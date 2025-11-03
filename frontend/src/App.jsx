@@ -8,7 +8,7 @@ function App() {
 
   return (
     <>
-      <div className='cursor'>
+      <div className='container-logos'>
         <a href="https://vite.dev" target="_blank">
           <img src={viteLogo} className="logo" alt="Vite logo" />
         </a>
