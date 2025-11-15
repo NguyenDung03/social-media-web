@@ -15,9 +15,9 @@ app.use(express.json()); // req.body user gui len
 
 const PORT = process.env.PORT || 3000;
 
+app.use(cookieParser());
 app.use("/api/auth", authRoutes);
 app.use("/api/messages", messageRoutes);
-app.use(cookieParser());
 
 //make ready for deployment
 if (process.env.NODE_ENV === "production") {
