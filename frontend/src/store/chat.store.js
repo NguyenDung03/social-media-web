@@ -9,7 +9,7 @@ export const useChatStore = create((set, get) => ({
 
   messages: [],
 
-  activetab: "chats",
+  activeTab: "chats",
 
   selectedUser: null,
 
@@ -26,7 +26,8 @@ export const useChatStore = create((set, get) => ({
     set({ isSoundEnabled: newValue });
   },
 
-  setActiveTab: (tab) => set({ activetab: tab }),
+  setActiveTab: (tab) => set({ activeTab: tab }),
+
   setSelectedUser: (user) => set({ selectedUser: user }),
 
   getAllContacts: async () => {
@@ -41,5 +42,15 @@ export const useChatStore = create((set, get) => ({
     }
   },
 
-  getMyChatPartners: async () => {},
+  getMyChatPartners: async () => {
+    set({ isUsersLoading: true });
+    try {
+      const res = await axiosInstance.get("/messages/chats");
+      set({ chats: res.data });
+    } catch (error) {
+      toast.error(error.response?.data?.message || "Failed to load chat partners");
+    } finally {
+      set({ isUsersLoading: false });
+    }
+  },
 }));

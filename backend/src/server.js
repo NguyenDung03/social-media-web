@@ -13,23 +13,27 @@ dotnetnv.config();
 const app = express();
 const __dirname = path.resolve();
 
-app.use(express.json()); // req.body user gui len
-
 const PORT = process.env.PORT || 3000;
 
-app.use(express.json({ limit: "5mb" })); // req.body
-
+// CORS - phải đặt trước các middleware khác
 app.use(
   cors({
     origin: ENV.CLIENT_URL,
     credentials: true,
   })
 );
+
+// Body parser với limit 10mb
+app.use(express.json({ limit: "10mb" }));
+app.use(express.urlencoded({ limit: "10mb", extended: true }));
+
 app.use(cookieParser());
+
+// Routes
 app.use("/api/auth", authRoutes);
 app.use("/api/messages", messageRoutes);
 
-//make ready for deployment
+// Make ready for deployment
 if (process.env.NODE_ENV === "production") {
   app.use(express.static(path.join(__dirname, "../frontend/dist")));
 
