@@ -99,7 +99,7 @@ export const useAuthStore = create((set, get) => ({
 
     if (socket.connected) socket.disconnect();
 
-    socket.off(); // gỡ toàn bộ listener để tránh memory leak
+    socket.off("getOnlineUsers"); // chỉ gỡ listener đã thêm trong connectSocket
 
     set({ socket: null, onlineUsers: [] });
   },
