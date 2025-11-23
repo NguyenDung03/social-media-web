@@ -36,7 +36,7 @@ const ChatsList = () => {
               {onlineUsers.includes(chat._id) ? (
                 <div className="absolute bottom-0 right-0 size-3 bg-gradient-to-br from-green-400 to-emerald-500 rounded-full ring-2 ring-slate-900 shadow-lg shadow-green-500/50 animate-pulse"></div>
               ) : (
-                <div className="absolute bottom-0 right-0 size-3.5 bg-gradient-to-br from-slate-500 to-slate-600 rounded-full ring-2 ring-slate-900"></div>
+                <div className="absolute bottom-0 right-0 size-3 bg-gradient-to-br from-slate-500 to-slate-600 rounded-full ring-2 ring-slate-900"></div>
               )}
             </div>
             <div className="flex-1 min-w-0">
