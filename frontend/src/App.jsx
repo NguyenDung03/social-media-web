@@ -4,9 +4,9 @@ import LoginPage from "./pages/LoginPage.jsx";
 import SignUpPage from "./pages/SignUpPage.jsx";
 import { useAuthStore } from "./store/auth.store.js";
 import { useEffect } from "react";
-
 import { Toaster } from "react-hot-toast";
 import PageLoader from "./components/loads/PageLoader.jsx";
+import BackgroundEffect from "./components/BackgroundEffect.jsx";
 
 function App() {
   const { checkAuth, isCheckingAuth, authUser } = useAuthStore();
@@ -19,11 +19,19 @@ function App() {
 
   return (
     <div className="min-h-screen bg-slate-900 relative flex items-center justify-center p-4 overflow-hidden">
-      {/* DECORATORS - GRID BG & GLOW SHAPES */}
-      <div className="absolute inset-0 bg-[linear-gradient(to_right,#4f4f4f2e_1px,transparent_1px),linear-gradient(to_bottom,#4f4f4f2e_1px,transparent_1px)] bg-[size:14px_24px]" />
-      <div className="absolute top-0 -left-4 size-96 bg-pink-500 opacity-20 blur-[100px]" />
-      <div className="absolute bottom-0 -right-4 size-96 bg-cyan-500 opacity-20 blur-[100px]" />
-
+      {/* DECORATORS - GLOW SHAPES */}
+      <div className="absolute top-10 left-10 size-[500px] bg-purple-500/20 rounded-full blur-[120px] animate-pulse" />
+      <div
+        className="absolute bottom-10 right-10 size-[500px] bg-cyan-500/20 rounded-full blur-[120px] animate-pulse"
+        style={{ animationDelay: "1s" }}
+      />
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 size-[600px] bg-pink-500/10 rounded-full blur-[150px]" />
+      <div
+        className="absolute top-1/3 right-1/4 size-[400px] bg-blue-500/15 rounded-full blur-[100px] animate-pulse"
+        style={{ animationDelay: "2s" }}
+      />
+      {/* BACKGROUND EFFECT */}
+      <BackgroundEffect type="particles" />
       <Routes>
         <Route
           path="/"
@@ -38,7 +46,6 @@ function App() {
           element={!authUser ? <SignUpPage /> : <Navigate to={"/"} />}
         />
       </Routes>
-
       <Toaster />
     </div>
   );
