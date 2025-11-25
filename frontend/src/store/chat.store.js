@@ -36,7 +36,7 @@ export const useChatStore = create((set, get) => ({
       const res = await axiosInstance.get("/messages/contacts");
       set({ allContacts: res.data });
     } catch (error) {
-      toast.error("Failed to load contacts");
+      toast.error("Lỗi tải danh bạ");
       console.log(error);
     } finally {
       set({ isUsersLoading: false });
@@ -50,7 +50,7 @@ export const useChatStore = create((set, get) => ({
       set({ chats: res.data });
     } catch (error) {
       toast.error(
-        error.response?.data?.message || "Failed to load chat partners"
+        error.response?.data?.message || "Lỗi tải danh sách trò chuyện"
       );
     } finally {
       set({ isUsersLoading: false });
@@ -63,7 +63,7 @@ export const useChatStore = create((set, get) => ({
       const res = await axiosInstance.get(`/messages/${userId}`);
       set({ messages: res.data });
     } catch (error) {
-      toast.error(error.response?.data?.message || "Failed to load messages");
+      toast.error(error.response?.data?.message || "Lỗi tải tin nhắn");
     } finally {
       set({ isMessagesLoading: false });
     }
@@ -96,7 +96,7 @@ export const useChatStore = create((set, get) => ({
       set({ messages: messages.concat(res.data) });
     } catch (error) {
       set({ messages: messages });
-      toast.error(error.response?.data?.message || "Failed to send message");
+      toast.error(error.response?.data?.message || "Lỗi gửi tin nhắn");
     }
   },
 
@@ -121,7 +121,7 @@ export const useChatStore = create((set, get) => ({
         notificationSound.currentTime = 0; // reset to start
         notificationSound
           .play()
-          .catch((e) => console.log("Audio play failed:", e));
+          .catch((e) => console.log("Lỗi phát âm thanh:", e));
       }
     });
   },

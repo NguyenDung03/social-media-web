@@ -4,6 +4,7 @@ import { ENV } from "../lib/env.js";
 import { generateToken } from "../lib/utils.js";
 import User from "../models/user.model.js";
 import bcrypt from "bcryptjs";
+import { upsertStreamUser } from "../lib/stream.js";
 
 // SIGNUP CONTROLLER
 export const signup = async (req, res) => {
@@ -41,7 +42,23 @@ export const signup = async (req, res) => {
 
     if (newUser) {
       const savedUser = await newUser.save();
+
+      // Tạo user trên Stream
+      try {
+        await upsertStreamUser({
+          id: savedUser._id.toString(),
+          name: savedUser.fullName,
+          image: savedUser.profilePic || "",
+        });
+        console.log(`Stream user created for ${savedUser.fullName}`);
+      } catch (streamError) {
+        console.error("Error creating Stream user:", streamError);
+      }
+
+      // Generate JWT token
       generateToken(newUser._id, res);
+
+      // Send response to client
       res.status(201).json({
         _id: newUser._id,
         fullName: newUser.fullName,
@@ -49,18 +66,19 @@ export const signup = async (req, res) => {
         profilePic: newUser.profilePic,
       });
 
-      //send email welcome to new user
-      try {
-        await sendWelcomeEmail(
-          savedUser.email,
-          savedUser.fullName,
-          ENV.CLIENT_URL
-        );
-      } catch (error) {
-        console.log("failed to send welcome email", error);
-      }
-    } else {
-      res.status(400).json({ message: "Invalid user data" });
+      // Sử dụng setImmediate để chạy sau khi response đã gửi
+      setImmediate(async () => {
+        try {
+          await sendWelcomeEmail(
+            savedUser.email,
+            savedUser.fullName,
+            ENV.CLIENT_URL
+          );
+          console.log(`Welcome email sent to ${savedUser.email}`);
+        } catch (emailError) {
+          console.error("Failed to send welcome email:", emailError);
+        }
+      });
     }
   } catch (error) {
     console.log("error in signup controller : ", error);

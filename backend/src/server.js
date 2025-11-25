@@ -1,12 +1,17 @@
 import express from "express";
+
 import authRoutes from "./routes/auth.route.js";
 import messageRoutes from "./routes/message.route.js";
+import streamRoutes from "./routes/stream.route.js";
+
 import { connectDB } from "./lib/db.js";
+import { app, server } from "./lib/socket.js";
+import { ENV } from "./lib/env.js";
+
 import path from "path";
+
 import cookieParser from "cookie-parser";
 import cors from "cors";
-import { ENV } from "./lib/env.js";
-import { app, server } from "./lib/socket.js";
 
 const __dirname = path.resolve();
 
@@ -29,6 +34,7 @@ app.use(cookieParser());
 // Routes
 app.use("/api/auth", authRoutes);
 app.use("/api/messages", messageRoutes);
+app.use("/api/stream", streamRoutes);
 
 // Make ready for deployment
 if (process.env.NODE_ENV === "production") {
