@@ -43,7 +43,7 @@ export const useAuthStore = create((set, get) => ({
       set({ authUser: res.data });
       get().connectSocket();
     } catch (error) {
-      console.log("Error in authCheck:", error);
+      console.log("Lỗi kiểm tra xác thực:", error);
       set({ authUser: null });
     } finally {
       set({ isCheckingAuth: false });
@@ -56,7 +56,7 @@ export const useAuthStore = create((set, get) => ({
       const res = await axiosInstance.post("/auth/signup", data);
       set({ authUser: res.data });
 
-      toast.success("Account created successfully!");
+      toast.success("Tạo tài khoản thành công!");
       get().connectSocket();
     } catch (error) {
       toast.error(error.response.data.message);
@@ -71,7 +71,7 @@ export const useAuthStore = create((set, get) => ({
       const res = await axiosInstance.post("/auth/login", data);
       set({ authUser: res.data });
 
-      toast.success("Logged in successfully!");
+      toast.success("Đăng nhập thành công!");
       get().connectSocket();
     } catch (error) {
       toast.error(error.response.data.message);
@@ -84,10 +84,10 @@ export const useAuthStore = create((set, get) => ({
     try {
       const res = await axiosInstance.put("/auth/update-profile", data);
       set({ authUser: res.data });
-      toast.success("Profile updated successfully");
+      toast.success("Cập nhật hồ sơ thành công");
     } catch (error) {
-      console.log("Error in update profile:", error);
-      toast.error("Failed to update profile. Please try again.");
+      console.log("Lỗi cập nhật hồ sơ:", error);
+      toast.error("Cập nhật hồ sơ thất bại. Vui lòng thử lại.");
     }
   },
 
@@ -107,11 +107,11 @@ export const useAuthStore = create((set, get) => ({
     try {
       await axiosInstance.post("/auth/logout");
       set({ authUser: null });
-      toast.success("Logged out successfully!");
+      toast.success("Đăng xuất thành công!");
       get().disconnectSocket();
     } catch (error) {
       console.log(error);
-      toast.error("Failed to logout. Please try again.");
+      toast.error("Đăng xuất thất bại. Vui lòng thử lại.");
     }
   },
 }));
