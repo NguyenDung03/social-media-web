@@ -7,7 +7,7 @@ import {
   LoaderIcon,
   LockIcon,
 } from "lucide-react";
-import { Link } from "react-router";
+import { Link } from "react-router-dom";
 
 function LoginPage() {
   const [formData, setFormData] = useState({ email: "", password: "" });

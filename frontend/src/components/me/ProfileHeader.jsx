@@ -7,7 +7,7 @@ import LogoutButton from "../me/LogoutButton.jsx";
 
 const ProfileHeader = () => {
   //
-  const { logout, authUser, updateProfile } = useAuthStore();
+  const { authUser, updateProfile, logout } = useAuthStore();
 
   const { isSoundEnabled, toggleSound } = useChatStore();
 
@@ -39,9 +39,9 @@ const ProfileHeader = () => {
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-4">
           {/* AVATAR */}
-          <div className="avatar online">
+          <div className="avatar online ">
             <button
-              className="size-16 rounded-full overflow-hidden relative group ring-2 ring-slate-600/50 hover:ring-blue-500/50 transition-all duration-300"
+              className="size-16 mt-0.5 rounded-full overflow-hidden relative group ring-2 ring-slate-600/50 hover:ring-blue-500/50 transition-all duration-300"
               onClick={() => fileInputRef.current.click()}
             >
               <img

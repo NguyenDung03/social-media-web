@@ -103,6 +103,7 @@ export const useAuthStore = create((set, get) => ({
 
     set({ socket: null, onlineUsers: [] });
   },
+
   logout: async () => {
     try {
       await axiosInstance.post("/auth/logout");
