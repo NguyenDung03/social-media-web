@@ -20,12 +20,16 @@ export const useChatStore = create((set, get) => ({
 
   isSoundEnabled: JSON.parse(localStorage.getItem("isSoundEnabled")) === true,
 
+  isLogoutModalOpen: false,
+
   toggleSound: () => {
     const newValue = !get().isSoundEnabled;
 
     localStorage.setItem("isSoundEnabled", newValue);
     set({ isSoundEnabled: newValue });
   },
+
+  setLogoutModalOpen: (isOpen) => set({ isLogoutModalOpen: isOpen }),
 
   setActiveTab: (tab) => set({ activeTab: tab }),
 
