@@ -75,7 +75,7 @@ function BackgroundEffect({ type = "rain" }) {
     <canvas
       ref={canvasRef}
       className="absolute inset-0 pointer-events-none"
-      style={{ zIndex: 0 }}
+      style={{ zIndex: 20 }}
     />
   );
 }

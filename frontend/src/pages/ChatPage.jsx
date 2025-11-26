@@ -6,9 +6,12 @@ import ContactList from "../components/chats/ContactList.jsx";
 import ChatContainer from "../components/chats/ChatContainer.jsx";
 import NoConversationPlaceholder from "../components/chats/NoConversationPlaceholder.jsx";
 import ProfileHeader from "../components/me/ProfileHeader.jsx";
+import IncomingCallModal from "@/components/modals/IncomingCallModal.jsx";
+import { useIncomingCall } from "@/hooks/streams/useIncomingCall.js";
 
 function ChatPage() {
   const { activeTab, selectedUser } = useChatStore();
+  const { incomingCall, acceptCall, rejectCall } = useIncomingCall();
 
   return (
     <div className="relative w-full max-w-6xl h-[800px] mx-auto">
@@ -27,6 +30,18 @@ function ChatPage() {
           <div className="flex-1 w-full flex flex-col bg-slate-900/50 backdrop-blur-sm border-l border-slate-700/50">
             {selectedUser ? <ChatContainer /> : <NoConversationPlaceholder />}
           </div>
+
+          {incomingCall && (
+            <IncomingCallModal
+              caller={{
+                name: incomingCall.caller.name,
+                image: incomingCall.caller.image,
+              }}
+              callId={incomingCall.callId}
+              onAccept={acceptCall}
+              onReject={rejectCall}
+            />
+          )}
         </div>
       </BorderAnimatedContainer>
     </div>
