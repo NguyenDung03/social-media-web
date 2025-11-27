@@ -104,7 +104,7 @@ export const useIncomingCall = () => {
       await waitForCallReady;
 
       // 3. Navigate đến CallPage (CallPage sẽ load call và join)
-      navigate(`streams/${incomingCall.callId}`);
+      navigate(`/streams/${incomingCall.callId}`);
       setIncomingCall(null);
     } catch (error) {
       console.error("Lỗi khi chấp nhận cuộc gọi:", error);
