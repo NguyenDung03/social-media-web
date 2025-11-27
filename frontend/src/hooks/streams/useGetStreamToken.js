@@ -5,7 +5,7 @@ import { useAuthStore } from "../../store/auth.store";
 export const useGetStreamToken = () => {
   const { authUser } = useAuthStore();
   return useQuery({
-    queryKey: ["generateStreamToken"],
+    queryKey: [streamApi.getStreamToken.name],
     queryFn: async () => await streamApi.getStreamToken(),
     enabled: !!authUser,
   });

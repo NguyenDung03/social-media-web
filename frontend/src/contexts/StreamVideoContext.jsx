@@ -2,6 +2,7 @@ import { createContext, useEffect, useRef, useState } from "react";
 import { StreamVideoClient } from "@stream-io/video-react-sdk";
 import { useGetStreamToken } from "@/hooks/streams/useGetStreamToken";
 import { useAuthStore } from "@/store/auth.store";
+import toast from "react-hot-toast";
 
 // Context để chia sẻ StreamVideoClient toàn app
 export const StreamVideoContext = createContext(null);
@@ -56,7 +57,8 @@ export const StreamVideoProvider = ({ children }) => {
           setClient(instance);
         }
       } catch (error) {
-        console.error("Error initializing Stream client:", error);
+        console.error("Lỗi khởi tạo Stream client:", error);
+        toast.error("Lỗi khởi tạo Stream client");
       } finally {
         if (!isCancelled) {
           setIsLoading(false);
@@ -74,6 +76,7 @@ export const StreamVideoProvider = ({ children }) => {
       if (currentClient && typeof currentClient.disconnectUser === "function") {
         currentClient.disconnectUser().catch((err) => {
           console.log("Stream client disconnect:", err.message);
+          toast.error("Lỗi ngắt kết nối Stream client");
         });
       }
     };
