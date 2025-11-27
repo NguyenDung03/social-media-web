@@ -90,15 +90,19 @@ export const useIncomingCall = () => {
       // 2. Chờ caller tạo Stream call và nhận signal "call_ready"
       const waitForCallReady = new Promise((resolve, reject) => {
         const timeout = setTimeout(() => {
+          socket.off("video_call_ready", handler);
           reject(new Error("Timeout waiting for call ready"));
         }, 10000);
 
-        socket.once("video_call_ready", ({ callId }) => {
-          clearTimeout(timeout);
+        function handler({ callId }) {
           if (callId === incomingCall.callId) {
+            clearTimeout(timeout);
+            socket.off("video_call_ready", handler);
             resolve();
           }
-        });
+        }
+
+        socket.on("video_call_ready", handler);
       });
 
       await waitForCallReady;
