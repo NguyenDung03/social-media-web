@@ -1,33 +1,108 @@
-import { Video, VideoIcon, XIcon } from "lucide-react";
+import { VideoIcon, XIcon } from "lucide-react";
 import { useChatStore } from "../../store/chat.store";
 import { useEffect } from "react";
 import { useAuthStore } from "../../store/auth.store";
 import { useNavigate } from "react-router-dom";
 import { useStreamVideo } from "@/hooks/streams/useStreamVideo";
+import { useVideoCallStore } from "@/store/videoCall.store";
 import toast from "react-hot-toast";
 
 const ChatHeader = () => {
   const { selectedUser, setSelectedUser } = useChatStore();
-  const { onlineUsers, authUser } = useAuthStore();
+  const { onlineUsers, authUser, socket } = useAuthStore();
+  const { client } = useStreamVideo();
+  const { startWaiting, clearWaiting, setTimeoutId, startCall } =
+    useVideoCallStore();
+
   const isUserOnline = onlineUsers.includes(selectedUser._id);
-
-  const { client, isLoading } = useStreamVideo();
-
   const navigate = useNavigate();
 
   useEffect(() => {
     const handleEscKey = (event) => {
       if (event.key === "Escape") setSelectedUser(null);
     };
-    window.addEventListener("keydown", handleEscKey);
+    globalThis.addEventListener("keydown", handleEscKey);
     // cleanup function
-    return () => window.removeEventListener("keydown", handleEscKey);
+    return () => globalThis.removeEventListener("keydown", handleEscKey);
   }, [setSelectedUser]);
 
+  // ============================================
+  // SOCKET LISTENERS CHO VIDEO CALL
+  // ============================================
+  useEffect(() => {
+    if (!socket) return;
+
+    // Listener: Callee đã chấp nhận → Tạo Stream call và navigate
+    const handlePeerAccepted = async ({ callId }) => {
+      try {
+        // Bây giờ mới tạo Stream call (khi chắc chắn sẽ dùng)
+        const call = client.call("default", callId);
+        await call.getOrCreate({
+          ring: false,
+          data: {
+            members: [{ user_id: authUser._id }, { user_id: selectedUser._id }],
+          },
+        });
+
+        // Notify callee rằng call đã sẵn sàng
+        socket.emit("video_call_ready", {
+          callId,
+          to: selectedUser._id,
+        });
+
+        // Clear waiting state và navigate
+        startCall(callId);
+        navigate(`streams/${callId}`);
+      } catch (error) {
+        console.error("Error creating Stream call:", error);
+        toast.error("Lỗi khi tạo cuộc gọi");
+        clearWaiting();
+      }
+    };
+
+    // Listener: Callee đã từ chối
+    const handlePeerRejected = () => {
+      clearWaiting();
+      toast.error(`${selectedUser.fullName} đã từ chối cuộc gọi`);
+    };
+
+    // Listener: Không thể gọi (user offline)
+    const handleCallFailed = ({ reason }) => {
+      clearWaiting();
+      toast.error(
+        reason === "User is offline"
+          ? "Người dùng đang offline"
+          : "Không thể gọi"
+      );
+    };
+
+    // Đăng ký listeners
+    socket.on("video_call_peer_accepted", handlePeerAccepted);
+    socket.on("video_call_peer_rejected", handlePeerRejected);
+    socket.on("video_call_failed", handleCallFailed);
+
+    // Cleanup
+    return () => {
+      socket.off("video_call_peer_accepted", handlePeerAccepted);
+      socket.off("video_call_peer_rejected", handlePeerRejected);
+      socket.off("video_call_failed", handleCallFailed);
+    };
+  }, [
+    socket,
+    client,
+    authUser,
+    selectedUser,
+    navigate,
+    startCall,
+    clearWaiting,
+  ]);
+
+  // ============================================
   // XỬ LÝ KHI BẮT ĐẦU GỌI VIDEO (CALLER)
-  const handleVideoCall = async () => {
-    // Kiểm tra điều kiện trước khi gọi
-    if (!client || !selectedUser) {
+  // ============================================
+  const handleVideoCall = () => {
+    // Kiểm tra điều kiện
+    if (!socket || !client || !selectedUser) {
       toast.error("Không thể bắt đầu cuộc gọi");
       return;
     }
@@ -36,27 +111,50 @@ const ChatHeader = () => {
       return;
     }
 
-    try {
-      // Tạo callId duy nhất: userId1-userId2-timestamp
-      const callId = `${authUser._id}-${selectedUser._id}-${Date.now()}`;
+    // Tạo callId tạm (chưa tạo Stream call)
+    const callId = `${authUser._id}-${selectedUser._id}-${Date.now()}`;
 
-      // Tạo call instance từ client
-      const call = client.call("default", callId);
+    // Gửi invitation qua socket
+    socket.emit("video_call_request", {
+      to: selectedUser._id,
+      from: authUser._id,
+      callId,
+      callerInfo: {
+        _id: authUser._id,
+        fullName: authUser.fullName,
+        profilePic: authUser.profilePic,
+      },
+    });
 
-      // getOrCreate: tạo cuộc gọi và gửi ring notification đến members
-      await call.getOrCreate({
-        ring: true, // Bật ringing để callee nhận modal
-        data: {
-          members: [{ user_id: authUser._id }, { user_id: selectedUser._id }],
-        },
-      });
+    // Lưu vào store và hiển thị WaitingModal
+    startWaiting({
+      callId,
+      peer: selectedUser,
+      timestamp: Date.now(),
+    });
 
-      // Navigate đến CallPage - join sẽ xảy ra ở đó
-      navigate(`/streams/${callId}`);
-    } catch (error) {
-      console.error("Lỗi khi bắt đầu cuộc gọi video:", error);
-      toast.error("Lỗi khi bắt đầu cuộc gọi video");
-    }
+    // Timeout 60 giây (để có thời gian cho network delay)
+    const timeout = setTimeout(() => {
+      handleCancelCall();
+      toast.error("Không có phản hồi từ người nhận");
+    }, 60000);
+
+    setTimeoutId(timeout);
+  };
+
+  // Hủy cuộc gọi (khi đang đợi)
+  const handleCancelCall = () => {
+    const { pendingCall } = useVideoCallStore.getState();
+    if (!pendingCall || !socket) return;
+
+    // Gửi signal cancel đến callee
+    socket.emit("video_call_cancelled", {
+      callId: pendingCall.callId,
+      to: pendingCall.peer._id,
+    });
+
+    // Clear waiting state
+    clearWaiting();
   };
 
   return (

@@ -2,8 +2,8 @@ import { useEffect, useRef } from "react";
 import { useChatStore } from "../../store/chat.store";
 import { useAuthStore } from "./../../store/auth.store";
 import ChatHeader from "./ChatHeader";
-import NoChatHistoryPlaceholder from "./NoChatHistoryPlaceholder";
-import MessagesLoadingSkeleton from "./MessagesLoadingSkeleton";
+import NoChatHistoryPlaceholder from "./status/NoChatHistoryPlaceholder";
+import MessagesLoadingSkeleton from "../loads/MessagesLoadingSkeleton";
 import MessageInput from "./MessageInput";
 
 const ChatContainer = () => {
@@ -92,8 +92,8 @@ const ChatContainer = () => {
                     <img
                       src={
                         group.senderId === authUser._id
-                          ? authUser.profilePic
-                          : selectedUser.profilePic
+                          ? authUser.profilePic || "/avatar.png"
+                          : selectedUser.profilePic || "/avatar.png"
                       }
                       alt="avatar"
                     />

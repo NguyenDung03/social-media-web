@@ -1,17 +1,34 @@
 import { useChatStore } from "../store/chat.store.js";
 import BorderAnimatedContainer from "../components/BorderAnimatedContainer.jsx";
-import ActiveTabSwitch from "../components/chats/ActiveTabSwitch.jsx";
-import ChatsList from "../components/chats/ChatsList.jsx";
-import ContactList from "../components/chats/ContactList.jsx";
+import ActiveTabSwitch from "../components/chats/status/ActiveTabSwitch.jsx";
+import ContactList from "../components/chats/lists/ContactList.jsx";
 import ChatContainer from "../components/chats/ChatContainer.jsx";
-import NoConversationPlaceholder from "../components/chats/NoConversationPlaceholder.jsx";
+import NoConversationPlaceholder from "../components/chats/status/NoConversationPlaceholder.jsx";
 import ProfileHeader from "../components/me/ProfileHeader.jsx";
 import IncomingCallModal from "@/components/modals/IncomingCallModal.jsx";
+import WaitingCallModal from "@/components/modals/WaitingCallModal.jsx";
 import { useIncomingCall } from "@/hooks/streams/useIncomingCall.js";
+import { useVideoCallStore } from "@/store/videoCall.store.js";
+import { useAuthStore } from "@/store/auth.store.js";
+import ChatsList from "@/components/chats/lists/ChatsList.jsx";
 
 function ChatPage() {
   const { activeTab, selectedUser } = useChatStore();
   const { incomingCall, acceptCall, rejectCall } = useIncomingCall();
+  const { isWaitingModalOpen, clearWaiting, pendingCall } = useVideoCallStore();
+  const { socket } = useAuthStore();
+
+  // Handler để hủy cuộc gọi từ ChatPage
+  const handleCancelCall = () => {
+    if (!pendingCall || !socket) return;
+
+    socket.emit("video_call_cancelled", {
+      callId: pendingCall.callId,
+      to: pendingCall.peer._id,
+    });
+
+    clearWaiting();
+  };
 
   return (
     <div className="relative w-full max-w-6xl h-[800px] mx-auto">
@@ -41,6 +58,10 @@ function ChatPage() {
               onAccept={acceptCall}
               onReject={rejectCall}
             />
+          )}
+
+          {isWaitingModalOpen && (
+            <WaitingCallModal onCancel={handleCancelCall} />
           )}
         </div>
       </BorderAnimatedContainer>

@@ -36,6 +36,7 @@ const CallPage = () => {
     const initCall = async () => {
       // Tạo call instance từ callId
       const callInstance = client.call("default", callId);
+
       callRef.current = callInstance;
 
       // Kiểm tra trạng thái hiện tại của call
@@ -59,9 +60,23 @@ const CallPage = () => {
       setIsConnecting(true);
 
       try {
-        // JOIN VÀO CUỘC GỌI - đây là điểm quan trọng nhất
-        // create: true → tạo cuộc gọi nếu chưa tồn tại (cho caller)
-        await callInstance.join({ create: true });
+        // ============================================
+        // LOAD call thay vì tạo mới (call đã được tạo bởi caller)
+
+        try {
+          await callInstance.get();
+        } catch (error) {
+          // Nếu call chưa tồn tại (edge case), log error
+          console.error(" Call not found, might be timing issue:", error);
+          toast.error("Cuộc gọi không tồn tại hoặc đã kết thúc");
+          joiningRef.current = false;
+          setIsConnecting(false);
+          return;
+        }
+
+        // JOIN VÀO CUỘC GỌI (create: false vì đã tạo rồi)
+        await callInstance.join({ create: false });
+
         toast.success("Kết nối đến cuộc gọi thành công");
         joinedRef.current = true; // Đánh dấu đã join
         setCall(callInstance); // Lưu call để render UI
@@ -94,9 +109,6 @@ const CallPage = () => {
 
             // Nếu là người cuối cùng → end call thay vì leave
             if (activeCount <= 1) {
-              console.log(
-                "🔴 Người cuối cùng rời → End call để giải phóng tài nguyên"
-              );
               await activeCall.endCall();
             } else {
               // Vẫn còn người khác → chỉ leave
@@ -104,6 +116,7 @@ const CallPage = () => {
             }
           } catch (error) {
             console.error("Lỗi khi rời khỏi cuộc gọi:", error);
+
             // Fallback: leave anyway
             activeCall.leave().catch(console.error);
           }
@@ -141,12 +154,9 @@ const CallPage = () => {
 
 // Component hiển thị UI cuộc gọi và xử lý khi người dùng leave
 const CallContent = () => {
-  const { useCallCallingState, useParticipants, useCall } = useCallStateHooks(); // Hook từ Stream SDK
+  const { useCallCallingState } = useCallStateHooks(); // Hook từ Stream SDK
   const callingState = useCallCallingState(); // Trạng thái cuộc gọi realtime
-  const participants = useParticipants(); // Danh sách người tham gia realtime
-  const call = useCall(); // Call instance hiện tại
   const navigate = useNavigate();
-  const hasEndedRef = useRef(false); // Flag để tránh end call nhiều lần
 
   // Theo dõi trạng thái: nếu user bấm "End Call" → callingState = LEFT
   useEffect(() => {
@@ -154,48 +164,6 @@ const CallContent = () => {
       navigate("/"); // Tự động quay về trang home
     }
   }, [callingState, navigate]);
-
-  // AUTO END CALL: Khi chỉ còn 1 người hoặc không còn ai
-  useEffect(() => {
-    if (!call || !participants || hasEndedRef.current) return;
-
-    const handleAutoEndCall = async () => {
-      // Đếm số người đang trong call (không tính người đang rời)
-      const activeParticipants = participants.filter(
-        (p) => p.connectionQuality !== "offline"
-      );
-
-      // Nếu chỉ còn 1 người hoặc không còn ai → end call để giải phóng tài nguyên
-      if (activeParticipants.length <= 1) {
-        console.log("⚠️ Chỉ còn 1 người trong call → Tự động end call");
-
-        hasEndedRef.current = true; // Đánh dấu đã end để tránh gọi lại
-
-        try {
-          // End call thay vì leave - điều này sẽ xóa call khỏi Stream servers
-          await call.endCall();
-          toast.info("Cuộc gọi đã kết thúc");
-
-          // Navigate về home sau 1 giây
-          setTimeout(() => {
-            navigate("/");
-          }, 1000);
-        } catch (error) {
-          console.error("Lỗi khi kết thúc cuộc gọi:", error);
-          // Fallback: leave nếu không thể end
-          call.leave().catch(console.error);
-          navigate("/");
-        }
-      }
-    };
-
-    // Chỉ check sau khi call đã stable (ít nhất 2 giây sau khi join)
-    const timeoutId = setTimeout(() => {
-      handleAutoEndCall();
-    }, 2000);
-
-    return () => clearTimeout(timeoutId);
-  }, [participants, call, navigate]); // Re-run khi participants thay đổi
 
   return (
     <StreamTheme className="h-full">
