@@ -10,13 +10,6 @@ const WaitingCallModal = ({ onCancel }) => {
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm animate-in fade-in duration-200">
       <div className="bg-gradient-to-br from-slate-800 to-slate-900 rounded-2xl shadow-2xl p-8 max-w-md w-full mx-4 border border-slate-700/50">
         {/* Close button */}
-        <button
-          onClick={onCancel}
-          className="absolute top-4 right-4 p-2 rounded-full hover:bg-slate-700/50 transition-colors"
-          aria-label="Đóng"
-        >
-          <X className="w-5 h-5 text-slate-400" />
-        </button>
 
         <div className="flex flex-col items-center space-y-6">
           {/* Avatar với animation pulse */}

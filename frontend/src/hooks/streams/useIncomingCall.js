@@ -32,7 +32,7 @@ export const useIncomingCall = () => {
       // Auto reject sau 60s nếu không có phản hồi
       timeoutRef.current = setTimeout(() => {
         rejectCall();
-        toast.error("Đối phương đang bận không thể nhận cuộc gọi này");
+        toast.error("Cuộc gọi đã kết thúc do không phản hồi");
       }, 60000);
     };
 
@@ -92,7 +92,7 @@ export const useIncomingCall = () => {
         const timeout = setTimeout(() => {
           socket.off("video_call_ready", handler);
           reject(new Error("Timeout waiting for call ready"));
-        }, 10000);
+        }, 15000);
 
         function handler({ callId }) {
           if (callId === incomingCall.callId) {

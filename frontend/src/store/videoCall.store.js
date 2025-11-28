@@ -2,7 +2,7 @@ import { create } from "zustand";
 
 /**
  * Video Call State Store
- * Quản lý trạng thái cuộc gọi video: waiting, active, idle
+ * Quản lý trạng thái cuộc gọi video: waiting, active
  */
 export const useVideoCallStore = create((set, get) => ({
   // Call status: null | 'waiting' | 'connecting' | 'active'

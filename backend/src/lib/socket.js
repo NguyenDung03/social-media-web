@@ -30,12 +30,18 @@ io.on("connection", (socket) => {
   const userId = socket.userId;
   userSocketMap[userId] = socket.id;
 
-  // Gửi danh sách user online cho tất cả client
+  // event : Gửi danh sách user online cho tất cả client
   io.emit("getOnlineUsers", Object.keys(userSocketMap));
+  // Event : Xử lý ngắt kết nối (trạng thái user offline)
+  socket.on("disconnect", () => {
+    console.log("A user disconnected", socket.user.fullName);
+    delete userSocketMap[userId];
+    io.emit("getOnlineUsers", Object.keys(userSocketMap));
+  });
 
   //
-  // VIDEO CALL EVENTS (Lazy Call Creation)
-  // Event: User A gửi yêu cầu gọi video
+  // VIDEO CALL EVENTS
+  // Event 1 : User A gửi yêu cầu gọi video
   socket.on("video_call_request", (data) => {
     const { to, callId, callerInfo } = data;
 
@@ -56,7 +62,7 @@ io.on("connection", (socket) => {
     }
   });
 
-  // Event: User B chấp nhận cuộc gọi
+  // Event 2 : User B chấp nhận cuộc gọi
   socket.on("video_call_accepted", (data) => {
     const { callId, from, acceptedBy } = data;
 
@@ -76,7 +82,22 @@ io.on("connection", (socket) => {
     }
   });
 
-  // Event: User B từ chối cuộc gọi
+  // Event 3: Notify rằng Stream call đã sẵn sàng (tránh race condition)
+  socket.on("video_call_ready", (data) => {
+    const { callId, to } = data;
+
+    console.log(`🎬 Call ${callId} is ready`);
+
+    const recipientSocketId = getReceiverSocketId(to);
+
+    if (recipientSocketId) {
+      io.to(recipientSocketId).emit("video_call_ready", {
+        callId,
+      });
+    }
+  });
+
+  // Event 4: User B từ chối cuộc gọi
   socket.on("video_call_rejected", (data) => {
     const { callId, from, rejectedBy } = data;
 
@@ -96,7 +117,7 @@ io.on("connection", (socket) => {
     }
   });
 
-  // Event: User A hủy cuộc gọi (trong lúc đợi B accept)
+  // Event 5: User A hủy cuộc gọi (trong lúc đợi B accept)
   socket.on("video_call_cancelled", (data) => {
     const { callId, to } = data;
 
@@ -115,28 +136,6 @@ io.on("connection", (socket) => {
     }
   });
 
-  // Event: Notify rằng Stream call đã sẵn sàng (tránh race condition)
-  socket.on("video_call_ready", (data) => {
-    const { callId, to } = data;
-
-    console.log(`🎬 Call ${callId} is ready`);
-
-    const recipientSocketId = getReceiverSocketId(to);
-
-    if (recipientSocketId) {
-      io.to(recipientSocketId).emit("video_call_ready", {
-        callId,
-      });
-    }
-  });
-
-  // END VIDEO CALL EVENTS
-  // Xử lý ngắt kết nối
-  socket.on("disconnect", () => {
-    console.log("A user disconnected", socket.user.fullName);
-    delete userSocketMap[userId];
-    io.emit("getOnlineUsers", Object.keys(userSocketMap));
-  });
   //
 });
 

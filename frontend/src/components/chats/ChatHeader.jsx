@@ -10,11 +10,14 @@ import toast from "react-hot-toast";
 const ChatHeader = () => {
   const { selectedUser, setSelectedUser } = useChatStore();
   const { onlineUsers, authUser, socket } = useAuthStore();
+
+  const isUserOnline = onlineUsers.includes(selectedUser._id);
+
   const { client } = useStreamVideo();
+
   const { startWaiting, clearWaiting, setTimeoutId, startCall } =
     useVideoCallStore();
 
-  const isUserOnline = onlineUsers.includes(selectedUser._id);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -25,6 +28,64 @@ const ChatHeader = () => {
     // cleanup function
     return () => globalThis.removeEventListener("keydown", handleEscKey);
   }, [setSelectedUser]);
+
+  // ============================================
+  // XỬ LÝ KHI BẮT ĐẦU GỌI VIDEO (CALLER)
+  // ============================================
+  const handleVideoCall = () => {
+    // Kiểm tra điều kiện để gọi
+    if (!socket || !client || !selectedUser) {
+      toast.error("Không thể bắt đầu cuộc gọi");
+      return;
+    }
+    if (!isUserOnline) {
+      toast.error("Người dùng đang offline, không thể gọi");
+      return;
+    }
+
+    // Tạo callId tạm (chưa tạo Stream call)
+    const callId = `${authUser._id}-${selectedUser._id}-${Date.now()}`;
+
+    // Gửi invitation qua socket
+    socket.emit("video_call_request", {
+      to: selectedUser._id,
+      from: authUser._id,
+      callId,
+      callerInfo: {
+        _id: authUser._id,
+        fullName: authUser.fullName,
+        profilePic: authUser.profilePic,
+      },
+    });
+
+    // Lưu vào store và hiển thị WaitingModal
+    startWaiting({
+      callId,
+      peer: selectedUser,
+      timestamp: Date.now(),
+    });
+
+    // Hủy cuộc gọi (khi đang đợi)
+    const handleCancelCall = () => {
+      const { pendingCall } = useVideoCallStore.getState();
+      if (!pendingCall || !socket) return;
+
+      // Gửi signal cancel đến callee
+      socket.emit("video_call_cancelled", {
+        callId: pendingCall.callId,
+        to: pendingCall.peer._id,
+      });
+      clearWaiting();
+    };
+
+    // Timeout 60 giây (để có thời gian cho network delay)
+    const timeout = setTimeout(() => {
+      handleCancelCall();
+      toast.error("Không có phản hồi từ người nhận");
+    }, 60000);
+
+    setTimeoutId(timeout);
+  };
 
   // ============================================
   // SOCKET LISTENERS CHO VIDEO CALL
@@ -96,66 +157,6 @@ const ChatHeader = () => {
     startCall,
     clearWaiting,
   ]);
-
-  // ============================================
-  // XỬ LÝ KHI BẮT ĐẦU GỌI VIDEO (CALLER)
-  // ============================================
-  const handleVideoCall = () => {
-    // Kiểm tra điều kiện
-    if (!socket || !client || !selectedUser) {
-      toast.error("Không thể bắt đầu cuộc gọi");
-      return;
-    }
-    if (!isUserOnline) {
-      toast.error("Người dùng đang offline, không thể gọi");
-      return;
-    }
-
-    // Tạo callId tạm (chưa tạo Stream call)
-    const callId = `${authUser._id}-${selectedUser._id}-${Date.now()}`;
-
-    // Gửi invitation qua socket
-    socket.emit("video_call_request", {
-      to: selectedUser._id,
-      from: authUser._id,
-      callId,
-      callerInfo: {
-        _id: authUser._id,
-        fullName: authUser.fullName,
-        profilePic: authUser.profilePic,
-      },
-    });
-
-    // Lưu vào store và hiển thị WaitingModal
-    startWaiting({
-      callId,
-      peer: selectedUser,
-      timestamp: Date.now(),
-    });
-
-    // Timeout 60 giây (để có thời gian cho network delay)
-    const timeout = setTimeout(() => {
-      handleCancelCall();
-      toast.error("Không có phản hồi từ người nhận");
-    }, 60000);
-
-    setTimeoutId(timeout);
-  };
-
-  // Hủy cuộc gọi (khi đang đợi)
-  const handleCancelCall = () => {
-    const { pendingCall } = useVideoCallStore.getState();
-    if (!pendingCall || !socket) return;
-
-    // Gửi signal cancel đến callee
-    socket.emit("video_call_cancelled", {
-      callId: pendingCall.callId,
-      to: pendingCall.peer._id,
-    });
-
-    // Clear waiting state
-    clearWaiting();
-  };
 
   return (
     <div className="flex justify-between items-center bg-gradient-to-r from-slate-800/60 to-slate-900/60 backdrop-blur-sm border-b border-slate-700/50 max-h-[84px] px-10 py-4 shadow-lg">
