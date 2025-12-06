@@ -219,7 +219,7 @@ export const getSuggestedUsers = async (req, res) => {
 export const followOrUnfollow = async (req, res) => {
   try {
     const requestingUserId = req.id; // ID của người dùng đang thực hiện hành động (từ token/middleware)
-    const targetUserId = req.params.id; // ID của người dùng được follow/unfollow (từ URL params)
+    const targetUserId = req.params.targetUserId; // ID của người dùng được follow/unfollow (từ URL params)
 
     // Kiểm tra không cho phép tự follow chính mình
     if (requestingUserId === targetUserId) {
