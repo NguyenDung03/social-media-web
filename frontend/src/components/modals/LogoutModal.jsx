@@ -1,15 +1,27 @@
 import { AlertTriangle } from "lucide-react";
 import { useChatStore } from "../../store/chat.store";
 import { useAuthStore } from "../../store/auth.store";
+import { useDispatch } from "react-redux";
+import { setPosts, setSelectedPost } from "@/redux/postSlice";
+import { setSelectedUser } from "@/redux/authSlice";
+import { useQueryClient } from "@tanstack/react-query";
 
 const LogoutModal = () => {
+  const queryClient = useQueryClient();
   const { isLogoutModalOpen, setLogoutModalOpen } = useChatStore();
   const { logout } = useAuthStore();
+
+  const dispatch = useDispatch();
 
   if (!isLogoutModalOpen) return null;
 
   const handleLogout = async () => {
     await logout();
+    dispatch(setPosts([]));
+    dispatch(setSelectedPost(null));
+    dispatch(setSelectedUser(null));
+
+    queryClient.clear();
     setLogoutModalOpen(false);
   };
 

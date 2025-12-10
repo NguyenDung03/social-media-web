@@ -2,7 +2,9 @@ import sharp from "../../node_modules/sharp/lib/index.js";
 import cloudinary from "../lib/cloudinary.js";
 
 import { getReceiverSocketId, io } from "../lib/socket.js";
+import { Comment } from "../models/comment.model.js";
 import { Post } from "../models/post.model.js";
+import User from "../models/user.model.js";
 
 //create post
 export const addNewPost = async (req, res) => {
@@ -79,7 +81,7 @@ export const getAllPosts = async (req, res) => {
 //get user posts by userId
 export const getUserPost = async (req, res) => {
   try {
-    const authorId = req.id;
+    const authorId = req.user?._id || req.id;
     const posts = await Post.find({ author: authorId })
       .sort({ createdAt: -1 })
       .populate({
@@ -101,7 +103,7 @@ export const getUserPost = async (req, res) => {
 // Hàm xử lý toggle like/unlike bài post
 export const toggleLikePost = async (req, res) => {
   try {
-    const currentUserId = req.id; // ID người dùng hiện tại
+    const currentUserId = req.user?._id || req.id; // ID người dùng hiện tại
     const postId = req.params.id; // ID bài post
 
     const post = await Post.findById(postId); // Tìm bài post
@@ -160,7 +162,7 @@ export const addComment = async (req, res) => {
   try {
     const postId = req.params.id;
 
-    const authorCommentId = req.id;
+    const authorCommentId = req.user?._id || req.id;
 
     const { text } = req.body;
 
@@ -216,36 +218,51 @@ export const getCommentsOfPost = async (req, res) => {
 export const deletePost = async (req, res) => {
   try {
     const postId = req.params.id; // ID bài post cần xóa
-    const authorId = req.id; // ID user đang đăng nhập
+    const authorId = req.user?._id || req.id; // ID user đang đăng nhập
+
+    console.log("🗑️ Deleting post:", { postId, authorId });
 
     const post = await Post.findById(postId); // Tìm bài post
-    if (!post)
+    if (!post) {
+      console.log("❌ Post not found:", postId);
       return res
         .status(404)
         .json({ message: "Post not found", success: false });
+    }
+
+    console.log(
+      "📝 Post author:",
+      post.author.toString(),
+      "Current user:",
+      authorId
+    );
 
     // Kiểm tra có phải chủ bài post không
     if (post.author.toString() !== authorId) {
+      console.log("❌ Unauthorized - Not the author");
       return res.status(403).json({ message: "Unauthorized" });
     }
 
     // BƯỚC 1: Xóa document Post trong collection "posts"
     await Post.findByIdAndDelete(postId);
+    console.log("✅ Post deleted from DB");
 
     // BƯỚC 2: Xóa postId trong array "posts" của User (vì User lưu danh sách ID bài post)
     let user = await User.findById(authorId);
     user.posts = user.posts.filter((id) => id.toString() !== postId); // Filter để loại bỏ postId
     await user.save();
+    console.log("✅ Post removed from user's posts array");
 
     // BƯỚC 3: Xóa tất cả comments liên quan đến bài post này
     await Comment.deleteMany({ post: postId });
+    console.log("✅ Comments deleted");
 
     return res.status(200).json({
       success: true,
       message: "Post deleted",
     });
   } catch (error) {
-    console.log(error);
+    console.log("❌ Error in deletePost:", error);
     return res.status(500).json({ message: "Server error", success: false });
   }
 };
@@ -254,7 +271,7 @@ export const deletePost = async (req, res) => {
 export const bookmarkPost = async (req, res) => {
   try {
     const postId = req.params.id; // ID bài post
-    const currentUserId = req.id; // ID user hiện tại
+    const currentUserId = req.user?._id || req.id; // ID user hiện tại
 
     const post = await Post.findById(postId); // Tìm bài post
     if (!post)

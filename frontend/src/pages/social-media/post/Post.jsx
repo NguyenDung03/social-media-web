@@ -4,132 +4,224 @@ import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import { Bookmark, MessageCircle, MoreHorizontal, Send } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { FaHeart, FaRegHeart } from "react-icons/fa";
-import { useDispatch, useSelector } from "react-redux";
-import { toast } from "sonner";
-// import { setPosts, setSelectedPost } from "@/redux/postSlice";
+import { useDispatch } from "react-redux";
+import { setSelectedPost } from "@/redux/postSlice";
 import { Badge } from "@/components/ui/badge";
-// import CommentDialog from "../comment/CommentDialog";
+import { useAuthStore } from "@/store/auth.store";
+import {
+  useAddComment,
+  useBookmarkPost,
+  useDeletePost,
+  useLikeOrDislikePost,
+} from "@/hooks/posts/usePost";
+import { formatTimeAgo } from "@/lib/dayjs";
+import CommentDialog from "../comment/CommentDialog";
 
-const Post = () => {
+const Post = ({ post }) => {
+  const dispatch = useDispatch();
+  const { authUser } = useAuthStore();
+
+  const [text, setText] = useState("");
+  const [open, setOpen] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
+
+  //hook
+  const { deletePost, isLoading: isDeleting } = useDeletePost();
+  const { mutate: likeOrDislikePost } = useLikeOrDislikePost();
+  const { bookmarkPost } = useBookmarkPost();
+  const { addComment, isLoading: isAddingComment } = useAddComment();
+
+  // Tính toán trạng thái từ post data
+  const isLiked =
+    (Array.isArray(post?.likes) && post.likes.includes(authUser?._id)) || false;
+  const isBookmarked =
+    Array.isArray(authUser?.bookmarks) &&
+    authUser.bookmarks.includes(post?._id);
+  const likeCount = Array.isArray(post?.likes) ? post.likes.length : 0;
+  const commentCount = Array.isArray(post?.comments) ? post.comments.length : 0;
+
+  const likeOrDislikeHandler = () => {
+    likeOrDislikePost(post._id);
+  };
+
+  const bookmarkHandler = () => {
+    bookmarkPost(post._id);
+  };
+
+  const deletePostHandler = () => {
+    deletePost(post._id);
+  };
+
+  const commentHandler = () => {
+    if (text.trim()) {
+      addComment({ postId: post._id, text });
+      setText("");
+    }
+  };
+
+  const changeEventHandler = (e) => {
+    const inputText = e.target.value;
+    setText(inputText.trim() ? inputText : "");
+  };
+
+  const openCommentDialog = () => {
+    dispatch(setSelectedPost(post));
+    setOpen(true);
+  };
+  //
   return (
-    <div className="my-8 w-full max-w-sm mx-auto">
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-2">
-          <Avatar>
+    <div className="mb-8 border-b border-gray-800 pb-4">
+      {/* Header bài viết */}
+      <div className="flex items-center justify-between mb-3">
+        <div className="flex items-center gap-3">
+          <Avatar className="w-8 h-8">
             <AvatarImage
-              //  src={post.author?.profilePicture}
-              alt="post_image"
+              src={post?.author?.profilePic || "/avatar.png"}
+              alt="avatar"
             />
-            <AvatarFallback>CN</AvatarFallback>
+            <AvatarFallback>
+              {post?.author?.fullName?.charAt(0).toUpperCase()}
+            </AvatarFallback>
           </Avatar>
-          <div className="flex items-center gap-3">
-            {/* <h1>{post.author?.username}</h1>
-            {user?._id === post.author._id && (
-              <Badge variant="secondary">Author</Badge>
-            )} */}
+          <div className="flex-1">
+            <div className="flex items-center gap-2">
+              <span className="font-semibold text-sm">
+                {post?.author?.fullName}
+              </span>
+              {authUser?._id === post?.author?._id && (
+                <span className="text-gray-400 text-xs">• Tác giả</span>
+              )}
+            </div>
+            <span className="text-gray-500 text-xs block">
+              {formatTimeAgo(post?.createdAt)}
+            </span>
           </div>
         </div>
-        <Dialog>
+
+        {/* Menu 3 chấm */}
+        <Dialog open={menuOpen} onOpenChange={setMenuOpen}>
           <DialogTrigger asChild>
-            <MoreHorizontal className="cursor-pointer" />
+            <button className="hover:text-gray-400">⋯</button>
           </DialogTrigger>
           <DialogContent className="flex flex-col items-center text-sm text-center">
-            {/* {post?.author?._id !== user?._id &&
-             (
+            {post?.author?._id !== authUser?._id && (
               <Button
                 variant="ghost"
                 className="cursor-pointer w-fit text-[#ED4956] font-bold"
               >
-                Unfollow
+                Bỏ theo dõi
               </Button>
-            )} */}
-
+            )}
             <Button variant="ghost" className="cursor-pointer w-fit">
-              Add to favorites
+              Thêm vào mục yêu thích
             </Button>
-            {/* {user && user?._id === post?.author._id && (
+            {authUser?._id === post?.author._id && (
               <Button
                 onClick={deletePostHandler}
+                disabled={isDeleting}
                 variant="ghost"
                 className="cursor-pointer w-fit"
               >
-                Delete
+                {isDeleting ? "Đang xóa..." : "Xóa bài viết"}
               </Button>
-            )} */}
+            )}
           </DialogContent>
         </Dialog>
       </div>
+
+      {/* Hình ảnh/ */}
       <img
-        className="rounded-sm my-2 w-full aspect-square object-cover"
-        // src={post.image}
+        className="w-full aspect-square object-cover mb-3 bg-gray-900"
+        src={post?.image}
         alt="post_img"
       />
 
-      <div className="flex items-center justify-between my-2">
-        <div className="flex items-center gap-3">
-          {/* {liked ? (
-            <FaHeart
-              onClick={likeOrDislikeHandler}
-              size={"24"}
-              className="cursor-pointer text-red-600"
-            />
-          ) : (
-            <FaRegHeart
-              onClick={likeOrDislikeHandler}
-              size={"22px"}
-              className="cursor-pointer hover:text-gray-600"
-            />
-          )} */}
-
-          <MessageCircle
-            onClick={() => {
-              // dispatch(setSelectedPost(post));
-              // setOpen(true);
-            }}
-            className="cursor-pointer hover:text-gray-600"
+      {/* Action buttons (Like, Comment, Share, Save) */}
+      <div className="flex items-center gap-4 mb-2">
+        {isLiked ? (
+          <FaHeart
+            onClick={likeOrDislikeHandler}
+            size={24}
+            className="cursor-pointer text-red-600 hover:text-red-500"
           />
-          <Send className="cursor-pointer hover:text-gray-600" />
-        </div>
-        <Bookmark
-          // onClick={bookmarkHandler}
-          className="cursor-pointer hover:text-gray-600"
+        ) : (
+          <FaRegHeart
+            onClick={likeOrDislikeHandler}
+            size={24}
+            className="cursor-pointer hover:text-gray-400"
+          />
+        )}
+
+        <MessageCircle
+          onClick={openCommentDialog}
+          size={24}
+          className="cursor-pointer hover:text-gray-400"
         />
+        <Send
+          size={24}
+          className="cursor-pointer hover:text-gray-400"
+          onClick={openCommentDialog}
+        />
+
+        <div className="ml-auto">
+          <Bookmark
+            onClick={bookmarkHandler}
+            size={24}
+            className={`cursor-pointer ${
+              isBookmarked
+                ? "fill-current text-gray-500"
+                : "hover:text-gray-400"
+            }`}
+          />
+        </div>
       </div>
-      {/* <span className="font-medium block mb-2">{postLike} likes</span> */}
-      {/* <p>
-        <span className="font-medium mr-2">{post.author?.username}</span>
-        {post.caption}
-      </p> */}
-      {/* {comment.length > 0 && (
-        <span
-          onClick={() => {
-            dispatch(setSelectedPost(post));
-            setOpen(true);
-          }}
-          className="cursor-pointer text-sm text-gray-400"
+
+      {/* Số lượt thích */}
+      <div className="font-semibold mb-2">{likeCount} lượt thích</div>
+
+      {/* Caption */}
+      <div className="text-sm">
+        <span className="font-semibold mr-2">{post?.author?.fullName}</span>
+        <span className="text-gray-300">{post?.caption}</span>
+      </div>
+
+      {/* Xem bình luận */}
+      {commentCount > 0 && (
+        <button
+          onClick={openCommentDialog}
+          className="text-gray-400 text-sm mt-1 hover:text-gray-300"
         >
-          View all {comment.length} comments
-        </span>
-      )} */}
-      {/* <CommentDialog
-       open={open} setOpen={setOpen}
-      /> */}
-      <div className="flex items-center justify-between">
-        {/* <input
+          Xem tất cả {commentCount} bình luận
+        </button>
+      )}
+
+      <CommentDialog
+        open={open}
+        setOpen={setOpen}
+        addCommentAtDialog={addComment}
+        currentUser={authUser}
+      />
+
+      <div className="flex items-center gap-2 mt-3 text-sm">
+        <input
           type="text"
-          placeholder="Add a comment..."
+          placeholder="Bình luận…"
           value={text}
           onChange={changeEventHandler}
-          className="outline-none text-sm w-full"
+          onKeyDown={(e) => e.key === "Enter" && commentHandler()}
+          className="flex-1 bg-transparent border-none outline-none text-gray-300 placeholder-gray-500"
+          disabled={isAddingComment}
         />
         {text && (
           <span
-            // onClick={commentHandler}
-            className="text-[#3BADF8] cursor-pointer"
+            onClick={commentHandler}
+            className={`text-[#3BADF8] cursor-pointer hover:text-[#258bcf] ${
+              isAddingComment ? "opacity-50" : ""
+            }`}
           >
-            Post
+            {isAddingComment ? "..." : "Đăng"}
           </span>
-        )} */}
+        )}
       </div>
     </div>
   );

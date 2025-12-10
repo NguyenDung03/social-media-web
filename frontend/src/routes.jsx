@@ -10,7 +10,7 @@ import ChatPage from "./pages/chats/ChatPage";
 import SocialMediaPage from "./pages/social-media/page";
 import Profile from "./pages/social-media/profile/Profile";
 import EditProfile from "./pages/social-media/profile/EditProfile";
-import Post from "./pages/social-media/post/Post";
+import Posts from "./pages/social-media/post/Posts";
 
 const routes = createBrowserRouter([
   {
@@ -52,10 +52,6 @@ const routes = createBrowserRouter([
       {
         path: "account/edit",
         element: <EditProfile />,
-      },
-      {
-        path: "post",
-        element: <Post />,
       },
 
       {
