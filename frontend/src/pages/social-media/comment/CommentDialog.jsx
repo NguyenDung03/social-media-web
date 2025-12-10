@@ -1,139 +1,173 @@
-// import React, { useEffect, useState } from "react";
-// import { Dialog, DialogContent, DialogTrigger } from "./ui/dialog";
-// import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
-// import { Link } from "react-router-dom";
-// import { MoreHorizontal } from "lucide-react";
-// import { Button } from "./ui/button";
-// import { useDispatch, useSelector } from "react-redux";
-// import Comment from "./Comment";
-// import axios from "axios";
-// import { toast } from "sonner";
-// import { setPosts } from "@/redux/postSlice";
+import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
+import { Heart, MessageCircle, Share2 } from "lucide-react";
+import { useSelector } from "react-redux";
+import { Dialog, DialogContent } from "@/components/ui/dialog";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Button } from "@/components/ui/button";
+import Comment from "./Comment";
 
-// const CommentDialog = ({ open, setOpen }) => {
-//   const [text, setText] = useState("");
-//   const { selectedPost, posts } = useSelector((store) => store.post);
-//   const [comment, setComment] = useState([]);
-//   const dispatch = useDispatch();
+const CommentDialog = ({ open, setOpen, addCommentAtDialog, currentUser }) => {
+  const [text, setText] = useState("");
+  const { selectedPost } = useSelector((store) => store.post);
+  const [comment, setComment] = useState([]);
 
-//   useEffect(() => {
-//     if (selectedPost) {
-//       setComment(selectedPost.comments);
-//     }
-//   }, [selectedPost]);
+  useEffect(() => {
+    if (selectedPost) {
+      setComment(selectedPost.comments);
+    }
+  }, [selectedPost]);
 
-//   const changeEventHandler = (e) => {
-//     const inputText = e.target.value;
-//     if (inputText.trim()) {
-//       setText(inputText);
-//     } else {
-//       setText("");
-//     }
-//   };
+  const changeEventHandler = (e) => {
+    const inputText = e.target.value;
+    setText(inputText);
+  };
 
-//   const sendMessageHandler = async () => {
-//     try {
-//       const res = await axios.post(
-//         `https://instaclone-g9h5.onrender.com/api/v1/post/${selectedPost?._id}/comment`,
-//         { text },
-//         {
-//           headers: {
-//             "Content-Type": "application/json",
-//           },
-//           withCredentials: true,
-//         }
-//       );
+  const handleCommentSubmit = () => {
+    if (text.trim()) {
+      addCommentAtDialog({ postId: selectedPost._id, text });
+      setText("");
+    }
+  };
 
-//       if (res.data.success) {
-//         const updatedCommentData = [...comment, res.data.comment];
-//         setComment(updatedCommentData);
+  return (
+    <Dialog open={open} onOpenChange={setOpen}>
+      <DialogContent
+        onInteractOutside={() => setOpen(false)}
+        className="max-w-4xl p-0 flex flex-col h-[600px] bg-black border-gray-700"
+      >
+        <div className="flex flex-1 overflow-hidden">
+          {/* ===== PHẦN HÌNH ẢNH (LEFT) ===== */}
+          <div className="w-1/2 flex items-center justify-center bg-black">
+            <img
+              src={selectedPost?.image}
+              alt="post_img"
+              className="w-full h-full object-cover"
+            />
+          </div>
 
-//         const updatedPostData = posts.map((p) =>
-//           p._id === selectedPost._id
-//             ? { ...p, comments: updatedCommentData }
-//             : p
-//         );
-//         dispatch(setPosts(updatedPostData));
-//         toast.success(res.data.message);
-//         setText("");
-//       }
-//     } catch (error) {
-//       console.log(error);
-//     }
-//   };
+          {/* ===== PHẦN BÌNH LUẬN (RIGHT) ===== */}
+          <div className="w-1/2 flex flex-col bg-black text-white border-l border-gray-700">
+            {/* HEADER: Thông tin tác giả */}
+            {selectedPost?.caption && (
+              <div className="px-4 py-3 border-b border-gray-700">
+                <div className="flex gap-2">
+                  <Avatar className="w-8 h-8 flex-shrink-0">
+                    <AvatarImage
+                      src={selectedPost?.author?.profilePic || "/avatar.png"}
+                      alt="author"
+                    />
+                    <AvatarFallback>
+                      {selectedPost?.author?.fullName?.charAt(0).toUpperCase()}
+                    </AvatarFallback>
+                  </Avatar>
+                  <div className="flex-1">
+                    <div className="text-sm">
+                      <span className="font-semibold">
+                        {selectedPost?.author?.fullName}
+                      </span>
+                      <span className="text-gray-300 ml-2">
+                        {selectedPost?.caption}
+                      </span>
+                    </div>
+                    <div className="text-gray-500 text-xs mt-1">
+                      1 giờ trước
+                    </div>
+                  </div>
+                  <button className="text-gray-500 hover:text-white">⋯</button>
+                </div>
+              </div>
+            )}
 
-//   return (
-//     <Dialog open={open}>
-//       <DialogContent
-//         onInteractOutside={() => setOpen(false)}
-//         className="max-w-5xl p-0 flex flex-col"
-//       >
-//         <div className="flex flex-1">
-//           <div className="w-1/2">
-//             <img
-//               src={selectedPost?.image}
-//               alt="post_img"
-//               className="w-full h-full object-cover rounded-l-lg"
-//             />
-//           </div>
-//           <div className="w-1/2 flex flex-col justify-between">
-//             <div className="flex items-center justify-between p-4">
-//               <div className="flex gap-3 items-center">
-//                 <Link>
-//                   <Avatar>
-//                     <AvatarImage src={selectedPost?.author?.profilePicture} />
-//                     <AvatarFallback>CN</AvatarFallback>
-//                   </Avatar>
-//                 </Link>
-//                 <div>
-//                   <Link className="font-semibold text-xs">
-//                     {selectedPost?.author?.username}
-//                   </Link>
-//                   {/* <span className='text-gray-600 text-sm'>Bio here...</span> */}
-//                 </div>
-//               </div>
+            {/* COMMENTS SECTION: Danh sách bình luận */}
+            <div className="flex-1 overflow-y-auto px-4 py-3 space-y-3">
+              {comment && comment.length > 0 ? (
+                comment.map((cmt) => (
+                  <div key={cmt._id} className="flex gap-2">
+                    <Avatar className="w-8 h-8 flex-shrink-0">
+                      <AvatarImage
+                        src={cmt?.author?.profilePic || "/avatar.png"}
+                        alt="commenter"
+                      />
+                      <AvatarFallback>
+                        {cmt?.author?.fullName?.charAt(0).toUpperCase()}
+                      </AvatarFallback>
+                    </Avatar>
+                    <div className="flex-1">
+                      <div className="bg-gray-900 rounded-2xl px-3 py-2">
+                        <div className="font-semibold text-sm">
+                          {cmt?.author?.fullName}
+                        </div>
+                        <div className="text-sm text-gray-300">{cmt?.text}</div>
+                      </div>
+                      <div className="text-gray-500 text-xs mt-1 px-3">
+                        {/* NEW: Có thể thêm timestamp */}
+                      </div>
+                    </div>
+                    {/* NEW: Like button cho comment */}
+                    <Heart
+                      size={16}
+                      className="text-gray-500 cursor-pointer hover:text-red-600 mt-2"
+                    />
+                  </div>
+                ))
+              ) : (
+                <div className="text-center text-gray-500 text-sm py-4">
+                  Chưa có bình luận nào
+                </div>
+              )}
+            </div>
 
-//               <Dialog>
-//                 <DialogTrigger asChild>
-//                   <MoreHorizontal className="cursor-pointer" />
-//                 </DialogTrigger>
-//                 <DialogContent className="flex flex-col items-center text-sm text-center">
-//                   <div className="cursor-pointer w-full text-[#ED4956] font-bold">
-//                     Unfollow
-//                   </div>
-//                   <div className="cursor-pointer w-full">Add to favorites</div>
-//                 </DialogContent>
-//               </Dialog>
-//             </div>
-//             <hr />
-//             <div className="flex-1 overflow-y-auto max-h-96 p-4">
-//               {comment.map((comment) => (
-//                 <Comment key={comment._id} comment={comment} />
-//               ))}
-//             </div>
-//             <div className="p-4">
-//               <div className="flex items-center gap-2">
-//                 <input
-//                   type="text"
-//                   value={text}
-//                   onChange={changeEventHandler}
-//                   placeholder="Add a comment..."
-//                   className="w-full outline-none border text-sm border-gray-300 p-2 rounded"
-//                 />
-//                 <Button
-//                   disabled={!text.trim()}
-//                   onClick={sendMessageHandler}
-//                   variant="outline"
-//                 >
-//                   Send
-//                 </Button>
-//               </div>
-//             </div>
-//           </div>
-//         </div>
-//       </DialogContent>
-//     </Dialog>
-//   );
-// };
+            {/* ACTION BAR: Like, Comment, Share */}
+            <div className="px-4 py-3 border-t border-b border-gray-700 flex gap-4">
+              <Heart size={20} className="cursor-pointer hover:text-gray-400" />
+              <MessageCircle
+                size={20}
+                className="cursor-pointer hover:text-gray-400"
+              />
+              <Share2
+                size={20}
+                className="cursor-pointer hover:text-gray-400"
+              />
+            </div>
 
-// export default CommentDialog;
+            {/* LIKES COUNT */}
+            <div className="px-4 py-2 text-sm font-semibold">
+              {selectedPost?.likes?.length || 0} lượt thích
+            </div>
+
+            {/* INPUT COMMENT: Nhập bình luận */}
+            <div className="px-4 py-3 border-t border-gray-700">
+              <div className="flex items-center gap-2">
+                <Avatar className="w-8 h-8">
+                  <AvatarImage
+                    src={currentUser?.profilePic || "/avatar.png"}
+                    alt="user"
+                  />
+                </Avatar>
+                <input
+                  type="text"
+                  value={text}
+                  onChange={changeEventHandler}
+                  onKeyDown={(e) => e.key === "Enter" && handleCommentSubmit()}
+                  placeholder="Bình luận…"
+                  className="flex-1 bg-transparent outline-none text-sm text-white placeholder-gray-500"
+                />
+                {text.trim() && (
+                  <button
+                    onClick={handleCommentSubmit}
+                    className="text-blue-400 hover:text-blue-300 font-semibold text-sm"
+                  >
+                    Đăng
+                  </button>
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
+      </DialogContent>
+    </Dialog>
+  );
+};
+
+export default CommentDialog;

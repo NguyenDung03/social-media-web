@@ -1,19 +1,22 @@
-import Home from "@/assets/home.svg?react";
-import Search from "@/assets/search.svg?react";
-import Heart from "@/assets/heart.svg?react";
-import Create from "@/assets/create.svg?react";
-import Explore from "@/assets/explore.svg?react";
-// import Reels from "@/assets/reels.svg?react";
-import Messenger from "@/assets/messenger.svg?react";
+import Home from "@/assets/home.svg?react"; //ko sai
+import Search from "@/assets/search.svg?react"; //ko sai
+import Heart from "@/assets/heart.svg?react"; //ko sai
+import Create from "@/assets/create.svg?react"; //ko sai
+import Explore from "@/assets/explore.svg?react"; //ko sai
+import Messenger from "@/assets/messenger.svg?react"; //ko sai
+
 import { LogOut } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useAuthStore } from "@/store/auth.store.js";
 import { useChatStore } from "@/store/chat.store.js";
 import { useNavigate } from "react-router-dom";
+import CreatePost from "../post/CreatePost";
+import { useState } from "react";
 
 const LeftSidebar = () => {
   const { authUser } = useAuthStore();
   const { setLogoutModalOpen } = useChatStore();
+  const [open, setOpen] = useState(false);
 
   const navigate = useNavigate();
 
@@ -80,7 +83,7 @@ const LeftSidebar = () => {
         </div>
       </div>
 
-      {/* <CreatePost open={open} setOpen={setOpen} /> */}
+      <CreatePost open={open} setOpen={setOpen} />
     </div>
   );
 };

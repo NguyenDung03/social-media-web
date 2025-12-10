@@ -1,17 +1,11 @@
 import React from "react";
-import { Menu, Send, Bookmark, MessageCircle } from "lucide-react";
-import Home from "@/assets/home.svg?react";
-import Search from "@/assets/search.svg?react";
-import Heart from "@/assets/heart.svg?react";
-import Create from "@/assets/create.svg?react";
-import Explore from "@/assets/explore.svg?react";
-import Reels from "@/assets/reels.svg?react";
-import Messenger from "@/assets/messenger.svg?react";
-import { useNavigate } from "react-router-dom";
+import { Menu, Send, Bookmark, MessageCircle, Heart } from "lucide-react";
+// import { useNavigate } from "react-router-dom";
 import LeftSidebar from "./components/LeftSidebar";
+import Posts from "./post/Posts";
 
 export default function SocialMediaPage() {
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
 
   return (
     <div className="flex h-screen bg-black text-white">
@@ -28,29 +22,12 @@ export default function SocialMediaPage() {
             <Story username="naxisneaker" />
             <Story username="t1lol" />
           </div>
-
-          {/* Bài viết 1 */}
-          <Post username="webguild" timeAgo="9 giờ" likes="191" comments="2" />
-
-          {/* Bài viết 2 */}
-          <Post
-            username="couple4infiny"
-            timeAgo="5 tuần"
-            likes="1,4 triệu"
-            comments="3,8K"
-            suggested
-          />
-
-          {/* Bài viết 3 */}
-          <Post
-            username="chithe.maycongabietgi"
-            timeAgo="1 ngày"
-            likes="3,3K"
-            comments="88"
-            suggested
-          />
+          {/* Posts */}
+          <Posts />
         </div>
       </div>
+
+      {/** */}
       {/* SIDEBAR BÊN PHẢI */}
       <div className="w-80 p-8">
         {/* Thông tin user hiện tại */}
@@ -123,67 +100,6 @@ function Story({ username }) {
 }
 
 // Component Post - Bài viết chính
-function Post({ username, timeAgo, likes, comments, suggested }) {
-  return (
-    <div className="mb-8 border-b border-gray-800 pb-4">
-      {/* Header bài viết */}
-      <div className="flex items-center justify-between mb-3">
-        <div className="flex items-center gap-3">
-          <div className="w-8 h-8 rounded-full bg-gray-700" /> {/* Avatar */}
-          <div>
-            <span className="font-semibold">{username}</span>
-            {suggested && (
-              <span className="text-gray-400 text-sm"> • Gợi ý cho bạn</span>
-            )}
-          </div>
-          <span className="text-gray-400 text-sm">• {timeAgo}</span>
-        </div>
-        <button>⋯</button>
-      </div>
-
-      {/* Hình ảnh/Video bài viết */}
-      <div className="bg-gray-900 aspect-square mb-3 flex items-center justify-center text-gray-500">
-        [Video/Hình ảnh]
-      </div>
-
-      {/* Action buttons (Like, Comment, Share, Save) */}
-      <div className="flex items-center gap-4 mb-2">
-        <Heart size={24} className="cursor-pointer hover:text-gray-400" />
-        <MessageCircle
-          size={24}
-          className="cursor-pointer hover:text-gray-400"
-        />
-        <Send size={24} className="cursor-pointer hover:text-gray-400" />
-        <div className="ml-auto">
-          <Bookmark size={24} className="cursor-pointer hover:text-gray-400" />
-        </div>
-      </div>
-
-      {/* Số lượt thích */}
-      <div className="font-semibold mb-2">{likes} lượt thích</div>
-
-      {/* Caption */}
-      <div className="text-sm">
-        <span className="font-semibold mr-2">{username}</span>
-        <span className="text-gray-300">#ui #ux #webdev...</span>
-      </div>
-
-      {/* Xem bình luận */}
-      <button className="text-gray-400 text-sm mt-1">
-        Xem tất cả {comments} bình luận
-      </button>
-
-      {/* Input thêm bình luận */}
-      <div className="flex items-center gap-2 mt-3 text-sm">
-        <input
-          type="text"
-          placeholder="Bình luận…"
-          className="flex-1 bg-transparent border-none outline-none text-gray-300"
-        />
-      </div>
-    </div>
-  );
-}
 
 // Component SuggestedUser - Gợi ý người dùng
 function SuggestedUser({ username, subtitle }) {
