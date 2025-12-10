@@ -98,7 +98,7 @@ export const useLikeOrDislikePost = () => {
       dispatch(setPosts(updatedPosts));
     },
     onSuccess: () => {
-      toast.success("Đã cập cảm xúc với bài viết");
+      toast.success("Đã cập nhật cảm xúc với bài viết");
     },
     onError: (error) => {
       console.error("Failed to toggle like status", error);
