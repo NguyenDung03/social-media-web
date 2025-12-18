@@ -197,14 +197,18 @@ export const getProfile = async (req, res) => {
 // SUGGESTED USERS CONTROLLER
 export const getSuggestedUsers = async (req, res) => {
   try {
+    const currentUserId = req.user?._id;
+
+    if (!currentUserId) {
+      return res.status(401).json({ message: "Unauthorized", success: false });
+    }
+
     const suggestedUsers = await User.find({
-      _id: { $ne: req.id || req.user?._id },
+      _id: { $ne: currentUserId },
     })
       .select("-password")
       .limit(10);
-    if (!suggestedUsers) {
-      return res.status(400).json({ message: "No suggested users found" });
-    }
+
     return res.status(200).json({
       message: "Suggested users found",
       users: suggestedUsers,
