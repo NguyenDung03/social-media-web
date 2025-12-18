@@ -131,7 +131,7 @@ const Post = ({ post }) => {
 
       {/* Hình ảnh/ */}
       <img
-        className="w-full aspect-square object-cover mb-3 bg-gray-900"
+        className="w-full aspect-[4/5]  object-cover mb-3 bg-gray-900 border-2 border-[#2A2A2A] rounded-[8.5px]"
         src={post?.image}
         alt="post_img"
       />

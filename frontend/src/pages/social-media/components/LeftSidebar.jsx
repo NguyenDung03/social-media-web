@@ -57,13 +57,13 @@ const LeftSidebar = () => {
   ];
 
   return (
-    <div className="fixed top-0 z-10 left-0 px-4 border-r border-gray-300 w-[16%] h-screen">
+    <div className="fixed top-0 z-10 left-0 px-4  w-[16%] h-screen">
       <div className="flex flex-col">
-        <h1 className="w-64  border-gray-800 p-4 flex flex-col">
+        <h1 className="w-60 border-gray-800 pl-[-20%] pr-14 py-3 flex flex-col">
           <img
             src="/logo.png"
             alt="Logo"
-            className="w-full h-auto object-contain object-center mb-5 mt-6"
+            className="w-full h-auto object-contain object-left mb-0 mt-6 ]"
             style={{ aspectRatio: "auto" }}
           />
         </h1>

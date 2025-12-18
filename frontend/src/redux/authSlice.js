@@ -3,14 +3,12 @@ import { createSlice } from "@reduxjs/toolkit";
 const authSlice = createSlice({
   name: "auth",
   initialState: {
-    suggestedUsers: [],
+    // suggestedUsers đã chuyển sang TanStack Query
+    // Server state không nên lưu trong Redux
     userProfile: null,
     selectedUser: null,
   },
   reducers: {
-    setSuggestedUsers: (state, action) => {
-      state.suggestedUsers = action.payload;
-    },
     setUserProfile: (state, action) => {
       state.userProfile = action.payload;
     },
@@ -19,6 +17,5 @@ const authSlice = createSlice({
     },
   },
 });
-export const { setSuggestedUsers, setUserProfile, setSelectedUser } =
-  authSlice.actions;
+export const { setUserProfile, setSelectedUser } = authSlice.actions;
 export default authSlice.reducer;
