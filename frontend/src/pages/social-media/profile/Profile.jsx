@@ -75,7 +75,9 @@ const Profile = () => {
   if (error) {
     return (
       <div className="flex flex-col justify-center items-center h-screen gap-4">
-        <p className="text-red-500">Failed to load profile</p>
+        <p className="text-red-500">
+          {error?.message ? `Failed to load profile: ${error.message}` : "Failed to load profile"}
+        </p>
         <Button onClick={() => window.location.reload()}>Retry</Button>
       </div>
     );
