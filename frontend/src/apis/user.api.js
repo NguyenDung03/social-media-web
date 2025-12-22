@@ -7,8 +7,19 @@ export const userApi = {
     });
     return response.data;
   },
+
   getUserProfile: async (userId) => {
     const response = await axiosInstance.get(`/auth/${userId}/profile`, {
+      withCredentials: true,
+    });
+    return response.data;
+  },
+
+  editUserProfile: async (formData) => {
+    const response = await axiosInstance.post("/auth/profile/edit", formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
       withCredentials: true,
     });
     return response.data;

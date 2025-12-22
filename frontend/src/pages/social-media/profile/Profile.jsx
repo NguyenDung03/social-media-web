@@ -76,7 +76,9 @@ const Profile = () => {
     return (
       <div className="flex flex-col justify-center items-center h-screen gap-4">
         <p className="text-red-500">
-          {error?.message ? `Failed to load profile: ${error.message}` : "Failed to load profile"}
+          {error?.message
+            ? `Failed to load profile: ${error.message}`
+            : "Failed to load profile"}
         </p>
         <Button onClick={() => window.location.reload()}>Retry</Button>
       </div>
@@ -92,11 +94,11 @@ const Profile = () => {
   }
 
   return (
-    <div className="flex justify-center mx-auto w-full py-8 px-20 xl:px-4">
+    <div className="flex justify-center mx-auto w-full py-20 px-20 xl:px-4">
       <div className="flex flex-col gap-20 w-full max-w-4xl">
         <div className="grid grid-cols-2">
           <section className="flex items-center justify-center ">
-            <Avatar className="h-32 w-32 ">
+            <Avatar className="h-44 w-44 rounded-full border border-gray-300">
               <AvatarImage
                 src={userProfile?.profilePic || "/avatar.png"}
                 alt="profilephoto"
@@ -105,7 +107,7 @@ const Profile = () => {
             </Avatar>
           </section>
           <section>
-            <div className="flex flex-col gap-5">
+            <div className="flex flex-col gap-5 ">
               <div className="flex items-center gap-2">
                 <span>{userProfile?.fullName}</span>
                 {isLoggedInUserProfile ? (
@@ -166,13 +168,15 @@ const Profile = () => {
                   following
                 </p>
               </div>
-              <div className="flex flex-col gap-1">
+              <div className="flex flex-col ">
                 {userProfile?.bio && (
-                  <span className="font-semibold">{userProfile.bio}</span>
+                  <span className="font-semibold mb-2.5">
+                    {userProfile.bio}
+                  </span>
                 )}
                 <Badge className="w-fit" variant="secondary">
                   <AtSign />{" "}
-                  <span className="pl-1">{userProfile?.fullName}</span>{" "}
+                  <span className="pl-1 ">{userProfile?.fullName}</span>{" "}
                 </Badge>
               </div>
             </div>

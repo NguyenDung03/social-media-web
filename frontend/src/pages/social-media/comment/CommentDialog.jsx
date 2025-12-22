@@ -59,6 +59,7 @@ const CommentDialog = ({ open, setOpen, addCommentAtDialog, currentUser }) => {
                     <AvatarImage
                       src={selectedPost?.author?.profilePic || "/avatar.png"}
                       alt="author"
+                      className="object-cover"
                     />
                     <AvatarFallback>
                       {selectedPost?.author?.fullName?.charAt(0).toUpperCase()}
@@ -95,6 +96,7 @@ const CommentDialog = ({ open, setOpen, addCommentAtDialog, currentUser }) => {
                       <AvatarImage
                         src={cmt?.author?.profilePic || "/avatar.png"}
                         alt="commenter"
+                        className="object-cover"
                       />
                       <AvatarFallback>
                         {cmt?.author?.fullName?.charAt(0).toUpperCase()}
@@ -150,6 +152,7 @@ const CommentDialog = ({ open, setOpen, addCommentAtDialog, currentUser }) => {
                   <AvatarImage
                     src={currentUser?.profilePic || "/avatar.png"}
                     alt="user"
+                    className="object-cover"
                   />
                 </Avatar>
                 <input

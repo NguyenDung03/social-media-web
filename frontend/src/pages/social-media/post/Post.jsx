@@ -78,6 +78,7 @@ const Post = ({ post }) => {
             <AvatarImage
               src={post?.author?.profilePic || "/avatar.png"}
               alt="avatar"
+              className="w-8 h-8 object-cover rounded-full cursor-pointer"
             />
             <AvatarFallback>
               {post?.author?.fullName?.charAt(0).toUpperCase()}
