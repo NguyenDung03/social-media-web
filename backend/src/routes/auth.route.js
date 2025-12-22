@@ -29,7 +29,7 @@ router.get("/:id/profile", protectRoute, getProfile);
 router.post(
   "/profile/edit",
   protectRoute,
-  upload.single("profilePic"),
+  upload.single("profilePictureFile"),
   updateProfile
 );
 

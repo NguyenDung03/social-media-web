@@ -35,25 +35,26 @@ const LeftSidebar = () => {
   };
 
   const sidebarItems = [
-    { icon: <Home width={24} height={24} />, text: "Home" },
-    { icon: <Search width={24} height={24} />, text: "Search" }, //chua co logic
-    { icon: <Explore width={24} height={24} />, text: "Explore" }, //chua co logic
-    { icon: <Messenger width={24} height={24} />, text: "Messages" },
-    { icon: <Heart width={24} height={24} />, text: "Notifications" },
-    { icon: <Create width={24} height={24} />, text: "Create" },
+    { icon: <Home width={28} height={28} />, text: "Home" },
+    { icon: <Search width={28} height={28} />, text: "Search" }, //chua co logic
+    { icon: <Explore width={28} height={28} />, text: "Explore" }, //chua co logic
+    { icon: <Messenger width={28} height={28} />, text: "Messages" },
+    { icon: <Heart width={28} height={28} />, text: "Notifications" },
+    { icon: <Create width={28} height={28} />, text: "Create" },
     {
       icon: (
-        <Avatar width={24} height={24} className="w-6 h-6">
+        <Avatar width={28} height={28} className="w-7 h-7 ">
           <AvatarImage
             src={authUser?.profilePic || "/avatar.png"}
             alt="@shadcn"
+            className="object-cover w-7 h-7 border-2 border-gray-50 rounded-full"
           />
           <AvatarFallback>Profile</AvatarFallback>
         </Avatar>
       ),
       text: "Profile",
     },
-    { icon: <LogOut width={24} height={24} />, text: "Logout" },
+    { icon: <LogOut width={28} height={28} />, text: "Logout" },
   ];
 
   return (
