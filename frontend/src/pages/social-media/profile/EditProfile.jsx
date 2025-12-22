@@ -49,7 +49,7 @@ const EditProfile = () => {
             <Avatar>
               <AvatarImage
                 src={user?.profilePicture || user.profilePic || "/avatar.png"}
-                alt="post_image"
+                alt="Profile picture"
                 className="w-14 h-14 object-cover rounded-full cursor-pointer"
               />
             </Avatar>
