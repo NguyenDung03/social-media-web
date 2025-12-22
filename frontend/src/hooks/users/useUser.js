@@ -87,9 +87,14 @@ export const useEditProfile = (user) => {
     }
 
     const formData = new FormData();
-    formData.append("bio", profileData.bio);
-    formData.append("gender", profileData.gender);
 
+    if (profileData.bio != null) {
+      formData.append("bio", profileData.bio);
+    }
+
+    if (profileData.gender != null) {
+      formData.append("gender", profileData.gender);
+    }
     if (profileData.profilePictureFile) {
       formData.append("profilePictureFile", profileData.profilePictureFile);
     }
