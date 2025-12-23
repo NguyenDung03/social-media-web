@@ -94,7 +94,7 @@ const LeftSidebar = () => {
               return (
                 <Popover key={index}>
                   <PopoverTrigger asChild>
-                    <div className="flex items-center gap-3 relative hover:bg-gray-400 cursor-pointer rounded-lg p-2.5 my-3 ">
+                    <div className="flex items-center gap-3 relative hover:bg-gray-400 cursor-pointer rounded-lg p-2.5 my-3">
                       <div className={active ? "fill-white" : ""}>
                         {item.icon}
                       </div>
