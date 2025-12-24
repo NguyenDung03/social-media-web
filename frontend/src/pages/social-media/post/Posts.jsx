@@ -41,7 +41,7 @@ const Posts = () => {
         observer.unobserve(loadMoreRef.current);
       }
     };
-  }, [hasNextPage, isFetchingNextPage, fetchNextPage, allPosts.length]);
+  }, [hasNextPage, isFetchingNextPage, fetchNextPage]);
 
   if (isLoading) {
     return (
