@@ -68,7 +68,7 @@ const Posts = () => {
               <React.Fragment key={post._id}>
                 <Post post={post} />
 
-                {/* Trigger load more khi đến post thứ 7 (index 6) trong batch hiện tại */}
+                {/* Trigger load more khi còn 4 bài viết nữa là hết danh sách hiện tại (index === allPosts.length - 4) */}
                 {hasNextPage &&
                   !isFetchingNextPage &&
                   index === allPosts.length - 4 && (
