@@ -8,6 +8,17 @@ export const userApi = {
     return response.data;
   },
 
+  getFollowingOfUser: async ({ cursor, limit = 10 } = {}) => {
+    const params = new URLSearchParams();
+    if (cursor) params.append("cursor", cursor);
+    params.append("limit", limit.toString());
+
+    const response = await axiosInstance.get(`/auth/following?${params}`, {
+      withCredentials: true,
+    });
+    return response.data;
+  },
+
   getUserProfile: async (userId) => {
     const response = await axiosInstance.get(`/auth/${userId}/profile`, {
       withCredentials: true,

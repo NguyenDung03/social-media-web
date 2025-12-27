@@ -1,6 +1,11 @@
 import { userApi } from "@/apis/user.api";
 import { setAuthUser } from "@/redux/authSlice";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import {
+  useMutation,
+  useQuery,
+  useInfiniteQuery,
+  useQueryClient,
+} from "@tanstack/react-query";
 import toast from "react-hot-toast";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
@@ -14,6 +19,35 @@ export const useGetSuggestedUsers = () => {
     },
     staleTime: 5 * 60 * 1000, // Cache 5 phút
     gcTime: 10 * 60 * 1000, // Garbage collection sau 10 phút
+  });
+};
+
+export const useGetFollowingOfUser = () => {
+  return useInfiniteQuery({
+    queryKey: ["followingUsers"],
+    queryFn: async ({ pageParam }) => {
+      const data = await userApi.getFollowingOfUser({
+        cursor: pageParam,
+        limit: 10,
+      });
+
+      const following = data?.following || [];
+      // Filter users with posts
+      const filtered = following.filter(
+        (user) => user.posts && user.posts.length > 0
+      );
+
+      return {
+        users: filtered,
+        nextCursor: data.nextCursor,
+        hasMore: data.hasMore,
+      };
+    },
+    getNextPageParam: (lastPage) =>
+      lastPage.hasMore ? lastPage.nextCursor : undefined,
+    initialPageParam: undefined,
+    staleTime: 5 * 60 * 1000,
+    gcTime: 10 * 60 * 1000,
   });
 };
 
