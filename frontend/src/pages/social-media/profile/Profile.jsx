@@ -20,10 +20,11 @@ import { Avatar, AvatarImage } from "@/components/ui/avatar";
 import CommentDialog from "../comment/CommentDialog";
 
 const Profile = () => {
-  const params = useParams();
-  const userId = params.id;
   const navigate = useNavigate();
   const dispatch = useDispatch();
+
+  const params = useParams();
+  const userId = params.id;
 
   const { data: userProfile, isLoading, error } = useGetUserProfile(userId);
 

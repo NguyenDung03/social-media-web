@@ -3,6 +3,7 @@ import {
   followOrUnfollow,
   getProfile,
   getSuggestedUsers,
+  getFollowingOfUser,
   login,
   logout,
   signup,
@@ -34,6 +35,7 @@ router.post(
 );
 
 router.get("/suggested", protectRoute, getSuggestedUsers);
+router.get("/following", protectRoute, getFollowingOfUser);
 
 router.post(
   "/follow-or-unfollow/:targetUserId",

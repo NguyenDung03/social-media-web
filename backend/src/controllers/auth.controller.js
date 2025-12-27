@@ -348,3 +348,52 @@ export const followOrUnfollow = async (req, res) => {
     res.status(500).json({ message: " Internal Server error" }); // Trả về lỗi server
   }
 };
+// get following of user controller with pagination
+export const getFollowingOfUser = async (req, res) => {
+  try {
+    const currentUserId = req.user?._id;
+    const { cursor, limit = 10 } = req.query;
+
+    const currentUser = await User.findById(currentUserId).select("following");
+
+    if (!currentUser) {
+      return res
+        .status(404)
+        .json({ message: "User not found", success: false });
+    }
+
+    // Build query to get following users
+    let followingQuery = { _id: { $in: currentUser.following } };
+
+    // If cursor exists, only get users after that cursor
+    if (cursor) {
+      followingQuery._id = {
+        $in: currentUser.following,
+        $gt: cursor,
+      };
+    }
+
+    // Fetch users with pagination
+    const followingUsers = await User.find(followingQuery)
+      .select("fullName profilePic posts")
+      .limit(parseInt(limit) + 1) // +1 to check hasMore
+      .sort({ _id: 1 }); // Sort by _id for consistent ordering
+
+    // Check if there are more users
+    const hasMore = followingUsers.length > parseInt(limit);
+    const users = hasMore
+      ? followingUsers.slice(0, parseInt(limit))
+      : followingUsers;
+    const nextCursor = hasMore ? users[users.length - 1]._id.toString() : null;
+
+    return res.status(200).json({
+      following: users,
+      hasMore,
+      nextCursor,
+      success: true,
+    });
+  } catch (error) {
+    console.log("error in getFollowingOfUser controller ", error);
+    res.status(500).json({ message: " Internal Server error" });
+  }
+};
