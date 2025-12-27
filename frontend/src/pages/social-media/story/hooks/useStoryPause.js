@@ -92,22 +92,25 @@ export const useStoryPause = () => {
 
   // Sync STORIES to state when fetching completes - use ref to prevent loops
   const prevUserIdRef = React.useRef(null);
+  const prevStoriesRef = React.useRef(null);
 
   useEffect(() => {
-    // Chỉ chạy khi userId thực sự thay đổi
+    // Chỉ chạy khi userId hoặc STORIES thực sự thay đổi
     if (
       userProfile?._id &&
-      userProfile._id !== prevUserIdRef.current &&
       STORIES &&
-      STORIES.length > 0
+      STORIES.length > 0 &&
+      (userProfile._id !== prevUserIdRef.current ||
+        STORIES !== prevStoriesRef.current)
     ) {
       storiesDispatch({
         type: STORIES_REDUCER_TYPES.setNewStoriesBatch,
         config: { currentStories: STORIES },
       });
       prevUserIdRef.current = userProfile._id;
+      prevStoriesRef.current = STORIES;
     }
-  }, [userProfile?._id]);
+  }, [userProfile?._id, STORIES]);
 
   return {
     storiesStateInitialValue,
