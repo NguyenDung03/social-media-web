@@ -4,6 +4,8 @@ import authRoutes from "./routes/auth.route.js";
 import messageRoutes from "./routes/message.route.js";
 import streamRoutes from "./routes/stream.route.js";
 import postRoutes from "./routes/post.route.js";
+import brandRoutes from "./routes/brand.routes.js";
+import categoryRoutes from "./routes/category.routes.js";
 
 import { connectDB } from "./lib/db.js";
 import { app, server } from "./lib/socket.js";
@@ -37,6 +39,8 @@ app.use("/api/auth", authRoutes);
 app.use("/api/messages", messageRoutes);
 app.use("/api/stream", streamRoutes);
 app.use("/api/post", postRoutes);
+app.use("/api/brand", brandRoutes);
+app.use("/api/category", categoryRoutes);
 
 // Make ready for deployment
 if (process.env.NODE_ENV === "production") {
@@ -48,6 +52,6 @@ if (process.env.NODE_ENV === "production") {
 }
 
 server.listen(PORT, () => {
-  console.log("server dang chay tren port " + PORT);
+  console.log("Server is running on port " + PORT);
   connectDB();
 });

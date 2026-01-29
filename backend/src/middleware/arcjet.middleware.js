@@ -10,14 +10,6 @@ const arcjetProtection = async (req, res, next) => {
           .status(429)
           .json({ message: "Too many requests. Please try again later." });
       }
-      // else if (decision.reason.isBot()) {
-      //   return res.status(403).json({ message: "Bots are not allowed." });
-      // }
-      // else {
-      //   return res
-      //     .status(403)
-      //     .json({ message: "Access denied by security policies." });
-      // }
     }
 
     if (decision.results.some(isSpoofedBot)) {

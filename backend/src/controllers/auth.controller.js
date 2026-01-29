@@ -310,9 +310,8 @@ export const followOrUnfollow = async (req, res) => {
       ]);
 
       // Lấy thông tin user đã cập nhật
-      const updatedUser = await User.findById(requestingUserId).select(
-        "-password"
-      );
+      const updatedUser =
+        await User.findById(requestingUserId).select("-password");
 
       return res.status(200).json({
         message: "Người dùng đã hủy theo dõi thành công",
@@ -333,9 +332,8 @@ export const followOrUnfollow = async (req, res) => {
       ]);
 
       // Lấy thông tin user đã cập nhật
-      const updatedUser = await User.findById(requestingUserId).select(
-        "-password"
-      );
+      const updatedUser =
+        await User.findById(requestingUserId).select("-password");
 
       return res.status(200).json({
         message: "Theo dõi người dùng thành công",

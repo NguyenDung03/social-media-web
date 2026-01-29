@@ -1,14 +1,14 @@
-import _ from 'lodash';
-import { HTTP_STATUS } from '../common/http-status.common.js';
-import { voucherService } from '../services/voucher.service.js';
+import _ from "lodash";
+import { HTTP_STATUS } from "../common/http-status.common.js";
+import { voucherService } from "../services/voucher.service.js";
 
 export const voucherController = {
   optionVoucher: (params) => {
     const { q, ...rest } = params;
 
     let populateDefault = [
-      { path: 'products.productId', select: '_id nameProduct desc images' },
-      { path: 'userId', select: '_id email' },
+      { path: "products.productId", select: "_id nameProduct desc images" },
+      { path: "userId", select: "_id email" },
     ];
     if (populate) {
       if (Array.isArray(populate)) {
@@ -38,11 +38,13 @@ export const voucherController = {
     const voucher = await voucherService.createVoucher(req.body);
 
     if (!voucher) {
-      return res.status(HTTP_STATUS.BAD_REQUEST).json({ message: 'Create voucher faild!', status: false });
+      return res
+        .status(HTTP_STATUS.BAD_REQUEST)
+        .json({ message: "Create voucher faild!", status: false });
     }
 
     return res.status(HTTP_STATUS.CREATED).json({
-      message: 'Create voucher successfully!',
+      message: "Create voucher successfully!",
       status: true,
       data: voucher,
     });
@@ -63,17 +65,19 @@ export const voucherController = {
     const vouchers = await voucherService.getVouchers(query);
 
     if (!vouchers) {
-      return res.status(HTTP_STATUS.BAD_REQUEST).json({ message: 'Get vouchers faild!', status: false });
+      return res
+        .status(HTTP_STATUS.BAD_REQUEST)
+        .json({ message: "Get vouchers faild!", status: false });
     }
 
     const result = vouchers.map((item) => {
       // loại bỏ đi createdBy
-      const rest = _.omit(item._doc, ['createdBy']);
+      const rest = _.omit(item._doc, ["createdBy"]);
       return rest;
     });
 
     return res.status(HTTP_STATUS.OK).json({
-      message: 'Get vouchers successfully!',
+      message: "Get vouchers successfully!",
       status: true,
       data: result,
     });
@@ -85,11 +89,13 @@ export const voucherController = {
     const voucher = await voucherService.updateVoucher(id, req.body);
 
     if (!voucher) {
-      return res.status(HTTP_STATUS.BAD_REQUEST).json({ message: 'Update voucher faild!', status: false });
+      return res
+        .status(HTTP_STATUS.BAD_REQUEST)
+        .json({ message: "Update voucher faild!", status: false });
     }
 
     return res.status(HTTP_STATUS.OK).json({
-      message: 'Update voucher successfully!',
+      message: "Update voucher successfully!",
       status: true,
       data: voucher,
     });
@@ -101,11 +107,13 @@ export const voucherController = {
     const voucher = await voucherService.findVoucherById(id);
 
     if (!voucher) {
-      return res.status(HTTP_STATUS.BAD_REQUEST).json({ message: 'Get voucher faild!', status: false });
+      return res
+        .status(HTTP_STATUS.BAD_REQUEST)
+        .json({ message: "Get voucher faild!", status: false });
     }
 
     return res.status(HTTP_STATUS.OK).json({
-      message: 'Get voucher successfully!',
+      message: "Get voucher successfully!",
       status: true,
       data: voucher,
     });

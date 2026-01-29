@@ -1,4 +1,4 @@
-import Brand from '../models/brand.model.js';
+import Brand from "../models/brand.model.js";
 
 export const createBrandService = async (body) => {
   const newBrand = await Brand.create(body);
@@ -22,6 +22,8 @@ export const getBrandByIdService = async (brandId) => {
 
 // update brand
 export const updateBrandService = async (brandId, body) => {
-  const brand = await Brand.findByIdAndUpdate({ _id: brandId }, body, { new: true });
+  const brand = await Brand.findByIdAndUpdate({ _id: brandId }, body, {
+    new: true,
+  });
   return brand;
 };
