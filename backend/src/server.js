@@ -6,6 +6,7 @@ import streamRoutes from "./routes/stream.route.js";
 import postRoutes from "./routes/post.route.js";
 import brandRoutes from "./routes/brand.routes.js";
 import categoryRoutes from "./routes/category.routes.js";
+import productRoutes from "./routes/product.routes.js";
 
 import { connectDB } from "./lib/db.js";
 import { app, server } from "./lib/socket.js";
@@ -41,6 +42,7 @@ app.use("/api/stream", streamRoutes);
 app.use("/api/post", postRoutes);
 app.use("/api/brand", brandRoutes);
 app.use("/api/category", categoryRoutes);
+app.use("/api/product", productRoutes);
 
 // Make ready for deployment
 if (process.env.NODE_ENV === "production") {
