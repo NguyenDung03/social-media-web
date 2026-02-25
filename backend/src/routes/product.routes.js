@@ -6,7 +6,7 @@ import { productController } from "../controllers/product.controller.js";
 // import { wrapRequestHandler } from "../utils/handlers.util.js";
 
 const router = express.Router();
-
+//1
 router.post(
   "/add-product",
   productController.addProduct
@@ -15,26 +15,29 @@ router.post(
   // wrapRequestHandler(productMiddleware),
   // wrapRequestHandler(productController.addProduct)
 );
-
+//2
 // router to get all products
 router.get(
-  "/get-products",
+  "/get-all-product",
   productController.getAllProduct
   // wrapRequestHandler(productController.getAllProduct)
 );
-// router to get product by id
+// 3 router to get product by id
 router.get(
   "/get-product-by-id/:id",
   productController.getProductById
   // wrapRequestHandler(productController.getProductById)
 );
-// router get product with status
+// 4 router get product with status
 router.get(
   "/get-product-with-status/:status/:deleted",
   productController.getProductWithStatus
   // wrapRequestHandler(productController.getProductWithStatus)
 );
-// router update status
+
+//done
+
+//5  router update status
 router.patch(
   "/update-product-status/:productId",
   productController.updateStatus
@@ -43,6 +46,7 @@ router.patch(
   // wrapRequestHandler(productController.updateStatus)
 );
 
+// 6
 // router update product
 router.put(
   "/update-product/:productId",
@@ -53,7 +57,7 @@ router.put(
   // wrapRequestHandler(productController.updateProduct)
 );
 
-// router delete product
+// 7 router delete product
 router.delete(
   "/delete-product/:productId",
   productController.deleteProduct
@@ -62,7 +66,7 @@ router.delete(
   // wrapRequestHandler(productController.deleteProduct)
 );
 
-// xoá cứng nhiều sản phẩm
+// 8 xoá cứng nhiều sản phẩm
 router.delete(
   `/hard-delete-multiple-product`,
   productController.deleteMultiple
@@ -71,7 +75,7 @@ router.delete(
   // productController.deleteMultiple
 );
 
-// xoá mềm nhiều sản phẩm
+// 9 xoá mềm nhiều sản phẩm
 router.patch(
   `/soft-delete-multiple-product`,
   productController.updateManyProduct
@@ -80,7 +84,7 @@ router.patch(
   // productController.updateManyProduct
 );
 
-//xóa mềm 1 sản phẩm
+//10 xóa mềm 1 sản phẩm
 router.patch(
   "/soft-delete-product/:productId",
   productController.softDeleteProduct
