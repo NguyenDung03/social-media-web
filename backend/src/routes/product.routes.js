@@ -75,14 +75,14 @@ router.delete(
   // productController.deleteMultiple
 );
 
-// 9 xoá mềm nhiều sản phẩm
-router.patch(
-  `/soft-delete-multiple-product`,
-  productController.updateManyProduct
-  // wrapRequestHandler(verifyToken),
-  // wrapRequestHandler(checkPermission),
-  // productController.updateManyProduct
-);
+// // 9 xoá mềm nhiều sản phẩm
+// router.patch(
+//   `/soft-delete-multiple-product`,
+//   productController.updateManyProduct
+//   // wrapRequestHandler(verifyToken),
+//   // wrapRequestHandler(checkPermission),
+//   // productController.updateManyProduct
+// );
 
 //10 xóa mềm 1 sản phẩm
 router.patch(
