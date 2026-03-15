@@ -35,6 +35,9 @@ export const voucherController = {
   },
   // create voucher
   createVoucher: async (req, res) => {
+    // Tự động gán người tạo voucher là user đang đăng nhập (từ token)
+    req.body.createdBy = req.user._id;
+
     const voucher = await voucherService.createVoucher(req.body);
 
     if (!voucher) {

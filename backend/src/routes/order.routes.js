@@ -1,69 +1,46 @@
 import express from "express";
 import { orderController } from "../controllers/order.controller.js";
-// import { checkPermission } from "../middlewares/check-permission.middleware.js";
+import { checkPermission } from "../middleware/check-permission.middleware.js";
 import { orderMiddleware } from "../middleware/ecom/order.middleware.js";
-// import { verifyToken } from "../middlewares/verify-token.middleware.js";
-// import { wrapRequestHandler } from "../utils/handlers.util.js";
+import { wrapRequestHandler } from "../lib/handlers.js";
+import arcjetProtection from "../middleware/arcjet.middleware.js";
+import { protectRoute } from "../middleware/auth.middleware.js";
 
 const router = express.Router();
 
-const mockUserMiddleware = (req, res, next) => {
-  // Giả lập dữ liệu user đang đăng nhập
-  req.user = {
-    // Ưu tiên lấy userId từ body (để test tạo đơn hàng mượt), nếu không có thì lấy chuỗi cố định
-    _id: req.body.userId || "6926b879106fe518fdb4b09d",
-    role: "customer", // Hoặc đổi thành "admin" nếu muốn test quyền admin ở API khác
-  };
-  next();
-};
+router.use(arcjetProtection, protectRoute);
 
 // thêm mới đơn hàng
 router.post(
   "/create-order",
-  // wrapRequestHandler(verifyToken),
-  // wrapRequestHandler(orderMiddleware),
-  // wrapRequestHandler(orderController.createOrder)
-  mockUserMiddleware,
-  orderMiddleware,
-  orderController.createOrder
+  wrapRequestHandler(orderMiddleware),
+  wrapRequestHandler(orderController.createOrder)
 );
 
-// lấy danh sách đơn hàng theo userId
+// lấy danh sách đơn hàng theo userId(user)
 router.get(
   "/get-order-by-user-id",
-  // wrapRequestHandler(verifyToken),
-  // wrapRequestHandler(
-  mockUserMiddleware,
-  orderController.getOrdersByUserId
+  wrapRequestHandler(orderController.getOrdersByUserId)
 );
 
-// lấy danh sách đơn hàng
+// lấy danh sách đơn hàng (admin)
 router.get(
   "/get-all-orders",
-  // wrapRequestHandler(verifyToken),
-  // wrapRequestHandler(checkPermission),
-  // wrapRequestHandler(
-  mockUserMiddleware,
-  orderController.getAllOrders
+  wrapRequestHandler(checkPermission),
+  wrapRequestHandler(orderController.getAllOrders)
 );
 
-// update status đơn hàng
+// update status đơn hàng(admin)
 router.patch(
   "/update-order/:orderId",
-  // wrapRequestHandler(verifyToken),
-  // wrapRequestHandler(checkPermission),
-  // wrapRequestHandler(
-  mockUserMiddleware,
-  orderController.updateOrder
+  wrapRequestHandler(checkPermission),
+  wrapRequestHandler(orderController.updateOrder)
 );
 
 // router cancel order
 router.patch(
   "/cancel-order/:orderId",
-  // wrapRequestHandler(verifyToken),
-  // wrapRequestHandler(
-  mockUserMiddleware,
-  orderController.cancelOrder
+  wrapRequestHandler(orderController.cancelOrder)
 );
 
 export default router;

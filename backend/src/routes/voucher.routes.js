@@ -1,41 +1,34 @@
 import express from "express";
 import { voucherController } from "../controllers/voucher.controller.js";
-// import { checkPermission } from "../middlewares/check-permission.middleware.js";
-// import { verifyToken } from "../middlewares/verify-token.middleware.js";
-// import { wrapRequestHandler } from "../utils/handlers.util.js";
+import { checkPermission } from "../middleware/check-permission.middleware.js";
+import { wrapRequestHandler } from "../lib/handlers.js";
+import arcjetProtection from "../middleware/arcjet.middleware.js";
+import { protectRoute } from "../middleware/auth.middleware.js";
 
 const router = express.Router();
 
+router.use(arcjetProtection, protectRoute);
+
 router.post(
   "/create-voucher",
-  // wrapRequestHandler(verifyToken),
-  // wrapRequestHandler(checkPermission),
-  //wrapRequestHandler(
-
-  voucherController.createVoucher
+  wrapRequestHandler(checkPermission),
+  wrapRequestHandler(voucherController.createVoucher)
 );
 
 // lấy danh sách voucher
-router.get(
-  "/get-vouchers",
-  // wrapRequestHandler(
-  voucherController.getVouchers
-);
+router.get("/get-vouchers", wrapRequestHandler(voucherController.getVouchers));
 
 // update voucher
 router.patch(
   "/update-voucher/:id",
-  // wrapRequestHandler(verifyToken),
-  // wrapRequestHandler(checkPermission),
-  // wrapRequestHandler(
-  voucherController.updateVoucher
+  wrapRequestHandler(checkPermission),
+  wrapRequestHandler(voucherController.updateVoucher)
 );
 
 // xem chi tiết voucher by id
 router.get(
   "/get-voucher/:id",
-  // wrapRequestHandler(
-  voucherController.getVoucherById
+  wrapRequestHandler(voucherController.getVoucherById)
 );
 
 export default router;

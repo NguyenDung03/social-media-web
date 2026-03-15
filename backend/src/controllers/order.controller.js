@@ -40,12 +40,7 @@ export const orderController = {
   createOrder: async (req, res) => {
     const { _id } = req.user;
 
-    // check userId có trùng nhau hay không
-    if (_id !== req.body.userId) {
-      return res
-        .status(HTTP_STATUS.FORBIDDEN)
-        .json({ message: "Bạn không đặt được đơn hàng này!", success: false });
-    }
+    req.body.userId = _id;
 
     // check xem nếu có voucher thì giảm số lượng của voucher đi 1 và trừ đi số tiền của voucher đó
     if (req.body.voucher) {
@@ -132,16 +127,7 @@ export const orderController = {
   },
   getOrdersByUserId: async (req, res) => {
     const { _id } = req.user;
-    // const { userId } = req.params;
 
-    // check userId có trùng nhau hay không
-    // if (_id !== userId) {
-    //   return res
-    //     .status(HTTP_STATUS.FORBIDDEN)
-    //     .json({ message: 'Bạn không có quyền xem đơn hàng này!', success: false });
-    // }
-
-    // lấy danh sách đơn hàng theo userId
     const orders = await orderService.getOrdersByUserId(_id);
 
     if (!orders) {
@@ -310,8 +296,8 @@ export const orderController = {
     const order = await orderService.getOrderById(orderId);
     // check role xem là admin hay user
     if (role === "customer") {
-      // check xem userId có trùng nhau không
-      if (order.userId._id.toString() !== req.user._id) {
+      // check xem userId có trùng nhau không. Phải ép sang chuỗi (toString) ở cả hai vế để tránh bị lệch kiểu dữ liệu
+      if (order.userId._id.toString() !== req.user._id.toString()) {
         return res.status(HTTP_STATUS.FORBIDDEN).json({
           message: "Bạn không có quyền hủy đơn hàng này!",
           success: false,

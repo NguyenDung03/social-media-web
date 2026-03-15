@@ -14,16 +14,10 @@ export const cartController = {
   // add to cart
   addCart: async (req, res) => {
     const { _id } = req.user;
-    const body = req.body;
-    const { userId, ...product } = body;
+    const { userId: bodyUserId, ...product } = req.body;
 
-    // check userId gửi lên có trùng với userId trong token không
-    if (userId !== _id) {
-      return res.status(HTTP_STATUS.UNAUTHORIZED).json({
-        message: "Unauthorized",
-        success: false,
-      });
-    }
+    // Tự động lấy ID người dùng từ token (KHÔNG CẦN GỬI LÊN TỪ BODY NỮA)
+    const userId = _id.toString();
 
     // check user tồn tại hay không
     const userExist = await checkUserExist(userId);
@@ -228,17 +222,11 @@ export const cartController = {
   // update quantity product in cart
   updateQuantityProductInCart: async (req, res) => {
     const { _id } = req.user;
-    const body = req.body;
-    const { userId, productId, productIdInCart } = body;
+    const { productId, productIdInCart } = req.body;
     const { status } = req.query;
 
-    // check userId gửi lên có trùng với userId trong token không
-    if (userId !== _id) {
-      return res.status(HTTP_STATUS.UNAUTHORIZED).json({
-        message: "Unauthorized",
-        success: false,
-      });
-    }
+    // Tự động lấy ID người dùng từ token
+    const userId = _id.toString();
 
     // check user tồn tại hay không
     const userExist = await checkUserExist(userId);
@@ -359,16 +347,10 @@ export const cartController = {
   // delete product in cart
   deleteProductInCart: async (req, res) => {
     const { _id } = req.user;
-    const body = req.body;
-    const { userId, productIdInCart } = body;
+    const { productIdInCart } = req.body;
 
-    // check userId gửi lên có trùng với userId trong token không
-    if (userId !== _id) {
-      return res.status(HTTP_STATUS.UNAUTHORIZED).json({
-        message: "Unauthorized",
-        success: false,
-      });
-    }
+    // Tự động lấy ID người dùng từ token
+    const userId = _id.toString();
 
     // lấy giỏ hàng của user
     const result = await cartService.getCartsByUserId({

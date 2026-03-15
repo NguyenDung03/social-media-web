@@ -1,8 +1,7 @@
 import joi from "joi";
 
 export const cartValidation = joi.object({
-  userId: joi.string().required().messages({
-    "any.required": "userId is required",
+  userId: joi.string().optional().messages({
     "string.empty": "userId is not allowed to be empty",
   }),
   productId: joi.string().required().messages({

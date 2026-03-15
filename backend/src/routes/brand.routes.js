@@ -7,43 +7,31 @@ import {
 
 import express from "express";
 import { protectRoute } from "../middleware/auth.middleware.js";
-// import { brandMiddleware } from "../middlewares/brand.middleware.js";
-// import { checkPermission } from "../middlewares/check-permission.middleware.js";
-// import { verifyToken } from "../middlewares/verify-token.middleware.js";
-// import { wrapRequestHandler } from "../utils/handlers.util.js";
+import { brandMiddleware } from "../middleware/ecom/brand.middleware.js";
+import { checkPermission } from "../middleware/check-permission.middleware.js";
+import { wrapRequestHandler } from "../lib/handlers.js";
+import arcjetProtection from "../middleware/arcjet.middleware.js";
 
 const router = express.Router();
 
-router.use(protectRoute);
+router.use(arcjetProtection, protectRoute);
 
 // create brand
 router.post(
   "/create-brand",
-  createBrand
-  // wrapRequestHandler(verifyToken),
-  // wrapRequestHandler(checkPermission),
-  // wrapRequestHandler(brandMiddleware),
-  // wrapRequestHandler(createBrand)
+  wrapRequestHandler(checkPermission),
+  wrapRequestHandler(brandMiddleware),
+  wrapRequestHandler(createBrand)
 );
 // get all
-router.get(
-  "/get-all-brands",
-  getBrands
-  // wrapRequestHandler(getBrands)
-);
+router.get("/get-all-brands", wrapRequestHandler(getBrands));
 // get by id
-router.get(
-  "/get-brand-by-id/:brandId",
-  getBrandById
-  // wrapRequestHandler(getBrandById)
-);
+router.get("/get-brand-by-id/:brandId", wrapRequestHandler(getBrandById));
 // update
 router.patch(
   "/update-brand/:brandId",
-  updateBrand
-  // wrapRequestHandler(verifyToken),
-  // wrapRequestHandler(checkPermission),
-  // wrapRequestHandler(updateBrand)
+  wrapRequestHandler(checkPermission),
+  wrapRequestHandler(updateBrand)
 );
 
 export default router;
