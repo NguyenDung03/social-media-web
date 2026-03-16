@@ -30,14 +30,15 @@ export default function CartPage() {
   const { mutation: deleteMutation } = useDeleteProductInCart();
 
   const cartData = query.data?.data || query.data || null;
-  const products = cartData?.carts || [];
-  
+  const products = useMemo(() => cartData?.carts || [], [cartData]);
+
   const [selectedItemKeys, setSelectedItemKeys] = useState([]);
+  const [selectedVoucher, setSelectedVoucher] = useState(null);
 
   // Calculate dynamic totals based on selected items
-  const { totalQuantity, totalPrice } = useMemo(() => {
+  const { totalQuantity, subtotal, taxAmount, totalAmount } = useMemo(() => {
     let quantity = 0;
-    let price = 0;
+    let tempSubtotal = 0;
     products.forEach((item) => {
       const itemKey = `${item.productId._id}-${item.color}-${item.size}`;
       if (selectedItemKeys.includes(itemKey)) {
@@ -45,15 +46,31 @@ export default function CartPage() {
         const currentPrice = item.productId.price || 0;
         const currentSale = item.productId.sale || 0;
         const finalPrice = currentPrice * (1 - currentSale / 100);
-        price += finalPrice * item.quantity;
+        tempSubtotal += finalPrice * item.quantity;
       }
     });
-    return { totalQuantity: quantity, totalPrice: price };
-  }, [products, selectedItemKeys]);
+
+    const tempTax = tempSubtotal * 0.01;
+    let tempTotal = tempSubtotal + tempTax;
+
+    // Apply voucher discount
+    if (selectedVoucher && tempTotal > 0) {
+      tempTotal = Math.max(0, tempTotal - selectedVoucher.voucherPrice);
+    }
+
+    return {
+      totalQuantity: quantity,
+      subtotal: tempSubtotal,
+      taxAmount: tempTax,
+      totalAmount: tempTotal,
+    };
+  }, [products, selectedItemKeys, selectedVoucher]);
 
   const handleSelectAll = (isChecked) => {
     if (isChecked) {
-      setSelectedItemKeys(products.map((p) => `${p.productId._id}-${p.color}-${p.size}`));
+      setSelectedItemKeys(
+        products.map((p) => `${p.productId._id}-${p.color}-${p.size}`)
+      );
     } else {
       setSelectedItemKeys([]);
     }
@@ -73,7 +90,7 @@ export default function CartPage() {
 
   const handleDeleteSelected = () => {
     if (selectedItemKeys.length === 0) return;
-    
+
     // selectedItemKeys are in format `${productId}-${color}-${size}`
     // We need to find the specific cart item _ids that match these selected keys
     const idsToDelete = products
@@ -81,7 +98,7 @@ export default function CartPage() {
         const key = `${item.productId._id}-${item.color}-${item.size}`;
         return selectedItemKeys.includes(key);
       })
-      .map(item => item._id);
+      .map((item) => item._id);
 
     if (idsToDelete.length > 0) {
       deleteMutation.mutate({ productIdsInCart: idsToDelete });
@@ -97,9 +114,7 @@ export default function CartPage() {
     <div className="bg-[#f8f6f6] dark:bg-[#1a1a1a] min-h-screen text-slate-900 dark:text-slate-100 pb-24 lg:pb-8 font-sans [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none][scrollbar-width:none]">
       <CartNavbar productCount={products.length} />
 
-      <AnimatePresence>
-        {isEmptyCart && <EmptyCartState />}
-      </AnimatePresence>
+      <AnimatePresence>{isEmptyCart && <EmptyCartState />}</AnimatePresence>
 
       {!isEmptyCart && (
         <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 relative z-10">
@@ -159,8 +174,12 @@ export default function CartPage() {
             >
               <CartSummarySidebar
                 totalQuantity={totalQuantity}
-                totalPrice={totalPrice}
+                subtotal={subtotal}
+                taxAmount={taxAmount}
+                totalAmount={totalAmount}
                 selectedCount={selectedItemKeys.length}
+                selectedVoucher={selectedVoucher}
+                setSelectedVoucher={setSelectedVoucher}
               />
             </motion.div>
           </div>
@@ -176,7 +195,7 @@ export default function CartPage() {
                 Tổng thanh toán
               </span>
               <span className="text-lg font-black bg-gradient-to-r from-yellow-400 to-pink-600 bg-clip-text text-transparent leading-none">
-                {totalPrice.toLocaleString("vi-VN")} VND
+                {totalAmount.toLocaleString("vi-VN")} VND
               </span>
             </div>
             <Button

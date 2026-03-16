@@ -1,14 +1,16 @@
 "use client";
 
-import React, { useState } from "react";
+import React from "react";
 import { useGetAllCategories } from "@/hooks/ecom/useCategory";
 import { useGetAllBrands } from "@/hooks/ecom/useBrand";
 
+import { useSearchParams } from "react-router-dom";
 import Header from "../main-shop/components/Header";
 import FilterSidebar from "../main-shop/components/FilterSidebar";
 import ProductGrid from "../main-shop/components/ProductGrid";
 import Pagination from "../main-shop/components/Pagination";
 import Footer from "../main-shop/components/Footer";
+import { useGetAllProduct } from "@/hooks/ecom/useProduct";
 
 export default function LuxeAutoPage() {
   const { data: categoriesData } = useGetAllCategories();
@@ -17,11 +19,22 @@ export default function LuxeAutoPage() {
   );
 
   const { data: brandsData } = useGetAllBrands();
-  const brands = brandsData?.data?.filter((brand) => brand.status === "active");
+  const brands = brandsData?.data?.filter((brand) => brand.status === "active");  const [searchParams] = useSearchParams();
+  const currentPage = Number(searchParams.get("_page")) || 1;
+  const queryQ = searchParams.get("q") || "";
+  const queryCategory = searchParams.get("category") || "";
+  const queryBrand = searchParams.get("brand") || "";
 
-  const [selectedCategory, setSelectedCategory] = useState("Tất cả");
-  const [selectedBrand, setSelectedBrand] = useState("Tất cả");
+  // Fetch product data to get totalPages
+  const { data: productsData } = useGetAllProduct({
+    _page: currentPage,
+    _limit: 8,
+    q: queryQ,
+    category: queryCategory,
+    brand: queryBrand,
+  });
 
+  const totalPages = productsData?.totalPages || 1;
   return (
     <div className="min-h-screen bg-background-dark text-slate-100 font-display selection:bg-pink-500/30 selection:text-white">
       <Header />
@@ -31,15 +44,11 @@ export default function LuxeAutoPage() {
           <FilterSidebar
             categories={categories || []}
             brands={brands || []}
-            selectedCategory={selectedCategory}
-            setSelectedCategory={setSelectedCategory}
-            selectedBrand={selectedBrand}
-            setSelectedBrand={setSelectedBrand}
           />
 
           <div className="flex-1">
-            <ProductGrid />
-            <Pagination />
+            <ProductGrid productsData={productsData} />
+            <Pagination totalPages={totalPages} currentPage={currentPage} />
           </div>
         </div>
       </main>

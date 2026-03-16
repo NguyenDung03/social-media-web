@@ -174,7 +174,7 @@ export const productController = {
   },
   // get all product
   getAllProduct: async (req, res) => {
-    const { _limit = 10, _page = 1, q, ...rest } = req.query;
+    const { _limit = 8, _page = 1, q, ...rest } = req.query;
     const { option, query } = productController.optionProduct({
       _limit,
       _page,

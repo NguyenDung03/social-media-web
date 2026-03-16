@@ -1,11 +1,10 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useSearchParams, createSearchParams } from "react-router-dom";
 import { motion } from "framer-motion";
 import { Search, ShoppingBag } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { useGetAllProduct } from "@/hooks/ecom/useProduct";
 import ProductCartDialog from "@/components/modals/ProductCartDialog";
 
 const containerVariants = {
@@ -21,10 +20,11 @@ const itemVariants = {
   show: { opacity: 1, y: 0, transition: { duration: 0.5, ease: "easeOut" } },
 };
 
-export default function ProductGrid() {
-  //
-  const { data } = useGetAllProduct();
-  const products = data?.docs || [];
+export default function ProductGrid({ productsData }) {
+  const [searchParams, setSearchParams] = useSearchParams();
+  const queryQ = searchParams.get("q") || "";
+
+  const products = productsData?.docs || [];
   //
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
@@ -51,7 +51,18 @@ export default function ProductGrid() {
             <Search className="w-5 h-5 text-slate-500 mr-3 group-focus-within:text-pink-400 transition-colors" />
             <Input
               className="bg-transparent border-none text-slate-200 placeholder:text-slate-500 focus-visible:ring-0 focus-visible:ring-offset-0 w-full text-sm p-0 h-auto"
-              placeholder="Tìm kiếm phụ kiện độ xe..."
+              placeholder="Tìm kiếm sản phẩm ..."
+              defaultValue={queryQ}
+              onChange={(e) => {
+                const value = e.target.value;
+                const params = Object.fromEntries(searchParams);
+                if (value) {
+                  params.q = value;
+                } else {
+                  delete params.q;
+                }
+                setSearchParams(createSearchParams(params), { replace: true });
+              }}
             />
           </div>
         </div>
@@ -106,11 +117,11 @@ export default function ProductGrid() {
                 <div className="flex items-baseline gap-2.5 mb-5 flex-wrap">
                   {/* Giá tiền - Điểm nhấn */}
                   <span className="font-black text-lg bg-gradient-to-tr from-yellow-400 to-pink-600 bg-clip-text text-transparent">
-                    {product.price} vnđ
+                    {product.price.toLocaleString("vi-VN")} vnđ
                   </span>
                   {product.oldPrice && (
                     <span className="text-slate-600 text-xs font-medium line-through">
-                      {product.oldPrice} vnđ
+                      {product.oldPrice.toLocaleString("vi-VN")} vnđ
                     </span>
                   )}
                 </div>

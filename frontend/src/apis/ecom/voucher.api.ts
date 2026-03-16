@@ -3,9 +3,12 @@ import { TQueryParams, TResponseNoPagination } from "@/types/common.type";
 import { TVoucher } from "@/types/voucher.type";
 
 export const voucherApi = {
-  getVouchers: async () => {
+  getVouchers: async (params?: TQueryParams) => {
     const response = await axiosInstance.get<TResponseNoPagination<TVoucher>>(
-      "/voucher/get-vouchers"
+      "/voucher/get-vouchers",
+      {
+        params,
+      }
     );
     return response.data;
   },
