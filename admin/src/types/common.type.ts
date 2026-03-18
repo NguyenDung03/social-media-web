@@ -60,6 +60,7 @@ export type TQueryParams = {
   q?: string
   status?: string
   deleted?: string
+  createSearch?: string
 }
 
 // int abc = 5 => abc = 'ahihi'

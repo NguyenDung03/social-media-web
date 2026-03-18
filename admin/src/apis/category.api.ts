@@ -1,53 +1,54 @@
-import { TCategory, TFormCategory } from '@/types/category.type'
-import { TQueryParams, TResponseDetail, TResponseNoPagination } from '@/types/common.type'
+import type { TCategory, TFormCategory } from "../types/category.type";
+import type {
+  TBaseResponseDelete,
+  TQueryParams,
+  TResponseDetail,
+  TResponseNoPagination,
+} from "../types/common.type";
+import { axiosInstance } from "../lib/axios";
 
-import api from './base-url.api'
+export const categoryApi = {
+  // 1. Get all categories
+  getCategories: async (
+    params?: TQueryParams,
+  ): Promise<TResponseNoPagination<TCategory>> => {
+    const response = await axiosInstance.get<TResponseNoPagination<TCategory>>(
+      `/category/get-categories`,
+      {
+        params,
+      },
+    );
+    return response.data;
+  },
 
-const CATEGORY_URL = `/category`
-const CATEGORIES_URL = `/categories`
+  // 3. Create category
+  createCategory: async (
+    body: TFormCategory,
+  ): Promise<TResponseDetail<TCategory>> => {
+    const response = await axiosInstance.post<TResponseDetail<TCategory>>(
+      `/category/create-category`,
+      body,
+    );
+    return response.data;
+  },
 
-export const getCategories = async (
-  token: string,
-  params?: TQueryParams
-): Promise<TResponseNoPagination<TCategory>> => {
-  const response = await api.get<TResponseNoPagination<TCategory>>(`${CATEGORIES_URL}`, {
-    params: {
-      ...params
-    },
-    headers: {
-      Authorization: `Bearer ${token}`
-    }
-  })
-  return response.data
-}
+  // 4. Update category
+  updateCategory: async (
+    body: TCategory,
+  ): Promise<TResponseDetail<TCategory>> => {
+    const { _id, ...rest } = body;
+    const response = await axiosInstance.patch<TResponseDetail<TCategory>>(
+      `/category/update-category-by-id/${_id}`,
+      rest,
+    );
+    return response.data;
+  },
 
-export const createCategory = async (body: TFormCategory, token: string): Promise<TResponseDetail<TCategory>> => {
-  const response = await api.post<TResponseDetail<TCategory>>(`${CATEGORY_URL}`, body, {
-    headers: {
-      Authorization: `Bearer ${token}`
-    }
-  })
-
-  return response.data
-}
-
-export const updateCategory = async (body: TCategory, token: string) => {
-  const response = await api.patch(`${CATEGORY_URL}/${body._id}`, body, {
-    headers: {
-      Authorization: `Bearer ${token}`
-    }
-  })
-
-  return response.data
-}
-
-// delete category
-export const deleteCategory = async (id: string, token: string) => {
-  const response = await api.delete(`${CATEGORY_URL}/${id}`, {
-    headers: {
-      Authorization: `Bearer ${token}`
-    }
-  })
-
-  return response.data
-}
+  // 5. Delete category
+  deleteCategory: async (id: string): Promise<TBaseResponseDelete> => {
+    const response = await axiosInstance.delete<TBaseResponseDelete>(
+      `/category/delete-category-by-id/${id}`,
+    );
+    return response.data;
+  },
+};

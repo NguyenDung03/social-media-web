@@ -9,4 +9,4 @@ export type TCategory = {
   updatedAt: string
 }
 
-export type TFormCategory = Pick<TCategory, 'nameCategory' | 'image' | 'desc'>
+export type TFormCategory = Pick<TCategory, 'nameCategory' | 'image' | 'desc' | 'status'>

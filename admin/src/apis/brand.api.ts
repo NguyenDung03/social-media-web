@@ -1,49 +1,43 @@
-import { TQueryParams, TResponseDetail, TResponseNoPagination } from '@/types/common.type'
-import api from './base-url.api'
-import { TBrand, TFormBrand } from '@/types/brand.type'
+import type { TBrand, TFormBrand } from "../types/brand.type";
+import type {
+  TQueryParams,
+  TResponseDetail,
+  TResponseNoPagination,
+} from "../types/common.type";
+import { axiosInstance } from "../lib/axios";
 
-const BRAND_URL = `/brand`
-const BRANDS_URL = `/brand`
+// ================= API CALLS =================
 
-export const getBrands = async (token: string, params?: TQueryParams): Promise<TResponseNoPagination<TBrand>> => {
-  const response = await api.get<TResponseNoPagination<TBrand>>(`${BRANDS_URL}`, {
-    params: {
-      ...params
-    },
-    headers: {
-      Authorization: `Bearer ${token}`
-    }
-  })
-  return response.data
-}
+export const brandApi = {
+  // 1. Get all brands
+  getBrands: async (
+    params?: TQueryParams,
+  ): Promise<TResponseNoPagination<TBrand>> => {
+    const response = await axiosInstance.get<TResponseNoPagination<TBrand>>(
+      `/brand/get-all-brands`,
+      {
+        params,
+      },
+    );
+    return response.data;
+  },
 
-export const createBrand = async (body: TFormBrand, token: string): Promise<TResponseDetail<TBrand>> => {
-  const response = await api.post<TResponseDetail<TBrand>>(`${BRAND_URL}`, body, {
-    headers: {
-      Authorization: `Bearer ${token}`
-    }
-  })
+  // 3. Create brand
+  createBrand: async (body: TFormBrand): Promise<TResponseDetail<TBrand>> => {
+    const response = await axiosInstance.post<TResponseDetail<TBrand>>(
+      `/brand/create-brand`,
+      body,
+    );
+    return response.data;
+  },
 
-  return response.data
-}
-
-export const updateBrand = async (body: TBrand, token: string) => {
-  const response = await api.patch(`${BRAND_URL}/${body._id}`, body, {
-    headers: {
-      Authorization: `Bearer ${token}`
-    }
-  })
-
-  return response.data
-}
-
-// delete
-export const deleteBrand = async (id: string, token: string) => {
-  const response = await api.delete(`${BRAND_URL}/${id}`, {
-    headers: {
-      Authorization: `Bearer ${token}`
-    }
-  })
-
-  return response.data
-}
+  // 4. Update brand
+  updateBrand: async (body: TBrand): Promise<TResponseDetail<TBrand>> => {
+    const { _id, ...rest } = body;
+    const response = await axiosInstance.patch<TResponseDetail<TBrand>>(
+      `/brand/update-brand/${_id}`,
+      rest,
+    );
+    return response.data;
+  },
+};

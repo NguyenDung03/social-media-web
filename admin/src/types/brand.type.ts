@@ -10,4 +10,4 @@ export type TBrand = {
   products: string[]
 }
 
-export type TFormBrand = Pick<TBrand, 'nameBrand' | 'image' | 'desc'>
+export type TFormBrand = Pick<TBrand, 'nameBrand' | 'image' | 'desc' | 'status'>

@@ -14,62 +14,62 @@ router.use(arcjetProtection);
 // router to get all products
 router.get(
   "/get-all-product",
-  wrapRequestHandler(productController.getAllProduct)
+  wrapRequestHandler(productController.getAllProduct),
 );
 // 3 router to get product by id
 router.get(
   "/get-product-by-id/:id",
-  wrapRequestHandler(productController.getProductById)
+  wrapRequestHandler(productController.getProductById),
 );
 // 4 router get product with status
 router.get(
   "/get-product-with-status/:status/:deleted",
-  wrapRequestHandler(productController.getProductWithStatus)
+  wrapRequestHandler(productController.getProductWithStatus),
 );
 
 router.use(protectRoute);
 
-//1
+// add product
 router.post(
   "/add-product",
   wrapRequestHandler(checkPermission),
   wrapRequestHandler(productMiddleware),
-  wrapRequestHandler(productController.addProduct)
+  wrapRequestHandler(productController.addProduct),
 );
 
-//5  router update status
+//5  router update status product
 router.patch(
   "/update-product-status/:productId",
   wrapRequestHandler(checkPermission),
-  wrapRequestHandler(productController.updateStatus)
+  wrapRequestHandler(productController.updateStatus),
 );
 // 6
-// router update product
+// router update product by id
 router.put(
   "/update-product/:productId",
   wrapRequestHandler(checkPermission),
   wrapRequestHandler(productMiddleware),
-  wrapRequestHandler(productController.updateProduct)
+  wrapRequestHandler(productController.updateProduct),
 );
 
 // 7 router delete product
 router.delete(
   "/delete-product/:productId",
   wrapRequestHandler(checkPermission),
-  wrapRequestHandler(productController.deleteProduct)
+  wrapRequestHandler(productController.deleteProduct),
 );
 
 // 8 xoá cứng nhiều sản phẩm
 router.delete(
   `/hard-delete-multiple-product`,
   wrapRequestHandler(checkPermission),
-  wrapRequestHandler(productController.deleteMultiple)
+  wrapRequestHandler(productController.deleteMultiple),
 );
 
 //10 xóa mềm 1 sản phẩm
 router.patch(
   "/soft-delete-product/:productId",
   wrapRequestHandler(checkPermission),
-  wrapRequestHandler(productController.softDeleteProduct)
+  wrapRequestHandler(productController.softDeleteProduct),
 );
 export default router;

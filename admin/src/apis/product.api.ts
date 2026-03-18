@@ -1,100 +1,106 @@
-import { TBaseResponseDelete, TQueryParams, TResponse, TResponseDetail } from '@/types/common.type'
-import { TProduct, TProductForm, TProductFormEdit } from '@/types/product.type'
+import { axiosInstance } from "../lib/axios";
+import type {
+  TBaseResponseDelete,
+  TQueryParams,
+  TResponse,
+  TResponseDetail,
+} from "../types/common.type";
+import type {
+  TProduct,
+  TProductForm,
+  TProductFormEdit,
+} from "../types/product.type";
 
-import api from './base-url.api'
+// ================= API CALLS =================
 
-export const getProducts = async (token: string, params?: TQueryParams): Promise<TResponse<TProduct>> => {
-  const response = await api.get<TResponse<TProduct>>(`/products`, {
-    params,
-    headers: {
-      Authorization: `Bearer ${token}`
-    }
-  })
-  return response.data
-}
-
-export const deleteProduct = async (productId: string, token: string): Promise<TBaseResponseDelete> => {
-  if (!productId || !token) {
-    throw new Error('Product ID and token are required for deletion.')
-  }
-
-  const response = await api.delete<TBaseResponseDelete>(`/product/${productId}`, {
-    headers: {
-      Authorization: `Bearer ${token}`,
-      'Content-Type': 'application/json'
-    }
-  })
-
-  return response.data
-}
-
-// xoá mềm sản phẩm (chuyển sản phẩm vào thùng rác)
-export const softDeleteProduct = async (idProduct: string, token: string): Promise<TBaseResponseDelete> => {
-  if (!idProduct || !token) {
-    throw new Error('Product ID and token are required for soft deletion.')
-  }
-
-  const response = await api.patch<TBaseResponseDelete>(
-    `/product-soft-delete/${idProduct}`,
-    {},
-    {
-      headers: {
-        Authorization: `Bearer ${token}`,
-        'Content-Type': 'application/json'
-      }
-    }
-  )
-
-  return response.data
-}
-
-// xoá mềm nhiều sản phẩm (chuyển sản phẩm vào thùng rác)
-export const softDeleteMultipleProduct = async (
-  params: { id: string | string[]; is_deleted?: boolean },
-  token: string
-) => {
-  const response = await api.patch<TBaseResponseDelete>(
-    `/product-delete-multiple`,
-    {}, // data rỗng
-    {
-      params: {
-        id: params.id,
-        deleted: params.is_deleted
+export const productApi = {
+  // 1. Get all products with pagination and search
+  getAllProducts: async (
+    params?: TQueryParams,
+  ): Promise<TResponse<TProduct>> => {
+    const response = await axiosInstance.get<TResponse<TProduct>>(
+      "/product/get-all-product",
+      {
+        params,
       },
-      headers: {
-        Authorization: `Bearer ${token}`
-      }
-    }
-  )
+    );
+    return response.data;
+  },
 
-  return response.data
-}
+  // 3. Get products with status and deleted flag
+  getProductsWithStatus: async (
+    status: string,
+    deleted: boolean,
+    params?: TQueryParams,
+  ): Promise<TResponse<TProduct>> => {
+    const response = await axiosInstance.get<TResponse<TProduct>>(
+      `/product/get-product-with-status/${status}/${deleted}`,
+      { params },
+    );
+    return response.data;
+  },
 
-// thêm sản phẩm
-export const addProduct = async (data: TProductForm, token: string) => {
-  const response = await api.post<TResponse<TProduct>>('/product', data, {
-    headers: {
-      Authorization: `Bearer ${token}`
-    }
-  })
+  // 4. Add product
+  addProduct: async (
+    data: TProductForm,
+  ): Promise<TResponseDetail<TProduct>> => {
+    const response = await axiosInstance.post<TResponseDetail<TProduct>>(
+      "/product/add-product",
+      data,
+    );
+    return response.data;
+  },
 
-  return response.data
-}
+  // 5. Update product status (Toggle active/inactive)
+  updateProductStatus: async (
+    productId: string,
+  ): Promise<TResponseDetail<TProduct>> => {
+    const response = await axiosInstance.patch<TResponseDetail<TProduct>>(
+      `/product/update-product-status/${productId}`,
+    );
+    return response.data;
+  },
 
-// cập nhật lại sản phẩm
-export const editProduct = async (data: TProductFormEdit, token: string) => {
-  const reponse = await api.put<TResponse<TProduct>>(`/product/${data._id}`, data, {
-    headers: {
-      Authorization: `Bearer ${token}`
-    }
-  })
+  // 6. Update product by ID
+  updateProduct: async (
+    data: TProductFormEdit,
+  ): Promise<TResponseDetail<TProduct>> => {
+    const { _id, ...body } = data;
+    const response = await axiosInstance.put<TResponseDetail<TProduct>>(
+      `/product/update-product/${_id}`,
+      body,
+    );
+    return response.data;
+  },
 
-  return reponse.data
-}
+  // 7. Hard delete product
+  deleteProduct: async (productId: string): Promise<TBaseResponseDelete> => {
+    const response = await axiosInstance.delete<TBaseResponseDelete>(
+      `/product/delete-product/${productId}`,
+    );
+    return response.data;
+  },
 
-// xem chi tiết sản phẩm
-export const getProduct = async (id: string) => {
-  const response = await api.get<TResponseDetail<TProduct>>(`/product/${id}`)
+  // 8. Hard delete multiple products
+  deleteMultipleProducts: async (
+    ids: string[],
+  ): Promise<TBaseResponseDelete> => {
+    const response = await axiosInstance.delete<TBaseResponseDelete>(
+      "/product/hard-delete-multiple-product",
+      {
+        params: { id: ids },
+      },
+    );
+    return response.data;
+  },
 
-  return response.data
-}
+  // 9. Soft delete product (Toggle is_deleted)
+  softDeleteProduct: async (
+    productId: string,
+  ): Promise<TResponseDetail<TProduct>> => {
+    const response = await axiosInstance.patch<TResponseDetail<TProduct>>(
+      `/product/soft-delete-product/${productId}`,
+    );
+    return response.data;
+  },
+};
