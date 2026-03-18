@@ -50,7 +50,7 @@ app.use("/api/product", productRoutes);
 app.use("/api/voucher", voucherRoutes);
 app.use("/api/order", orderRoutes);
 app.use("/api/cart", cartRoutes);
-app.use("/api", paymentRoutes);
+app.use("/api/payment", paymentRoutes);
 
 // Make ready for deployment
 if (process.env.NODE_ENV === "production") {

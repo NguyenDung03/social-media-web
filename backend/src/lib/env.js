@@ -21,4 +21,9 @@ export const ENV = {
 
   ARCJET_KEY: process.env.ARCJET_KEY,
   ARCJET_ENV: process.env.ARCJET_ENV,
+
+  VNP_TMN_CODE: process.env.VNP_TMN_CODE,
+  VNP_HASH_SECRET: process.env.VNP_HASH_SECRET,
+  VNP_URL: process.env.VNP_URL,
+  VNP_RETURN_URL: process.env.VNP_RETURN_URL,
 };

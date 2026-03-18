@@ -84,7 +84,7 @@ export const orderController = {
         }
 
         // Lấy giá từ DB
-        const itemPrice = dbProduct.price; 
+        const itemPrice = dbProduct.price;
         subTotal += itemPrice * quantity;
 
         verifiedProducts.push({
@@ -108,15 +108,24 @@ export const orderController = {
       let voucherDiscount = 0;
       if (voucherId) {
         const voucherDoc = await voucherService.findVoucherById(voucherId);
-        if (voucherDoc && dayjs().isBefore(dayjs(voucherDoc.endDate)) && voucherDoc.discount > 0) {
+        if (
+          voucherDoc &&
+          dayjs().isBefore(dayjs(voucherDoc.endDate)) &&
+          voucherDoc.discount > 0
+        ) {
           voucherDiscount = voucherDoc.voucherPrice;
           // Cập nhật lượt dùng voucher
-          await voucherService.updateVoucher(voucherId, { discount: voucherDoc.discount - 1 });
+          await voucherService.updateVoucher(voucherId, {
+            discount: voucherDoc.discount - 1,
+          });
         }
       }
 
       const shippingPrice = 0; // Có thể hardcode hoặc lấy từ logic ship
-      const finalTotal = Math.max(0, subTotal + shippingPrice - voucherDiscount);
+      const finalTotal = Math.max(
+        0,
+        subTotal + shippingPrice - voucherDiscount
+      );
 
       // 3. TẠO ORDER (Pending status)
       const newOrder = await orderService.createOrder({
@@ -135,13 +144,21 @@ export const orderController = {
       // 4. XỬ LÝ THANH TOÁN VNPAY NẾU CẦN
       let paymentUrl = null;
       if (paymentMethod === "vnpay") {
-        paymentUrl = await generateVnPayUrl(req, newOrder._id.toString(), finalTotal);
+        paymentUrl = generateVnPayUrl(
+          req,
+          newOrder._id.toString(),
+          finalTotal
+        );
       }
 
       // 5. CẬP NHẬT KHO
       await Promise.all(
         stockUpdates.map((u) =>
-          productService.updateQuantityProduct(u.productId, u.variantId, u.newQuantity)
+          productService.updateQuantityProduct(
+            u.productId,
+            u.variantId,
+            u.newQuantity
+          )
         )
       );
 

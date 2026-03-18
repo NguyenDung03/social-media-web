@@ -12,14 +12,13 @@ import ChatPage from "./pages/chats/ChatPage";
 import SocialMediaPage from "./pages/social-media/page";
 import Profile from "./pages/social-media/profile/Profile";
 import EditProfile from "./pages/social-media/profile/EditProfile";
-import Posts from "./pages/social-media/post/Posts";
-import RightSidebar from "./pages/social-media/components/RightSidebar";
+
 import Shopping from "./pages/e-commerce/main-shop/Shopping";
 import DetailPrduct from "./pages/e-commerce/detail-product/[productId]/DetailPrduct";
 import CartPage from "./pages/e-commerce/cart-page/CartPage";
 import Checkout from "./pages/e-commerce/cart-page/payment/Checkout.tsx";
-import VNPayResult from "./pages/e-commerce/cart-page/payment/VNPayResult.tsx";
 import StatusOrder from "./pages/e-commerce/order/StatusOrder";
+import VNPayReturn from "./pages/e-commerce/cart-page/payment/VNPayReturn.tsx";
 
 const routes = createBrowserRouter([
   {
@@ -83,8 +82,8 @@ const routes = createBrowserRouter([
             element: <Checkout />,
           },
           {
-            path: "vnpay-result",
-            element: <VNPayResult />,
+            path: "vnpay-return",
+            element: <VNPayReturn />,
           },
           {
             path: "order",
