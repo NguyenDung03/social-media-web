@@ -6,6 +6,8 @@ import CategoryPage from "./pages/home/category/CategoryPage.tsx";
 import ProtectedRoute from "./components/auth/ProtectedRoute.tsx";
 import PublicRoute from "./components/auth/PublicRoute.tsx";
 import ProductPage from "./pages/home/product/ProductPage.tsx";
+import VoucherPage from "./pages/home/voucher/Voucher.tsx";
+import OrderPage from "./pages/home/order/Order.tsx";
 
 const routes: ReturnType<typeof createBrowserRouter> = createBrowserRouter([
   {
@@ -35,6 +37,14 @@ const routes: ReturnType<typeof createBrowserRouter> = createBrowserRouter([
           {
             path: "product",
             element: <ProductPage />,
+          },
+          {
+            path: "voucher",
+            element: <VoucherPage />,
+          },
+          {
+            path: "order",
+            element: <OrderPage />,
           },
         ],
       },

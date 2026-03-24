@@ -250,6 +250,7 @@ export const orderController = {
   // cập nhật đơn hàng trạng thái đơn hàng
   updateOrder: async (req, res) => {
     const { _id } = req.user;
+    const userRole = req.user?.role;
     console.log("🚀 ~ updateOrder: ~ req.user:", req.user);
     const { orderId } = req.params;
     const { status, message } = req.body;
@@ -257,13 +258,14 @@ export const orderController = {
     // lấy ra thông tin đơn hàng theo orderId
     const order = await orderService.getOrderById(orderId);
 
+    // Admin có thể cập nhật mọi đơn hàng mà không cần assignee
+    const isAdmin = userRole === "admin";
+
     // check xem có trường assignee không
     if (!order.assignee && order.status === "pending") {
       // gán _id của user hiện tại vào trường assignee và cập nhật trạng thái đơn hàng => confirmed
-      const updateOrder = await orderService.updateOrder(
-        { _id: orderId },
-        { assignee: _id, status }
-      );
+      const updateData = isAdmin ? { status } : { assignee: _id, status };
+      const updateOrder = await orderService.updateOrder({ _id: orderId }, updateData);
       if (!updateOrder) {
         return res
           .status(HTTP_STATUS.BAD_REQUEST)
@@ -274,12 +276,15 @@ export const orderController = {
         .json({ message: "Cập nhật đơn hàng thành công!", success: true });
     }
 
-    // check xem có phải là người được gán đơn hàng không
-    if (order.assignee._id.toString() !== _id) {
-      return res.status(HTTP_STATUS.FORBIDDEN).json({
-        message: "Bạn không có quyền cập nhật đơn hàng này!",
-        success: false,
-      });
+    // Admin được phép cập nhật mọi đơn hàng (bỏ qua kiểm tra assignee)
+    if (!isAdmin) {
+      // check xem có phải là người được gán đơn hàng không
+      if (order.assignee && order.assignee._id.toString() !== _id) {
+        return res.status(HTTP_STATUS.FORBIDDEN).json({
+          message: "Bạn không có quyền cập nhật đơn hàng này!",
+          success: false,
+        });
+      }
     }
 
     // check xem trạng thái đơn hàng có hợp lệ không

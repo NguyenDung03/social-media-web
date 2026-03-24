@@ -17,6 +17,7 @@ import { app, server } from "./lib/socket.js";
 import { ENV } from "./lib/env.js";
 
 import path from "path";
+import dns from "dns";
 
 import cookieParser from "cookie-parser";
 import cors from "cors";
@@ -25,12 +26,14 @@ const __dirname = path.resolve();
 
 const PORT = process.env.PORT || 3000;
 
+dns.setServers(["1.1.1.1", "8.8.8.8"]);
+
 // CORS - phải đặt trước các middleware khác
 app.use(
   cors({
     origin: ["http://localhost:5173", "http://localhost:5174"],
     credentials: true,
-  })
+  }),
 );
 
 // Body parser với limit 10mb

@@ -45,32 +45,53 @@ export const Navbar = () => {
         </Link>
 
         <div className="hidden md:flex items-center gap-8">
-          <Link to="/" className="text-[#111111] text-[13px] font-medium">
+          <Link
+            to="/"
+            className={`text-[13px] font-medium transition-colors ${
+              location.pathname === "/" ? "text-[#111111]" : "text-[#787774] hover:text-[#111111]"
+            }`}
+          >
             Dashboard
           </Link>
           <Link
             to="/product"
-            className="text-[#787774] text-[13px] hover:text-[#111111] transition-colors"
+            className={`text-[13px] font-medium transition-colors ${
+              location.pathname.startsWith("/product") ? "text-[#111111]" : "text-[#787774] hover:text-[#111111]"
+            }`}
           >
             Sản phẩm
           </Link>
           <Link
             to="/order"
-            className="text-[#787774] text-[13px] hover:text-[#111111] transition-colors"
+            className={`text-[13px] font-medium transition-colors ${
+              location.pathname.startsWith("/order") ? "text-[#111111]" : "text-[#787774] hover:text-[#111111]"
+            }`}
           >
             Đơn hàng
           </Link>
           <Link
             to="/brand"
-            className="text-[#787774] text-[13px] hover:text-[#111111] transition-colors"
+            className={`text-[13px] font-medium transition-colors ${
+              location.pathname.startsWith("/brand") ? "text-[#111111]" : "text-[#787774] hover:text-[#111111]"
+            }`}
           >
             Thương hiệu
           </Link>
           <Link
             to="/category"
-            className="text-[#787774] text-[13px] hover:text-[#111111] transition-colors"
+            className={`text-[13px] font-medium transition-colors ${
+              location.pathname.startsWith("/category") ? "text-[#111111]" : "text-[#787774] hover:text-[#111111]"
+            }`}
           >
             Danh mục
+          </Link>
+          <Link
+            to="/voucher"
+            className={`text-[13px] font-medium transition-colors ${
+              location.pathname.startsWith("/voucher") ? "text-[#111111]" : "text-[#787774] hover:text-[#111111]"
+            }`}
+          >
+            Khuyến mãi
           </Link>
         </div>
 

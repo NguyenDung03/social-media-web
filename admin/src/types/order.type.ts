@@ -21,9 +21,17 @@ export type TOrderProduct = {
   color: string;
   price: number;
   _id: string;
+  name?: string;
+  image?: string;
 };
 
 export type TOrderInfo = TInfoOrderShipping & { _id: string };
+
+export type TAssignee = {
+  _id: string;
+  fullname: string;
+  role: string;
+};
 
 export type TOrder = {
   _id: string;
@@ -35,10 +43,12 @@ export type TOrder = {
   note: string;
   paymentMethod: string;
   total: number;
+  subTotal?: number;
   products: TOrderProduct[];
   infoOrderShipping: TOrderInfo;
   priceShipping: number;
   reasonCancel: string;
+  assignee?: TAssignee;
   createdAt: string;
   updatedAt: string;
 };

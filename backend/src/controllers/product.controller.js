@@ -100,7 +100,7 @@ export const productController = {
     const promises = [];
     if (categoryId) {
       promises.push(
-        productService.removeProductFromCategory(productId, categoryId)
+        productService.removeProductFromCategory(productId, categoryId),
       );
     }
     if (brandId) {
@@ -264,7 +264,7 @@ export const productController = {
       // 4. Update status mới
       const updatedProduct = await productService.updateStatus(
         productId,
-        newStatus
+        newStatus,
       );
       if (!updatedProduct) {
         return res
@@ -340,7 +340,7 @@ export const productController = {
       await productController.removeProductFromCateAndBrand(
         productId,
         productExist.category ? productExist.category._id : null,
-        productExist.brand ? productExist.brand._id : null
+        productExist.brand ? productExist.brand._id : null,
       );
 
       // update product
@@ -406,13 +406,13 @@ export const productController = {
       if (productExist.category) {
         await productService.removeProductFromCategory(
           productId,
-          productExist.category._id
+          productExist.category._id,
         );
       }
       if (productExist.brand) {
         await productService.removeProductFromBrand(
           productId,
-          productExist.brand._id
+          productExist.brand._id,
         );
       }
 
@@ -476,52 +476,6 @@ export const productController = {
     });
   },
 
-  // update many
-  // updateManyProduct: async (req, res) => {
-  //   const { id: ids, deleted } = req.query;
-  //   if (!ids || !ids.length) {
-  //     return res
-  //       .status(HTTP_STATUS.BAD_REQUEST)
-  //       .json({ message: "Ids invalid", success: false });
-  //   }
-
-  //   const idsArray = Array.isArray(ids) ? ids : [ids];
-
-  //   // check id product invalid
-  //   const checkIds = idsArray.map((id) => {
-  //     return mongoose.Types.ObjectId.isValid(id);
-  //   });
-  //   // include
-  //   if (checkIds.includes(false)) {
-  //     return res
-  //       .status(HTTP_STATUS.BAD_REQUEST)
-  //       .json({ message: "Ids invalid", success: false });
-  //   }
-
-  //   // update many id field is_deleted = true
-  //   const result = await Product.updateMany(
-  //     { _id: { $in: idsArray } },
-  //     { is_deleted: deleted || true },
-  //     { new: true }
-  //   );
-
-  //   if (!result) {
-  //     return res.status(HTTP_STATUS.BAD_REQUEST).json({
-  //       message: "Update many failed",
-  //       success: false,
-  //       status: HTTP_STATUS.BAD_REQUEST,
-  //     });
-  //   }
-
-  //   return res.status(HTTP_STATUS.OK).json({
-  //     message: deleted
-  //       ? "Restore product success!"
-  //       : "Update many successfully",
-  //     success: true,
-  //     status: HTTP_STATUS.OK,
-  //   });
-  // },
-  // softDeleteProduct controller
   softDeleteProduct: async (req, res) => {
     try {
       const { productId } = req.params;
@@ -545,7 +499,7 @@ export const productController = {
       const newIsDeletedStatus = !product.is_deleted;
       const updatedProduct = await productService.updateDeleted(
         productId,
-        newIsDeletedStatus
+        newIsDeletedStatus,
       );
 
       if (!updatedProduct) {
