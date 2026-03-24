@@ -282,5 +282,5 @@ npm run preview # Preview build
 ---
 
 <p align="center">
-  Made with ❤️ by the Dũng
+  Made with ❤️ by Dũng
 </p>
