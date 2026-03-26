@@ -9,7 +9,6 @@ import ProductPage from "./pages/home/product/ProductPage.tsx";
 import VoucherPage from "./pages/home/voucher/Voucher.tsx";
 import OrderPage from "./pages/home/order/Order.tsx";
 import ProfilePage from "./pages/home/profile/Profile.tsx";
-
 const routes: ReturnType<typeof createBrowserRouter> = createBrowserRouter([
   {
     element: <PublicRoute />,
@@ -56,5 +55,4 @@ const routes: ReturnType<typeof createBrowserRouter> = createBrowserRouter([
     ],
   },
 ]);
-
 export default routes;

@@ -1,6 +1,5 @@
 import { motion } from "framer-motion";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-
 interface OrderPaginationProps {
   page: number;
   totalPages: number;
@@ -9,7 +8,6 @@ interface OrderPaginationProps {
   isLoading: boolean;
   onPageChange: (newPage: number) => void;
 }
-
 export default function OrderPagination({
   page,
   totalPages,

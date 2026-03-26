@@ -7,10 +7,6 @@ import type {
   TResponseDetail,
   TResponseNoPagination,
 } from "../types/common.type";
-
-// ================= TANSTACK QUERY HOOKS =================
-
-// 1. Hook get all brands
 export const useGetBrands = (
   params?: TQueryParams,
 ): UseQueryResult<TResponseNoPagination<TBrand>, Error> => {
@@ -19,8 +15,6 @@ export const useGetBrands = (
     queryFn: () => brandApi.getBrands(params),
   });
 };
-
-// 3. Hook create brand
 export const useAddBrand = (): UseMutationResult<
   TResponseDetail<TBrand>,
   Error,
@@ -34,8 +28,6 @@ export const useAddBrand = (): UseMutationResult<
     },
   });
 };
-
-// 4. Hook update brand
 export const useUpdateBrand = (): UseMutationResult<
   TResponseDetail<TBrand>,
   Error,

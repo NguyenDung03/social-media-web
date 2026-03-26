@@ -2,7 +2,6 @@ import React from "react";
 import { motion } from "framer-motion";
 import { Edit3, Trash2, Tag, Clock, Loader2 } from "lucide-react";
 import type { TCategory } from "../../../../types/category.type";
-
 interface CategoryItemProps {
   category: TCategory;
   index: number;
@@ -10,7 +9,6 @@ interface CategoryItemProps {
   onDelete: (id: string) => void;
   isDeleting: boolean;
 }
-
 export const CategoryItem: React.FC<CategoryItemProps> = ({
   category,
   index,
@@ -40,7 +38,6 @@ export const CategoryItem: React.FC<CategoryItemProps> = ({
             <Tag size={24} strokeWidth={1.5} />
           )}
         </div>
-
         <div className="flex-1 grid grid-cols-12 gap-4 items-center">
           <div className="col-span-12 lg:col-span-3">
             <h3 className="font-semibold text-slate-900 text-lg">
@@ -50,13 +47,11 @@ export const CategoryItem: React.FC<CategoryItemProps> = ({
               {category._id.slice(-8).toUpperCase()}
             </p>
           </div>
-
           <div className="hidden lg:block col-span-4">
             <p className="text-lg text-slate-500 truncate max-w-sm">
               {category.desc}
             </p>
           </div>
-
           <div className="hidden lg:block col-span-1 text-center">
             <span
               className={`text-[8px] uppercase px-2 py-1 rounded-full font-bold tracking-wider inline-block whitespace-nowrap ${
@@ -68,14 +63,12 @@ export const CategoryItem: React.FC<CategoryItemProps> = ({
               {category.status === "active" ? "Hoạt động" : "Tạm ngưng"}
             </span>
           </div>
-
           <div className="hidden lg:block col-span-2 text-right">
             <span className="font-mono text-[15px] text-slate-400 uppercase tracking-tighter flex items-center justify-end gap-1">
               <Clock size={15} />{" "}
               {new Date(category.createdAt).toLocaleDateString()}
             </span>
           </div>
-
           <div className="col-span-12 lg:col-span-2 flex justify-end gap-2 text-[#506076]">
             <button
               onClick={(e) => {

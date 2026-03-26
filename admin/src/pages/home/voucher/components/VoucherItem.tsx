@@ -2,20 +2,17 @@ import React from "react";
 import { motion } from "framer-motion";
 import { Calendar, Edit } from "lucide-react";
 import type { TVoucher } from "../../../../types/voucher.type";
-
 interface VoucherItemProps {
   voucher: TVoucher;
   index: number;
   onEdit: (voucher: TVoucher) => void;
 }
-
 export const VoucherItem: React.FC<VoucherItemProps> = ({
   voucher,
   index,
   onEdit,
 }) => {
   const isActive = voucher.status === "active";
-
   const formatDate = (dateString: string) => {
     if (!dateString) return "-";
     const date = new Date(dateString);
@@ -25,21 +22,18 @@ export const VoucherItem: React.FC<VoucherItemProps> = ({
       year: "numeric",
     });
   };
-
   const formatDiscount = () => {
     if (voucher.voucherPrice > 0) {
       return `${voucher.voucherPrice.toLocaleString("vi-VN")} VNĐ`;
     }
     return `${voucher.discount}% OFF`;
   };
-
   const formatMinOrder = () => {
     if (voucher.applicablePrice > 0) {
       return `Tối thiểu: ${voucher.applicablePrice.toLocaleString("vi-VN")} VNĐ`;
     }
     return "Không giới hạn";
   };
-
   return (
     <motion.div
       initial={{ opacity: 0, y: 10 }}
@@ -48,14 +42,13 @@ export const VoucherItem: React.FC<VoucherItemProps> = ({
       className="bg-white border border-slate-200/60 rounded-xl overflow-hidden transition-all hover:border-slate-300/50 group"
     >
       <div className="bg-slate-50/50 grid grid-cols-12 items-center px-6 py-4">
-        {/* Code */}
+        {}
         <div className="col-span-2">
           <span className="inline-block px-3 py-1 border border-dashed border-slate-300 rounded-md font-mono text-sm font-bold text-slate-700 bg-white/50">
             {voucher.code}
           </span>
         </div>
-
-        {/* Discount Details */}
+        {}
         <div className="col-span-3">
           <div className="flex flex-col">
             <span className="text-slate-900 font-bold text-lg font-mono">
@@ -66,8 +59,7 @@ export const VoucherItem: React.FC<VoucherItemProps> = ({
             </span>
           </div>
         </div>
-
-        {/* Date Range */}
+        {}
         <div className="col-span-3">
           <div className="flex items-center gap-2 text-slate-500">
             <Calendar size={14} />
@@ -76,8 +68,7 @@ export const VoucherItem: React.FC<VoucherItemProps> = ({
             </span>
           </div>
         </div>
-
-        {/* Status */}
+        {}
         <div className="col-span-2">
           <span
             className={`inline-flex items-center gap-1.5 px-3 py-1 text-[10px] font-mono uppercase tracking-wider rounded-full border ${
@@ -92,8 +83,7 @@ export const VoucherItem: React.FC<VoucherItemProps> = ({
             {isActive ? "Hoạt động" : "Tạm dừng"}
           </span>
         </div>
-
-        {/* Actions */}
+        {}
         <div className="col-span-2 flex justify-end">
           <button
             onClick={() => onEdit(voucher)}
@@ -106,5 +96,4 @@ export const VoucherItem: React.FC<VoucherItemProps> = ({
     </motion.div>
   );
 };
-
 export default VoucherItem;

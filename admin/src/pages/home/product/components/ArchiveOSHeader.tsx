@@ -1,5 +1,4 @@
 import { FolderSimple, Bell } from "@phosphor-icons/react";
-
 const ArchiveOSHeader: React.FC = () => {
   return (
     <header className="border-b border-[#EAEAEA] bg-white/80 backdrop-blur-md sticky top-0 z-50">
@@ -46,5 +45,4 @@ const ArchiveOSHeader: React.FC = () => {
     </header>
   );
 };
-
 export default ArchiveOSHeader;

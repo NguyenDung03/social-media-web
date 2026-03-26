@@ -5,19 +5,14 @@ import { FONTS } from "../pages/home/dashboard/components/theme";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { User, LogOut } from "lucide-react";
 import { userApi } from "../apis/user.api";
-
 export const Navbar = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const [isDropdownOpen, setIsDropdownOpen] = React.useState(false);
-
-  // Force re-render on navigation by using location.key
   const [, forceUpdate] = React.useReducer((x) => x + 1, 0);
   React.useEffect(() => {
     forceUpdate();
   }, [location.key]);
-
-  // Read user directly from localStorage
   const user = React.useMemo(() => {
     try {
       return JSON.parse(localStorage.getItem("user") || "null");
@@ -25,14 +20,11 @@ export const Navbar = () => {
       return null;
     }
   }, []);
-
   const displayName = user?.fullName || "Admin";
-
   const handleLogout = async () => {
     try {
       await userApi.logout();
     } catch {
-      // Continue with local logout even if API call fails
       console.warn("Logout API failed, continuing with local logout");
     } finally {
       localStorage.removeItem("user");
@@ -40,18 +32,14 @@ export const Navbar = () => {
       navigate("/login");
     }
   };
-
   const handleProfileClick = () => {
     navigate("/profile");
     setIsDropdownOpen(false);
   };
-
   const toggleDropdown = (e: React.MouseEvent) => {
     e.stopPropagation();
     setIsDropdownOpen(!isDropdownOpen);
   };
-
-  // Close dropdown when clicking outside
   React.useEffect(() => {
     const handleClickOutside = () => setIsDropdownOpen(false);
     if (isDropdownOpen) {
@@ -59,7 +47,6 @@ export const Navbar = () => {
       return () => document.removeEventListener("click", handleClickOutside);
     }
   }, [isDropdownOpen]);
-
   return (
     <nav className="fixed top-6 left-1/2 -translate-x-1/2 z-50 w-[90%] max-w-5xl pointer-events-none">
       <motion.div
@@ -79,7 +66,6 @@ export const Navbar = () => {
             Vibe Flow
           </span>
         </Link>
-
         <div className="hidden md:flex items-center gap-8">
           <Link
             to="/"
@@ -142,7 +128,6 @@ export const Navbar = () => {
             Khuyến mãi
           </Link>
         </div>
-
         <div className="flex items-center gap-5">
           <MagnifyingGlass
             size={18}
@@ -164,13 +149,12 @@ export const Navbar = () => {
               </div>
               <div className="w-8 h-8 rounded-full border border-[#EAEAEA] bg-[#F7F6F3] overflow-hidden group-hover:grayscale-0 transition-all">
                 <img
-                  src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${displayName}`}
+                  src={`https:
                   alt="Avatar"
                   className="w-full h-full object-cover"
                 />
               </div>
             </div>
-
             <AnimatePresence>
               {isDropdownOpen && (
                 <motion.div

@@ -1,10 +1,8 @@
 import React from "react";
 import { Plus } from "lucide-react";
-
 interface VoucherHeaderProps {
   onAdd: () => void;
 }
-
 export const VoucherHeader: React.FC<VoucherHeaderProps> = ({ onAdd }) => (
   <header className="bg-white border-b rounded-[10px] border-slate-200/60 sticky top-0 z-40 px-6 py-4 flex items-center justify-between">
     <div className="flex flex-col">
@@ -24,5 +22,4 @@ export const VoucherHeader: React.FC<VoucherHeaderProps> = ({ onAdd }) => (
     </button>
   </header>
 );
-
 export default VoucherHeader;

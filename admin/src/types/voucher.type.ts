@@ -11,7 +11,6 @@ export type TVoucher = {
   createdAt: string;
   updatedAt: string;
 };
-
 export type TFormVoucher = Pick<
   TVoucher,
   | "code"

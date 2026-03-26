@@ -1,12 +1,10 @@
 import React from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-
 interface VoucherPaginationProps {
   currentPage: number;
   totalPages: number;
   onPageChange: (page: number) => void;
 }
-
 export const VoucherPagination: React.FC<VoucherPaginationProps> = ({
   currentPage,
   totalPages,
@@ -36,5 +34,4 @@ export const VoucherPagination: React.FC<VoucherPaginationProps> = ({
     </div>
   </div>
 );
-
 export default VoucherPagination;

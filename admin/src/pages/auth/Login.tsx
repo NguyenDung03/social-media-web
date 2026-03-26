@@ -10,29 +10,22 @@ import {
   Loader2,
 } from "lucide-react";
 import { useAuth } from "../../hooks/useAuth";
-
 const LoginPage = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
-
   const [formData, setFormData] = useState({
     email: "",
     password: "",
   });
-
   const { login, isLoading, error } = useAuth();
-
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
-
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     login(formData);
   };
-
-  // Animation variants
   const containerVariants = {
     hidden: { opacity: 0, y: 20 },
     visible: {
@@ -41,21 +34,18 @@ const LoginPage = () => {
       transition: { duration: 0.8, ease: "easeOut" },
     },
   };
-
   return (
     <div className="min-h-screen w-full bg-[#FBFBFA] text-[#1A1A1A] font-sans selection:bg-[#ec5b13]/20 flex flex-col items-center justify-center py-32 px-6 overflow-hidden relative">
-      {/* Background Decoration Lines */}
+      {}
       <div className="fixed bottom-0 left-0 w-full h-[1px] bg-[#EAEAEA]" />
       <div className="fixed top-0 left-1/2 -translate-x-1/2 h-full w-[1px] bg-[#EAEAEA]/30" />
-
-      {/* Header / Status Bar */}
+      {}
       <div className="fixed top-0 left-0 w-full px-10 py-8 flex justify-between items-start pointer-events-none z-50">
         <div className="flex items-center gap-3 pointer-events-auto">
           <div className="w-8 h-8 flex items-center justify-center border border-[#EAEAEA] rounded-full bg-white/50 backdrop-blur-sm">
             <LayoutGrid size={16} strokeWidth={1.5} />
           </div>
         </div>
-
         <div className="flex flex-col items-end gap-1 pointer-events-auto">
           <div className="flex items-center gap-2">
             <span className="text-[10px] font-mono tracking-[0.15em] text-slate-400 uppercase">
@@ -69,8 +59,7 @@ const LoginPage = () => {
           </div>
         </div>
       </div>
-
-      {/* Main Portal Container */}
+      {}
       <motion.main
         initial="hidden"
         animate="visible"
@@ -78,7 +67,7 @@ const LoginPage = () => {
         className="w-full max-w-[580px] z-10"
       >
         <div className="bg-white border border-[#EAEAEA] rounded-[2rem] p-8 md:p-12 shadow-sm">
-          {/* Brand & Heading */}
+          {}
           <div className="mb-12 text-center">
             <h1 className="text-5xl md:text-6xl mb-4 text-[#1A1A1A] font-light tracking-tight italic">
               Hệ thống quản trị
@@ -87,8 +76,7 @@ const LoginPage = () => {
               Điều hành mạng xã hội và thương mại điện tử.
             </p>
           </div>
-
-          {/* Inner Core Form Area */}
+          {}
           <div className="bg-[#F9F9F8] rounded-2xl p-8 border border-[#EAEAEA]/50">
             {error && (
               <motion.div
@@ -99,9 +87,8 @@ const LoginPage = () => {
                 {error.message}
               </motion.div>
             )}
-
             <form className="space-y-6" onSubmit={handleSubmit}>
-              {/* Username field */}
+              {}
               <div className="space-y-2">
                 <label className="text-[10px] font-mono tracking-[0.15em] text-slate-500 uppercase ml-1 block">
                   Email đăng nhập
@@ -122,8 +109,7 @@ const LoginPage = () => {
                   />
                 </div>
               </div>
-
-              {/* Password field */}
+              {}
               <div className="space-y-2">
                 <div className="flex justify-between items-center ml-1">
                   <label className="text-[10px] font-mono tracking-[0.15em] text-slate-500 uppercase block">
@@ -149,8 +135,7 @@ const LoginPage = () => {
                   </button>
                 </div>
               </div>
-
-              {/* Auth Button */}
+              {}
               <div className="pt-4">
                 <motion.button
                   type="submit"
@@ -207,8 +192,7 @@ const LoginPage = () => {
               </div>
             </form>
           </div>
-
-          {/* Meta Status Footer */}
+          {}
           <div className="mt-8 flex justify-between items-center px-2">
             <div className="flex items-center gap-4">
               <div className="flex -space-x-2">
@@ -218,7 +202,7 @@ const LoginPage = () => {
                     className="w-6 h-6 rounded-full border-2 border-white bg-slate-200 overflow-hidden"
                   >
                     <img
-                      src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${i + 10}`}
+                      src={`https:
                       alt="admin"
                       className="w-full h-full object-cover grayscale"
                     />
@@ -232,7 +216,6 @@ const LoginPage = () => {
                 3 Đang trực tuyến
               </span>
             </div>
-
             <div className="flex items-center gap-2">
               <span className="text-[10px] font-mono tracking-[0.15em] text-slate-400 uppercase">
                 Cấp độ bảo mật
@@ -243,8 +226,7 @@ const LoginPage = () => {
             </div>
           </div>
         </div>
-
-        {/* Footer */}
+        {}
         <footer className="mt-12 text-center space-y-4">
           <div className="flex justify-center gap-6">
             {["Điều khoản", "Bảo mật", "Trợ giúp"].map((item) => (
@@ -265,5 +247,4 @@ const LoginPage = () => {
     </div>
   );
 };
-
 export default LoginPage;

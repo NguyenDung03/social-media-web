@@ -1,19 +1,16 @@
 import type { TProduct } from "./product.type";
-
 export type TInfoOrderShipping = {
   name: string;
   phone: string;
   address: string;
   email: string;
 };
-
 export type TOrderStatus =
   | "pending"
   | "confirmed"
   | "delivery"
   | "completed"
   | "cancelled";
-
 export type TOrderProduct = {
   productId: Pick<TProduct, "_id" | "nameProduct" | "desc" | "images">;
   quantity: number;
@@ -24,15 +21,12 @@ export type TOrderProduct = {
   name?: string;
   image?: string;
 };
-
 export type TOrderInfo = TInfoOrderShipping & { _id: string };
-
 export type TAssignee = {
   _id: string;
   fullname: string;
   role: string;
 };
-
 export type TOrder = {
   _id: string;
   userId: {
@@ -52,7 +46,6 @@ export type TOrder = {
   createdAt: string;
   updatedAt: string;
 };
-
 export type TCancelOrder = {
   status: "cancelled";
   message: string;

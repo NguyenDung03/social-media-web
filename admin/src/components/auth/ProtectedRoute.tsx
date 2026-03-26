@@ -1,12 +1,9 @@
 import React from "react";
 import { Navigate, Outlet } from "react-router-dom";
-
 const ProtectedRoute: React.FC = () => {
   const [user, setUser] = React.useState<{ _id: string } | null>(null);
   const [isLoading, setIsLoading] = React.useState(true);
-
   React.useEffect(() => {
-    // Read user from localStorage directly (synchronous)
     const userStr = localStorage.getItem("user");
     if (userStr) {
       try {
@@ -17,7 +14,6 @@ const ProtectedRoute: React.FC = () => {
     }
     setIsLoading(false);
   }, []);
-
   if (isLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-[#FBFBFA]">
@@ -28,14 +24,9 @@ const ProtectedRoute: React.FC = () => {
       </div>
     );
   }
-
-  // Nếu chưa đăng nhập, chuyển hướng về trang login
   if (!user) {
     return <Navigate to="/login" replace />;
   }
-
-  // Nếu đã đăng nhập, cho phép truy cập vào các route con
   return <Outlet />;
 };
-
 export default ProtectedRoute;

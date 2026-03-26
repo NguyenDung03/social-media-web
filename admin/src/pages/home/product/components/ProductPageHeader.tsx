@@ -1,12 +1,10 @@
 import { motion } from "framer-motion";
 import { MagnifyingGlass, Plus } from "@phosphor-icons/react";
-
 interface ProductPageHeaderProps {
   searchQuery: string;
   onSearchChange: (value: string) => void;
   onAddClick: () => void;
 }
-
 const ProductPageHeader: React.FC<ProductPageHeaderProps> = ({
   searchQuery,
   onSearchChange,
@@ -50,5 +48,4 @@ const ProductPageHeader: React.FC<ProductPageHeaderProps> = ({
     </motion.div>
   );
 };
-
 export default ProductPageHeader;

@@ -7,13 +7,8 @@ import type {
   TResponseDetail,
   TResponse,
 } from "../types/common.type";
-
-// ================= TANSTACK QUERY HOOKS =================
-
-// 1. Hook get all orders (Admin)
 export const useGetAllOrders = (
   params?: TQueryParams,
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   options?: any,
 ): UseQueryResult<TResponse<TOrder>, Error> => {
   return useQuery<TResponse<TOrder>, Error>({
@@ -26,8 +21,6 @@ export const useGetAllOrders = (
     ...options,
   });
 };
-
-// 4. Hook update order status
 export const useUpdateOrder = (): UseMutationResult<
   TResponseDetail<TOrder>,
   Error,
@@ -41,8 +34,6 @@ export const useUpdateOrder = (): UseMutationResult<
     },
   });
 };
-
-// 5. Hook cancel order
 export const useCancelOrder = (): UseMutationResult<
   TResponseDetail<TCancelOrder>,
   Error,

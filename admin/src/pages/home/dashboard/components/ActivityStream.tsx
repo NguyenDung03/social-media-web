@@ -10,7 +10,6 @@ import {
 import { FONTS, SPRING } from "./theme";
 import { useGetAllOrders } from "../../../../hooks/useOrder";
 import type { TOrder } from "../../../../types/order.type";
-
 type TActivityItem = {
   id: string;
   user: string;
@@ -19,7 +18,6 @@ type TActivityItem = {
   type: string;
   icon: React.ReactNode;
 };
-
 const getStatusIcon = (status: string) => {
   switch (status) {
     case "completed":
@@ -43,27 +41,21 @@ const getStatusIcon = (status: string) => {
       );
   }
 };
-
 const mapOrderToActivity = (
   order: TOrder,
   indexOffset: number = 0,
 ): TActivityItem => {
   const userName = order.infoOrderShipping?.name || "Khách hàng ẩn danh";
-
   const firstProduct =
     order.products?.[0]?.productId?.nameProduct || "sản phẩm";
   const date = new Date(order.createdAt);
-
   const hours = date.getHours().toString().padStart(2, "0");
   const minutes = date.getMinutes().toString().padStart(2, "0");
-
   let action = "vừa tạo đơn hàng";
   if (order.status === "completed") action = `vừa nhận ${firstProduct}`;
   else if (order.status === "cancelled") action = `vừa huỷ đơn ${firstProduct}`;
   else if (order.status === "delivery") action = `đang giao ${firstProduct}`;
   else action = `vừa đặt mua ${firstProduct}`;
-
-  // Use date.now mixed with order id to force react motion to recognize a completely new child node when looping identical orders
   return {
     id: `${order._id}-${Date.now()}-${indexOffset}`,
     user: `Khách hàng ${userName}`,
@@ -73,28 +65,19 @@ const mapOrderToActivity = (
     icon: getStatusIcon(order.status),
   };
 };
-
 export const IntelligentActivityStream = () => {
   const { data: orderResponse } = useGetAllOrders();
-
   const [items, setItems] = useState<TActivityItem[]>([]);
-
   useEffect(() => {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const orders = (orderResponse as any)?.docs as TOrder[] | undefined;
     if (!orders || orders.length === 0) return;
-
     const getRandomOrder = () =>
       orders[Math.floor(Math.random() * orders.length)];
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
     setItems([
       mapOrderToActivity(getRandomOrder(), 1),
       mapOrderToActivity(getRandomOrder(), 2),
       mapOrderToActivity(getRandomOrder(), 3),
     ]);
-
-    // Perpetual auto-sorting / simulating real-time activity mapped from random orders
     const timer = setInterval(() => {
       setItems((prev) => {
         const newItems = [...prev];
@@ -103,21 +86,17 @@ export const IntelligentActivityStream = () => {
         return newItems;
       });
     }, 6000);
-
     return () => clearInterval(timer);
   }, [orderResponse]);
-
   return (
     <div className="flex-1 min-h-0 relative mt-4">
-      {/* Decorative hairline */}
+      {}
       <div className="absolute left-[7px] top-2 bottom-0 w-[1px] bg-gradient-to-b from-[#EAEAEA] to-transparent z-0" />
-
       {items.length === 0 && (
         <div className="text-[#787774] text-xs font-mono ml-8 mt-2 opacity-50 relative z-10">
           Fetching feed...
         </div>
       )}
-
       <div className="relative h-[320px] overflow-hidden">
         <AnimatePresence initial={false} mode="popLayout">
           {items.map((activity, index) => (

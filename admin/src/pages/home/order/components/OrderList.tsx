@@ -2,8 +2,6 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Package } from "lucide-react";
 import { FONTS } from "../../dashboard/components/theme";
 import type { TOrder, TOrderStatus } from "../../../../types/order.type";
-
-// Helper to format currency
 const formatCurrency = (amount: number): string => {
   return new Intl.NumberFormat("vi-VN", {
     style: "currency",
@@ -11,12 +9,9 @@ const formatCurrency = (amount: number): string => {
     maximumFractionDigits: 0,
   }).format(amount);
 };
-
-// Status badge component
 interface StatusBadgeProps {
   status: TOrderStatus;
 }
-
 function StatusBadge({ status }: StatusBadgeProps) {
   const statusConfig: Record<
     TOrderStatus,
@@ -53,9 +48,7 @@ function StatusBadge({ status }: StatusBadgeProps) {
       border: "#adb3b2",
     },
   };
-
   const config = statusConfig[status];
-
   return (
     <span
       className="px-2 py-1 text-[10px] font-mono uppercase tracking-wider rounded border"
@@ -69,13 +62,10 @@ function StatusBadge({ status }: StatusBadgeProps) {
     </span>
   );
 }
-
-// Order row component
 interface OrderRowProps {
   order: TOrder;
   onClick: () => void;
 }
-
 function OrderRow({ order, onClick }: OrderRowProps) {
   const getPaymentStatus = () => {
     if (order.paymentMethod === "vnpay") {
@@ -83,7 +73,6 @@ function OrderRow({ order, onClick }: OrderRowProps) {
     }
     return `COD • ${order.status === "completed" ? "ĐÃ NHẬN" : "CHƯA THANH TOÁN"}`;
   };
-
   return (
     <motion.div
       initial={{ opacity: 0, y: 10 }}
@@ -98,7 +87,7 @@ function OrderRow({ order, onClick }: OrderRowProps) {
         className="bg-[#F7F6F3] rounded-lg p-4 flex flex-col md:flex-row items-center gap-6"
         style={{ fontFamily: FONTS.mono }}
       >
-        {/* Order ID */}
+        {}
         <div className="flex-shrink-0 w-full md:w-32">
           <p className="text-[10px] uppercase tracking-widest text-[#787774] mb-1">
             Mã đơn hàng
@@ -107,8 +96,7 @@ function OrderRow({ order, onClick }: OrderRowProps) {
             #{order._id.slice(-6).toUpperCase()}
           </p>
         </div>
-
-        {/* Customer */}
+        {}
         <div className="flex-grow">
           <p className="text-[10px] uppercase tracking-widest text-[#787774] mb-1">
             Khách hàng
@@ -122,8 +110,7 @@ function OrderRow({ order, onClick }: OrderRowProps) {
             </span>
           </div>
         </div>
-
-        {/* Payment */}
+        {}
         <div className="flex-shrink-0 w-full md:w-40">
           <p className="text-[10px] uppercase tracking-widest text-[#787774] mb-1">
             Thanh toán
@@ -133,8 +120,7 @@ function OrderRow({ order, onClick }: OrderRowProps) {
           </p>
           <p className="text-[10px] text-[#787774]">{getPaymentStatus()}</p>
         </div>
-
-        {/* Assigned */}
+        {}
         <div className="flex-shrink-0 w-full md:w-40">
           <p className="text-[10px] uppercase tracking-widest text-[#787774] mb-1">
             Phân công
@@ -161,16 +147,14 @@ function OrderRow({ order, onClick }: OrderRowProps) {
             </span>
           )}
         </div>
-
-        {/* Status */}
+        {}
         <div className="flex-shrink-0 w-full md:w-32">
           <StatusBadge status={order.status} />
         </div>
-
-        {/* Chevron */}
+        {}
         <motion.div className="flex-shrink-0 text-[#787774] group-hover:translate-x-1 transition-transform">
           <svg
-            xmlns="http://www.w3.org/2000/svg"
+            xmlns="http:
             width="20"
             height="20"
             viewBox="0 0 24 24"
@@ -187,8 +171,6 @@ function OrderRow({ order, onClick }: OrderRowProps) {
     </motion.div>
   );
 }
-
-// Loading skeleton component
 function OrderRowSkeleton() {
   return (
     <div className="p-1 rounded-xl bg-white border border-[#EAEAEA]">
@@ -216,8 +198,6 @@ function OrderRowSkeleton() {
     </div>
   );
 }
-
-// Error message component
 function OrderError({ message }: { message: string }) {
   return (
     <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg">
@@ -225,8 +205,6 @@ function OrderError({ message }: { message: string }) {
     </div>
   );
 }
-
-// Empty state component
 function OrderEmpty() {
   return (
     <motion.div
@@ -240,14 +218,12 @@ function OrderEmpty() {
     </motion.div>
   );
 }
-
 interface OrderListProps {
   orders: TOrder[];
   isLoading: boolean;
   error: Error | null;
   onOrderClick: (order: TOrder) => void;
 }
-
 export default function OrderList({
   orders,
   isLoading,
@@ -256,16 +232,14 @@ export default function OrderList({
 }: OrderListProps) {
   return (
     <>
-      {/* Error State */}
+      {}
       {error && (
         <OrderError message={`Lỗi khi tải đơn hàng: ${error.message}`} />
       )}
-
-      {/* Order Rows Ledger */}
+      {}
       <div className="space-y-4">
         <AnimatePresence mode="popLayout">
           {isLoading ? (
-            // Loading skeletons
             Array.from({ length: 5 }).map((_, index) => (
               <motion.div
                 key={`skeleton-${index}`}

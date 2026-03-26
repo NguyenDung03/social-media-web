@@ -15,9 +15,6 @@ import {
   VoucherPagination,
   VoucherDrawer,
 } from "./components";
-
-// ================= TYPES =================
-
 interface VoucherFormData {
   code: string;
   discount: number;
@@ -28,16 +25,12 @@ interface VoucherFormData {
   applicablePrice: number;
   status: "active" | "inactive";
 }
-
-// ================= MAIN COMPONENT =================
-
 const VoucherPage: React.FC = () => {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [editingVoucher, setEditingVoucher] = useState<TVoucher | null>(null);
   const [searchValue, setSearchValue] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 5;
-
   const [formData, setFormData] = useState<VoucherFormData>({
     code: "",
     discount: 0,
@@ -48,8 +41,6 @@ const VoucherPage: React.FC = () => {
     applicablePrice: 0,
     status: "active",
   });
-
-  // Fetch vouchers from API
   const {
     data: vouchersResponse,
     isLoading,
@@ -59,21 +50,15 @@ const VoucherPage: React.FC = () => {
   });
   const addVoucherMutation = useAddVoucher();
   const updateVoucherMutation = useUpdateVoucher();
-
   const vouchers = useMemo(
     () => vouchersResponse?.data || [],
     [vouchersResponse?.data],
   );
-
-  // Pagination
   const paginatedVouchers = useMemo(() => {
     const start = (currentPage - 1) * itemsPerPage;
     return vouchers.slice(start, start + itemsPerPage);
   }, [vouchers, currentPage]);
-
   const totalPages = Math.ceil(vouchers.length / itemsPerPage) || 1;
-
-  // Handlers
   const handleOpenAdd = () => {
     setEditingVoucher(null);
     setFormData({
@@ -88,7 +73,6 @@ const VoucherPage: React.FC = () => {
     });
     setIsDrawerOpen(true);
   };
-
   const handleOpenEdit = (voucher: TVoucher) => {
     setEditingVoucher(voucher);
     setFormData({
@@ -103,16 +87,12 @@ const VoucherPage: React.FC = () => {
     });
     setIsDrawerOpen(true);
   };
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
-    // Validate required fields
     if (!formData.code || !formData.startDate || !formData.endDate) {
       alert("Vui lòng điền đầy đủ thông tin bắt buộc");
       return;
     }
-
     try {
       if (editingVoucher) {
         await updateVoucherMutation.mutateAsync({
@@ -128,11 +108,9 @@ const VoucherPage: React.FC = () => {
       alert("Thao tác thất bại. Vui lòng thử lại.");
     }
   };
-
   return (
     <div className="min-h-screen bg-[#f9f9f8] text-slate-900 font-sans antialiased">
       <VoucherHeader onAdd={handleOpenAdd} />
-
       <main className="max-w-7xl mx-auto px-6 py-10 space-y-8">
         <VoucherStats
           total={vouchers.length}
@@ -140,15 +118,13 @@ const VoucherPage: React.FC = () => {
           searchValue={searchValue}
           onSearchChange={setSearchValue}
         />
-
-        {/* Loading State */}
+        {}
         {isLoading && (
           <div className="h-64 flex items-center justify-center">
             <Loader2 className="animate-spin text-slate-300" size={32} />
           </div>
         )}
-
-        {/* Error State */}
+        {}
         {error && (
           <div className="p-4 bg-red-50 border border-red-100 rounded-lg">
             <p className="text-red-600 text-sm">
@@ -156,8 +132,7 @@ const VoucherPage: React.FC = () => {
             </p>
           </div>
         )}
-
-        {/* Data Content */}
+        {}
         {!isLoading && !error && (
           <>
             {vouchers.length === 0 ? (
@@ -177,7 +152,6 @@ const VoucherPage: React.FC = () => {
                 </div>
               </div>
             )}
-
             {vouchers.length > 0 && (
               <VoucherPagination
                 currentPage={currentPage}
@@ -188,7 +162,6 @@ const VoucherPage: React.FC = () => {
           </>
         )}
       </main>
-
       <VoucherDrawer
         isOpen={isDrawerOpen}
         onClose={() => setIsDrawerOpen(false)}
@@ -200,7 +173,6 @@ const VoucherPage: React.FC = () => {
           addVoucherMutation.isPending || updateVoucherMutation.isPending
         }
       />
-
       <style>{`
         .custom-scrollbar::-webkit-scrollbar {
           width: 4px;
@@ -216,5 +188,4 @@ const VoucherPage: React.FC = () => {
     </div>
   );
 };
-
 export default VoucherPage;

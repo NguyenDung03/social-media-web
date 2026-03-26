@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Loader2, X, Edit, Settings } from "lucide-react";
 import type { TVoucher } from "../../../types/voucher.type";
-
 interface VoucherFormData {
   code: string;
   discount: number;
@@ -13,7 +12,6 @@ interface VoucherFormData {
   applicablePrice: number;
   status: "active" | "inactive";
 }
-
 interface VoucherDrawerProps {
   isOpen: boolean;
   onClose: () => void;
@@ -23,7 +21,6 @@ interface VoucherDrawerProps {
   onSubmit: (e: React.FormEvent) => void;
   isPending: boolean;
 }
-
 export const VoucherDrawer: React.FC<VoucherDrawerProps> = ({
   isOpen,
   onClose,
@@ -36,15 +33,13 @@ export const VoucherDrawer: React.FC<VoucherDrawerProps> = ({
   const [activeTab, setActiveTab] = useState<"general" | "logic" | "limits">(
     "general",
   );
-
   const isEdit = !!editingVoucher;
   const isValid = formData.code && formData.startDate && formData.endDate;
-
   return (
     <AnimatePresence>
       {isOpen && (
         <>
-          {/* Backdrop */}
+          {}
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -52,8 +47,7 @@ export const VoucherDrawer: React.FC<VoucherDrawerProps> = ({
             onClick={onClose}
             className="fixed inset-0 bg-black/20 z-40"
           />
-
-          {/* Drawer */}
+          {}
           <motion.aside
             initial={{ x: "100%" }}
             animate={{ x: 0 }}
@@ -61,7 +55,7 @@ export const VoucherDrawer: React.FC<VoucherDrawerProps> = ({
             transition={{ type: "spring", stiffness: 300, damping: 30 }}
             className="fixed right-0 top-0 h-full w-96 bg-white border-l border-slate-200 flex flex-col shadow-2xl z-50"
           >
-            {/* Header */}
+            {}
             <div className="p-6 border-b border-slate-200/10">
               <div className="flex items-center justify-between mb-2">
                 <span className="font-mono text-lg font-bold text-slate-900">
@@ -78,8 +72,7 @@ export const VoucherDrawer: React.FC<VoucherDrawerProps> = ({
                 {isEdit ? `ID: ${editingVoucher._id.slice(-6)}` : "TẠO_MỚI"}
               </span>
             </div>
-
-            {/* Tabs */}
+            {}
             <div className="flex border-b border-slate-200/10">
               <button
                 onClick={() => setActiveTab("general")}
@@ -115,10 +108,9 @@ export const VoucherDrawer: React.FC<VoucherDrawerProps> = ({
                 Giới hạn
               </button>
             </div>
-
-            {/* Form Content */}
+            {}
             <div className="flex-1 overflow-y-auto p-6 space-y-6">
-              {/* General Tab */}
+              {}
               {activeTab === "general" && (
                 <>
                   <div className="space-y-2">
@@ -138,7 +130,6 @@ export const VoucherDrawer: React.FC<VoucherDrawerProps> = ({
                       placeholder="VD: SUMMER2024"
                     />
                   </div>
-
                   <div className="space-y-2">
                     <label className="font-mono text-[11px] uppercase text-slate-500 block">
                       Giá trị giảm <span className="text-red-500">*</span>
@@ -158,7 +149,6 @@ export const VoucherDrawer: React.FC<VoucherDrawerProps> = ({
                       placeholder="20"
                     />
                   </div>
-
                   <div className="space-y-2">
                     <label className="font-mono text-[11px] uppercase text-slate-500 block">
                       Giá trị giảm cố định (VNĐ)
@@ -180,7 +170,6 @@ export const VoucherDrawer: React.FC<VoucherDrawerProps> = ({
                       Để trống nếu dùng %
                     </p>
                   </div>
-
                   <div className="space-y-2">
                     <label className="font-mono text-[11px] uppercase text-slate-500 block">
                       Trạng thái
@@ -199,7 +188,6 @@ export const VoucherDrawer: React.FC<VoucherDrawerProps> = ({
                       <option value="inactive">Tạm dừng</option>
                     </select>
                   </div>
-
                   <div className="space-y-2">
                     <label className="font-mono text-[11px] uppercase text-slate-500 block">
                       Mô tả
@@ -215,8 +203,7 @@ export const VoucherDrawer: React.FC<VoucherDrawerProps> = ({
                   </div>
                 </>
               )}
-
-              {/* Logic Tab */}
+              {}
               {activeTab === "logic" && (
                 <div className="space-y-6">
                   <div className="space-y-2">
@@ -242,8 +229,7 @@ export const VoucherDrawer: React.FC<VoucherDrawerProps> = ({
                   </div>
                 </div>
               )}
-
-              {/* Limits Tab */}
+              {}
               {activeTab === "limits" && (
                 <div className="space-y-6">
                   <div className="p-4 bg-slate-50 rounded-lg">
@@ -255,8 +241,7 @@ export const VoucherDrawer: React.FC<VoucherDrawerProps> = ({
                 </div>
               )}
             </div>
-
-            {/* Dates - Always visible */}
+            {}
             <div className="px-6 py-4 border-t border-slate-200/10 space-y-4">
               <div className="space-y-2">
                 <label className="font-mono text-[11px] uppercase text-slate-500 block">
@@ -285,8 +270,7 @@ export const VoucherDrawer: React.FC<VoucherDrawerProps> = ({
                 />
               </div>
             </div>
-
-            {/* Footer */}
+            {}
             <div className="p-6 bg-slate-50 border-t border-slate-200/10 space-y-3">
               <button
                 onClick={onSubmit}
@@ -309,5 +293,4 @@ export const VoucherDrawer: React.FC<VoucherDrawerProps> = ({
     </AnimatePresence>
   );
 };
-
 export default VoucherDrawer;

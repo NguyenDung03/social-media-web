@@ -1,10 +1,8 @@
 import React from "react";
 import { Calendar, Plus } from "lucide-react";
-
 interface VoucherEmptyStateProps {
   onAdd: () => void;
 }
-
 export const VoucherEmptyState: React.FC<VoucherEmptyStateProps> = ({
   onAdd,
 }) => (
@@ -28,5 +26,4 @@ export const VoucherEmptyState: React.FC<VoucherEmptyStateProps> = ({
     </button>
   </div>
 );
-
 export default VoucherEmptyState;

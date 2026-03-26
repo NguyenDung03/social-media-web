@@ -5,11 +5,7 @@ import type {
   TResponseNoPagination,
 } from "../types/common.type";
 import { axiosInstance } from "../lib/axios";
-
-// ================= API CALLS =================
-
 export const brandApi = {
-  // 1. Get all brands
   getBrands: async (
     params?: TQueryParams,
   ): Promise<TResponseNoPagination<TBrand>> => {
@@ -21,8 +17,6 @@ export const brandApi = {
     );
     return response.data;
   },
-
-  // 3. Create brand
   createBrand: async (body: TFormBrand): Promise<TResponseDetail<TBrand>> => {
     const response = await axiosInstance.post<TResponseDetail<TBrand>>(
       `/brand/create-brand`,
@@ -30,8 +24,6 @@ export const brandApi = {
     );
     return response.data;
   },
-
-  // 4. Update brand
   updateBrand: async (body: TBrand): Promise<TResponseDetail<TBrand>> => {
     const { _id, ...rest } = body;
     const response = await axiosInstance.patch<TResponseDetail<TBrand>>(

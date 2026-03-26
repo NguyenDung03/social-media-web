@@ -8,8 +8,6 @@ import type {
   TResponseDetail,
   TResponseNoPagination,
 } from "../types/common.type";
-
-// 1. Hook get all categories
 export const useGetCategories = (
   params?: TQueryParams,
 ): UseQueryResult<TResponseNoPagination<TCategory>, Error> => {
@@ -18,8 +16,6 @@ export const useGetCategories = (
     queryFn: () => categoryApi.getCategories(params),
   });
 };
-
-// 3. Hook create category
 export const useAddCategory = (): UseMutationResult<
   TResponseDetail<TCategory>,
   Error,
@@ -33,8 +29,6 @@ export const useAddCategory = (): UseMutationResult<
     },
   });
 };
-
-// 4. Hook update category
 export const useUpdateCategory = (): UseMutationResult<
   TResponseDetail<TCategory>,
   Error,
@@ -49,8 +43,6 @@ export const useUpdateCategory = (): UseMutationResult<
     },
   });
 };
-
-// 5. Hook delete category
 export const useDeleteCategory = (): UseMutationResult<
   TBaseResponseDelete,
   Error,

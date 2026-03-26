@@ -1,5 +1,4 @@
 import type { TImage } from "./common.type";
-
 export type TProduct = {
   _id: string;
   nameProduct: string;
@@ -14,7 +13,6 @@ export type TProduct = {
   updatedAt: string;
   sale: number;
 };
-
 export type TBrandRefProduct = {
   _id: string;
   nameBrand: string;
@@ -28,14 +26,12 @@ export type TCategroyRefProduct = {
   image: string;
   desc: string;
 };
-
 export type TSize = {
   size: string;
   quantity: number;
   color: string;
   _id: string;
 };
-
 export type TProductForm = {
   nameProduct: string;
   price: number;
@@ -47,5 +43,4 @@ export type TProductForm = {
   desc: string;
   images: Omit<TImage, "_id">[];
 };
-
 export type TProductFormEdit = TProductForm & { _id: string };

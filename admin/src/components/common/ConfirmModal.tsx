@@ -1,7 +1,6 @@
 import React from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { AlertTriangle, Loader2 } from "lucide-react";
-
 interface ConfirmModalProps {
   isOpen: boolean;
   onClose: () => void;
@@ -10,7 +9,6 @@ interface ConfirmModalProps {
   description: string;
   isLoading?: boolean;
 }
-
 const ConfirmModal: React.FC<ConfirmModalProps> = ({
   isOpen,
   onClose,
@@ -23,7 +21,7 @@ const ConfirmModal: React.FC<ConfirmModalProps> = ({
     <AnimatePresence>
       {isOpen && (
         <>
-          {/* Backdrop */}
+          {}
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -31,8 +29,7 @@ const ConfirmModal: React.FC<ConfirmModalProps> = ({
             onClick={onClose}
             className="fixed inset-0 bg-black/40 backdrop-blur-[2px] z-[100]"
           />
-
-          {/* Modal Container */}
+          {}
           <div className="fixed inset-0 flex items-center justify-center z-[110] p-4 pointer-events-none">
             <motion.div
               initial={{ opacity: 0, scale: 0.95, y: 10 }}
@@ -51,12 +48,10 @@ const ConfirmModal: React.FC<ConfirmModalProps> = ({
                     </h3>
                   </div>
                 </div>
-
                 <p className="text-slate-500 text-[15px] leading-relaxed ml-2">
                   {description}
                 </p>
               </div>
-
               <div className="bg-slate-50 px-6 py-4 flex flex-col-reverse sm:flex-row sm:justify-end gap-3">
                 <button
                   type="button"
@@ -82,5 +77,4 @@ const ConfirmModal: React.FC<ConfirmModalProps> = ({
     </AnimatePresence>
   );
 };
-
 export default ConfirmModal;

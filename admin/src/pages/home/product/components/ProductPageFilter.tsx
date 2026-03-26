@@ -1,13 +1,11 @@
 import { motion } from "framer-motion";
 import { Funnel } from "@phosphor-icons/react";
-
 interface ProductPageFilterProps {
   activeTab: "current" | "archive";
   statusFilter: string;
   onTabChange: (tab: "current" | "archive") => void;
   onStatusFilterChange: (status: string) => void;
 }
-
 const ProductPageFilter: React.FC<ProductPageFilterProps> = ({
   activeTab,
   statusFilter,
@@ -58,5 +56,4 @@ const ProductPageFilter: React.FC<ProductPageFilterProps> = ({
     </motion.div>
   );
 };
-
 export default ProductPageFilter;

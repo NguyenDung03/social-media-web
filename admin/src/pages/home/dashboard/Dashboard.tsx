@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
+
 import React from "react";
 import { motion } from "framer-motion";
 import { DotsThreeVertical } from "@phosphor-icons/react";
@@ -9,48 +9,36 @@ import { IntelligentActivityStream } from "./components/ActivityStream";
 import { Navbar } from "../../../components/Navbar";
 import { Hero } from "./components/Hero";
 import { Inventory } from "./components/Inventory";
-
 import { useGetAllOrders } from "../../../hooks/useOrder";
 import { Outlet, useLocation } from "react-router-dom";
-
 export default function DashboardPage() {
   const location = useLocation();
   const isRoot = location.pathname === "/";
-
-  // Fetch completed orders to calculate revenue
   const { data: completedOrdersResponse } = useGetAllOrders({
     status: "completed",
     _limit: 1000,
   });
-  // Fetch pending orders to count
   const { data: pendingOrdersResponse } = useGetAllOrders({
     status: "pending",
     _limit: 1000,
   });
-
   const totalRevenue = React.useMemo(() => {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const orders = (completedOrdersResponse as any)?.docs || [];
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     return orders.reduce(
       (acc: number, order: any) => acc + (order.total || 0),
       0,
     );
   }, [completedOrdersResponse]);
-
   const pendingCount = React.useMemo(() => {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     return (pendingOrdersResponse as any)?.totalDocs || 0;
   }, [pendingOrdersResponse]);
-
   return (
     <div
       className="min-h-[100dvh] bg-[#FBFBFA] selection:bg-[#EAEAEA] selection:text-[#111111]"
       style={{ fontFamily: FONTS.sans }}
     >
       <Navbar />
-
-      {/* Main Structural Grid Container */}
+      {}
       <motion.main
         initial="hidden"
         animate="visible"
@@ -64,10 +52,9 @@ export default function DashboardPage() {
           <>
             <Hero />
             <EditorialLine />
-
-            {/* The Asymmetrical Bento Grid */}
+            {}
             <div className="grid grid-cols-1 md:grid-cols-12 gap-6 items-stretch">
-              {/* Main Analytics Block */}
+              {}
               <div className="md:col-span-8 grid grid-cols-1 md:grid-cols-2 gap-6">
                 <MetricFlatCard
                   title="Chỉ số tương tác"
@@ -98,8 +85,7 @@ export default function DashboardPage() {
                   autoPulse={false}
                 />
               </div>
-
-              {/* Sidebar / Stream Block */}
+              {}
               <div className="md:col-span-4 max-h-[460px]">
                 <motion.div
                   variants={{
@@ -133,7 +119,6 @@ export default function DashboardPage() {
                 </motion.div>
               </div>
             </div>
-
             <Inventory />
           </>
         ) : (

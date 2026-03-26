@@ -11,7 +11,6 @@ import {
   Edit3,
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-
 interface UserData {
   fullName?: string;
   email?: string;
@@ -22,10 +21,8 @@ interface UserData {
   avatar?: string;
   profilePic?: string;
 }
-
 export const ProfilePage = () => {
   const navigate = useNavigate();
-
   const user: UserData = React.useMemo(() => {
     try {
       const stored = localStorage.getItem("user");
@@ -34,16 +31,13 @@ export const ProfilePage = () => {
       return null;
     }
   }, []);
-
   const handleLogout = () => {
     localStorage.removeItem("user");
     localStorage.removeItem("token");
     navigate("/login");
   };
-
   const displayName = user?.fullName || "Admin";
   const displayRole = user?.role === "admin" ? "Quản trị viên" : "Người dùng";
-
   const infoFields = [
     {
       icon: Mail,
@@ -73,7 +67,6 @@ export const ProfilePage = () => {
         : "Chưa cập nhật",
     },
   ];
-
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: {
@@ -83,7 +76,6 @@ export const ProfilePage = () => {
       },
     },
   };
-
   const itemVariants = {
     hidden: { y: 20, opacity: 0 },
     visible: {
@@ -95,7 +87,6 @@ export const ProfilePage = () => {
       },
     },
   };
-
   return (
     <motion.div
       variants={containerVariants}
@@ -110,7 +101,6 @@ export const ProfilePage = () => {
             Quản lý thông tin tài khoản của bạn
           </p>
         </motion.div>
-
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           <motion.div variants={itemVariants} className="lg:col-span-1">
             <div className="bg-white rounded-2xl p-6 shadow-[0_2px_12px_rgba(0,0,0,0.04)] border border-[#EAEAEA]">
@@ -119,7 +109,7 @@ export const ProfilePage = () => {
                   <img
                     src={
                       user?.profilePic ||
-                      `https://api.dicebear.com/7.x/avataaars/svg?seed=${displayName}`
+                      `https:
                     }
                     alt="Avatar"
                     className="w-full h-full object-cover"
@@ -129,12 +119,10 @@ export const ProfilePage = () => {
                   {displayName}
                 </h2>
                 <p className="text-[#787774] text-sm mt-1">{displayRole}</p>
-
                 <button className="mt-6 w-full flex items-center justify-center gap-2 py-2.5 px-4 bg-[#111111] text-white rounded-lg text-sm font-medium hover:bg-[#333333] transition-colors">
                   <Edit3 size={16} />
                   Chỉnh sửa hồ sơ
                 </button>
-
                 <button
                   onClick={handleLogout}
                   className="mt-3 w-full flex items-center justify-center gap-2 py-2.5 px-4 border border-[#EAEAEA] text-[#DC2626] rounded-lg text-sm font-medium hover:bg-[#FEF2F2] transition-colors"
@@ -145,7 +133,6 @@ export const ProfilePage = () => {
               </div>
             </div>
           </motion.div>
-
           <motion.div
             variants={itemVariants}
             className="lg:col-span-2 space-y-6"
@@ -159,7 +146,6 @@ export const ProfilePage = () => {
                   Thông tin cá nhân
                 </h3>
               </div>
-
               <div className="space-y-4">
                 {infoFields.map((field, index) => (
                   <div
@@ -179,8 +165,7 @@ export const ProfilePage = () => {
                 ))}
               </div>
             </div>
-
-            {/* Account Stats */}
+            {}
             <div className="bg-white rounded-2xl p-6 shadow-[0_2px_12px_rgba(0,0,0,0.04)] border border-[#EAEAEA]">
               <h3 className="text-lg font-semibold text-[#111111] mb-4">
                 Thống kê tài khoản
@@ -206,5 +191,4 @@ export const ProfilePage = () => {
     </motion.div>
   );
 };
-
 export default ProfilePage;

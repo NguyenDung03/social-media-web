@@ -10,11 +10,7 @@ import type {
   TProductForm,
   TProductFormEdit,
 } from "../types/product.type";
-
-// ================= API CALLS =================
-
 export const productApi = {
-  // 1. Get all products with pagination and search
   getAllProducts: async (
     params?: TQueryParams,
   ): Promise<TResponse<TProduct>> => {
@@ -26,8 +22,6 @@ export const productApi = {
     );
     return response.data;
   },
-
-  // 3. Get products with status and deleted flag
   getProductsWithStatus: async (
     status: string,
     deleted: boolean,
@@ -39,8 +33,6 @@ export const productApi = {
     );
     return response.data;
   },
-
-  // 4. Add product
   addProduct: async (
     data: TProductForm,
   ): Promise<TResponseDetail<TProduct>> => {
@@ -50,8 +42,6 @@ export const productApi = {
     );
     return response.data;
   },
-
-  // 5. Update product status (Toggle active/inactive)
   updateProductStatus: async (
     productId: string,
   ): Promise<TResponseDetail<TProduct>> => {
@@ -60,8 +50,6 @@ export const productApi = {
     );
     return response.data;
   },
-
-  // 6. Update product by ID
   updateProduct: async (
     data: TProductFormEdit,
   ): Promise<TResponseDetail<TProduct>> => {
@@ -72,16 +60,12 @@ export const productApi = {
     );
     return response.data;
   },
-
-  // 7. Hard delete product
   deleteProduct: async (productId: string): Promise<TBaseResponseDelete> => {
     const response = await axiosInstance.delete<TBaseResponseDelete>(
       `/product/delete-product/${productId}`,
     );
     return response.data;
   },
-
-  // 8. Hard delete multiple products
   deleteMultipleProducts: async (
     ids: string[],
   ): Promise<TBaseResponseDelete> => {
@@ -93,8 +77,6 @@ export const productApi = {
     );
     return response.data;
   },
-
-  // 9. Soft delete product (Toggle is_deleted)
   softDeleteProduct: async (
     productId: string,
   ): Promise<TResponseDetail<TProduct>> => {

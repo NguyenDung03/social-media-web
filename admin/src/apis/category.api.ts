@@ -6,9 +6,7 @@ import type {
   TResponseNoPagination,
 } from "../types/common.type";
 import { axiosInstance } from "../lib/axios";
-
 export const categoryApi = {
-  // 1. Get all categories
   getCategories: async (
     params?: TQueryParams,
   ): Promise<TResponseNoPagination<TCategory>> => {
@@ -20,8 +18,6 @@ export const categoryApi = {
     );
     return response.data;
   },
-
-  // 3. Create category
   createCategory: async (
     body: TFormCategory,
   ): Promise<TResponseDetail<TCategory>> => {
@@ -31,8 +27,6 @@ export const categoryApi = {
     );
     return response.data;
   },
-
-  // 4. Update category
   updateCategory: async (
     body: TCategory,
   ): Promise<TResponseDetail<TCategory>> => {
@@ -43,8 +37,6 @@ export const categoryApi = {
     );
     return response.data;
   },
-
-  // 5. Delete category
   deleteCategory: async (id: string): Promise<TBaseResponseDelete> => {
     const response = await axiosInstance.delete<TBaseResponseDelete>(
       `/category/delete-category-by-id/${id}`,

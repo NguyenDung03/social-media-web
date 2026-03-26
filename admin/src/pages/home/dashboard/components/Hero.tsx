@@ -2,7 +2,6 @@ import React from "react";
 import { motion } from "framer-motion";
 import { ShieldCheck } from "@phosphor-icons/react";
 import { FONTS, SPRING } from "./theme";
-
 export const Hero = () => {
   return (
     <div className="flex flex-col md:flex-row items-end justify-between gap-12 mb-20">
@@ -33,8 +32,7 @@ export const Hero = () => {
           <span className="italic text-[#787774]">Administrator.</span>
         </h1>
       </motion.div>
-
-      {/* Right Pillar Data Point */}
+      {}
       <motion.div
         variants={{
           hidden: { opacity: 0, x: 20 },

@@ -1,7 +1,6 @@
 import React from "react";
 import { motion } from "framer-motion";
 import { FONTS, SPRING } from "./theme";
-
 export const MetricFlatCard = ({
   title,
   value,
@@ -38,7 +37,6 @@ export const MetricFlatCard = ({
           </span>
         )}
       </div>
-
       <div className="flex mb-5.5 items-end justify-between relative z-10 mt-auto">
         <h3
           className="text-4xl text-[#111111] font-medium tracking-tight"
@@ -57,8 +55,7 @@ export const MetricFlatCard = ({
           {change}
         </span>
       </div>
-
-      {/* Subtle hover gradient entering from bottom */}
+      {}
       <div className="absolute inset-0 bg-gradient-to-t from-[rgba(0,0,0,0.02)] to-transparent translate-y-full group-hover:translate-y-0 transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]" />
     </motion.div>
   );

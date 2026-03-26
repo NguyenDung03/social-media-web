@@ -13,8 +13,6 @@ import type {
   TProductFormEdit,
 } from "../types/product.type";
 import { showError, showSuccess } from "../lib/toast";
-
-// 1. Hook get all products
 export const useGetProducts = (
   params?: TQueryParams,
 ): UseQueryResult<TResponse<TProduct>, Error> => {
@@ -23,8 +21,6 @@ export const useGetProducts = (
     queryFn: () => productApi.getAllProducts(params),
   });
 };
-
-// 3. Hook get products with status/deleted
 export const useGetProductsWithStatus = (
   status: string,
   deleted: boolean,
@@ -35,8 +31,6 @@ export const useGetProductsWithStatus = (
     queryFn: () => productApi.getProductsWithStatus(status, deleted, params),
   });
 };
-
-// 4. Hook add product
 export const useAddProduct = (): UseMutationResult<
   TResponseDetail<TProduct>,
   Error,
@@ -54,8 +48,6 @@ export const useAddProduct = (): UseMutationResult<
     },
   });
 };
-
-// 5. Hook update product status
 export const useUpdateProductStatus = (): UseMutationResult<
   TResponseDetail<TProduct>,
   Error,
@@ -73,8 +65,6 @@ export const useUpdateProductStatus = (): UseMutationResult<
     },
   });
 };
-
-// 6. Hook update product detail
 export const useUpdateProduct = (): UseMutationResult<
   TResponseDetail<TProduct>,
   Error,
@@ -93,8 +83,6 @@ export const useUpdateProduct = (): UseMutationResult<
     },
   });
 };
-
-// 7. Hook hard delete product
 export const useDeleteProduct = (): UseMutationResult<
   TBaseResponseDelete,
   Error,
@@ -112,8 +100,6 @@ export const useDeleteProduct = (): UseMutationResult<
     },
   });
 };
-
-// 8. Hook hard delete multiple products
 export const useDeleteMultipleProducts = (): UseMutationResult<
   TBaseResponseDelete,
   Error,
@@ -131,8 +117,6 @@ export const useDeleteMultipleProducts = (): UseMutationResult<
     },
   });
 };
-
-// 9. Hook soft delete product
 export const useSoftDeleteProduct = (): UseMutationResult<
   TResponseDetail<TProduct>,
   Error,

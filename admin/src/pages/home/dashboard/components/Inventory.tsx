@@ -1,29 +1,22 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
+
 import React from "react";
 import { motion } from "framer-motion";
 import { FONTS, SPRING } from "./theme";
 import { useGetProducts } from "../../../../hooks/useProduct";
 import type { TProduct } from "../../../../types/product.type";
-
 export const Inventory = () => {
   const { data: productResponse } = useGetProducts();
   const [products, setProducts] = React.useState<TProduct[]>([]);
-
   React.useEffect(() => {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const items =
       (productResponse as any)?.docs || (productResponse as any)?.data || [];
-
     if (items.length <= 4) {
       setProducts(items);
       return;
     }
-
-    // Randomize and pick 4
     const shuffled = [...items].sort(() => 0.5 - Math.random());
     setProducts(shuffled.slice(0, 4));
   }, [productResponse]);
-
   return (
     <div className="mt-24 space-y-8">
       <div className="flex items-center justify-between">
@@ -34,7 +27,6 @@ export const Inventory = () => {
           Sản phẩm bán chạy
         </h3>
       </div>
-
       {!products.length ? (
         <div className="text-[#787774] text-xs font-mono opacity-50">
           Loading curated inventory...
@@ -56,11 +48,11 @@ export const Inventory = () => {
                   alt={product.nameProduct}
                   src={
                     product.images?.[0]?.url ||
-                    `https://picsum.photos/seed/${product._id}/400/500`
+                    `https:
                   }
                   className="w-full h-full object-cover scale-100 group-hover:scale-110 transition-transform duration-[1.5s]"
                 />
-                {/* Inner Refraction */}
+                {}
                 <div className="absolute inset-0 shadow-[inset_0_0_0_1px_rgba(255,255,255,0.2)] rounded-[1rem] pointer-events-none" />
               </div>
               <div>

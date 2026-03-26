@@ -1,6 +1,5 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { Archive, TrashSimple } from "@phosphor-icons/react";
-
 interface ProductPageFloatingBarProps {
   selectedIds: string[];
   activeTab: "current" | "archive";
@@ -9,7 +8,6 @@ interface ProductPageFloatingBarProps {
   onHardDeleteMultiple: () => void;
   onClearSelection: () => void;
 }
-
 const ProductPageFloatingBar: React.FC<ProductPageFloatingBarProps> = ({
   selectedIds,
   activeTab,
@@ -79,5 +77,4 @@ const ProductPageFloatingBar: React.FC<ProductPageFloatingBarProps> = ({
     </AnimatePresence>
   );
 };
-
 export default ProductPageFloatingBar;

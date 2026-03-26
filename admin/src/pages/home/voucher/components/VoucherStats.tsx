@@ -1,13 +1,11 @@
 import React from "react";
 import { Layers, Activity, Search } from "lucide-react";
-
 interface VoucherStatsProps {
   total: number;
   active: number;
   searchValue: string;
   onSearchChange: (value: string) => void;
 }
-
 export const VoucherStats: React.FC<VoucherStatsProps> = ({
   total,
   active,
@@ -31,7 +29,6 @@ export const VoucherStats: React.FC<VoucherStatsProps> = ({
         </span>
       </div>
     </div>
-
     <div className="relative group">
       <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 size-4 group-focus-within:text-[#5f5e61] transition-colors" />
       <input
@@ -44,5 +41,4 @@ export const VoucherStats: React.FC<VoucherStatsProps> = ({
     </div>
   </div>
 );
-
 export default VoucherStats;

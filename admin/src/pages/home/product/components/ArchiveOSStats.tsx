@@ -1,19 +1,16 @@
 import { motion } from "framer-motion";
 import { Package, TrendUp, HardDrive, Calendar } from "@phosphor-icons/react";
-
 interface ArchiveOSStatsProps {
   totalDocs: number;
   totalValue: number;
   totalStock: number;
 }
-
 const formatPrice = (price: number) => {
   return new Intl.NumberFormat("vi-VN", {
     style: "currency",
     currency: "VND",
   }).format(price);
 };
-
 const ArchiveOSStats: React.FC<ArchiveOSStatsProps> = ({
   totalDocs,
   totalValue,
@@ -44,7 +41,6 @@ const ArchiveOSStats: React.FC<ArchiveOSStatsProps> = ({
       icon: <Calendar size={14} weight="bold" />,
     },
   ];
-
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -89,5 +85,4 @@ const ArchiveOSStats: React.FC<ArchiveOSStatsProps> = ({
     </motion.div>
   );
 };
-
 export default ArchiveOSStats;

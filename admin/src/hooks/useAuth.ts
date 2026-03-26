@@ -8,7 +8,6 @@ import { ERole } from "../types/role.type";
 import { useNavigate } from "react-router-dom";
 import type { TLogin, TUser } from "../types/user.type";
 import { showError, showSuccess } from "../lib/toast";
-
 export const useAuth = (): {
   login: UseMutateFunction<TUser, Error, TLogin, unknown>;
   loginAsync: UseMutateAsyncFunction<TUser, Error, TLogin, unknown>;
@@ -17,11 +16,9 @@ export const useAuth = (): {
   user: TUser | undefined;
 } => {
   const navigate = useNavigate();
-
   const loginMutation = useMutation({
     mutationFn: async (body: TLogin) => {
       const data = await userApi.login(body);
-      // Kiểm tra role: Nếu là customer thì không được đăng nhập admin
       if (data.role === ERole.CUSTORMER) {
         throw new Error(
           "Tài khoản của bạn không có quyền truy cập trang quản trị!",
@@ -30,7 +27,6 @@ export const useAuth = (): {
       return data;
     },
     onSuccess: (data) => {
-      // Lưu user vào localStorage hoặc state tùy project
       localStorage.setItem("user", JSON.stringify(data));
       showSuccess("Đăng nhập thành công!");
       navigate("/");
@@ -39,7 +35,6 @@ export const useAuth = (): {
       showError(error.message || "Đăng nhập thất bại. Vui lòng thử lại.");
     },
   });
-
   return {
     login: loginMutation.mutate,
     loginAsync: loginMutation.mutateAsync,

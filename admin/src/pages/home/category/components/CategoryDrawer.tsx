@@ -2,7 +2,6 @@ import React from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, Camera, Tag, Loader2 } from "lucide-react";
 import type { TCategory, TFormCategory } from "../../../../types/category.type";
-
 interface CategoryDrawerProps {
   isOpen: boolean;
   onClose: () => void;
@@ -12,7 +11,6 @@ interface CategoryDrawerProps {
   onSubmit: (e: React.FormEvent) => void;
   isPending: boolean;
 }
-
 export const CategoryDrawer: React.FC<CategoryDrawerProps> = ({
   isOpen,
   onClose,
@@ -33,7 +31,6 @@ export const CategoryDrawer: React.FC<CategoryDrawerProps> = ({
             onClick={onClose}
             className="fixed inset-0 bg-black/20 backdrop-blur-sm z-[50]"
           />
-
           <motion.aside
             initial={{ x: "100%" }}
             animate={{ x: 0 }}
@@ -57,7 +54,6 @@ export const CategoryDrawer: React.FC<CategoryDrawerProps> = ({
                 <X size={20} />
               </button>
             </div>
-
             <form onSubmit={onSubmit} className="flex-1 flex flex-col gap-8">
               <div className="flex-1 space-y-8 overflow-y-auto pr-2 custom-scrollbar">
                 <div className="space-y-3">
@@ -87,7 +83,6 @@ export const CategoryDrawer: React.FC<CategoryDrawerProps> = ({
                     />
                   </div>
                 </div>
-
                 <div className="space-y-5">
                   <div className="space-y-1.5">
                     <label className="font-mono text-[10px] uppercase text-slate-500 tracking-widest flex items-center gap-1">
@@ -107,7 +102,6 @@ export const CategoryDrawer: React.FC<CategoryDrawerProps> = ({
                       type="text"
                     />
                   </div>
-
                   <div className="space-y-1.5">
                     <label className="font-mono text-[10px] uppercase text-slate-500 tracking-widest block">
                       Mô tả ngắn
@@ -122,7 +116,6 @@ export const CategoryDrawer: React.FC<CategoryDrawerProps> = ({
                       required
                     />
                   </div>
-
                   <div className="space-y-2">
                     <label className=" text-[13px] text-slate-500  block">
                       Trạng thái
@@ -157,7 +150,6 @@ export const CategoryDrawer: React.FC<CategoryDrawerProps> = ({
                   </div>
                 </div>
               </div>
-
               <div className="pt-6 border-t border-slate-100">
                 <button
                   type="submit"

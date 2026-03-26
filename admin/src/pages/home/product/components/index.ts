@@ -1,12 +1,9 @@
-// ArchiveOS Components
 export { default as ArchiveOSHeader } from "./ArchiveOSHeader";
 export { default as ArchiveOSStats } from "./ArchiveOSStats";
 export { default as ArchiveOSFilterBar } from "./ArchiveOSFilterBar";
 export { default as ArchiveOSTable } from "./ArchiveOSTable";
 export { default as ArchiveOSPagination } from "./ArchiveOSPagination";
 export { default as ArchiveOSFloatingBar } from "./ArchiveOSFloatingBar";
-
-// ProductPage Components
 export { default as ProductPageHeader } from "./ProductPageHeader";
 export { default as ProductPageFilter } from "./ProductPageFilter";
 export { default as ProductPageTable } from "./ProductPageTable";

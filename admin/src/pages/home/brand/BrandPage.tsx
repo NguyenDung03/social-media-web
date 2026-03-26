@@ -11,7 +11,6 @@ import { BrandHeader } from "./components/BrandHeader";
 import { BrandStats } from "./components/BrandStats";
 import { BrandItem } from "./components/BrandItem";
 import { BrandDrawer } from "./components/BrandDrawer";
-
 const BrandPage: React.FC = () => {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [editingBrand, setEditingBrand] = useState<TBrand | null>(null);
@@ -22,19 +21,16 @@ const BrandPage: React.FC = () => {
     desc: "",
     status: "active",
   });
-
   const { data: brandsResponse, isLoading } = useGetBrands({
     createSearch: searchValue,
   });
   const addBrandMutation = useAddBrand();
   const updateBrandMutation = useUpdateBrand();
-
   const handleOpenAdd = () => {
     setEditingBrand(null);
     setFormData({ nameBrand: "", image: "", desc: "", status: "active" });
     setIsDrawerOpen(true);
   };
-
   const handleOpenEdit = (brand: TBrand) => {
     setEditingBrand(brand);
     setFormData({
@@ -45,7 +41,6 @@ const BrandPage: React.FC = () => {
     });
     setIsDrawerOpen(true);
   };
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
@@ -62,13 +57,10 @@ const BrandPage: React.FC = () => {
       console.error("Operation failed:", error);
     }
   };
-
   const brands = brandsResponse?.data || [];
-
   return (
     <div className="min-h-screen bg-[#f9f9f8] text-[#2d3433] font-sans antialiased">
       <BrandHeader onAdd={handleOpenAdd} />
-
       <main className="max-w-7xl mx-auto px-6 py-10 space-y-8">
         <BrandStats
           total={brands.length}
@@ -76,7 +68,6 @@ const BrandPage: React.FC = () => {
           searchValue={searchValue}
           onSearchChange={setSearchValue}
         />
-
         {isLoading ? (
           <div className="h-64 flex items-center justify-center">
             <Loader2 className="animate-spin text-slate-300" size={32} />
@@ -97,15 +88,13 @@ const BrandPage: React.FC = () => {
             ))}
           </motion.div>
         )}
-
-        {/* Pagination placeholder */}
+        {}
         <div className="flex items-center justify-between border-t border-slate-200 pt-6">
           <span className=" text-[10px] text-slate-400 uppercase tracking-widest">
             Hiển thị 1 - {brands.length} của {brands.length} thương hiệu
           </span>
         </div>
       </main>
-
       <BrandDrawer
         isOpen={isDrawerOpen}
         onClose={() => setIsDrawerOpen(false)}
@@ -115,7 +104,6 @@ const BrandPage: React.FC = () => {
         onSubmit={handleSubmit}
         isPending={addBrandMutation.isPending || updateBrandMutation.isPending}
       />
-
       <style>{`
         .custom-scrollbar::-webkit-scrollbar {
           width: 4px;
@@ -131,5 +119,4 @@ const BrandPage: React.FC = () => {
     </div>
   );
 };
-
 export default BrandPage;

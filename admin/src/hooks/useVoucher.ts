@@ -7,10 +7,6 @@ import type {
   TResponseDetail,
   TResponseNoPagination,
 } from "../types/common.type";
-
-// ================= TANSTACK QUERY HOOKS =================
-
-// 1. Hook get all vouchers
 export const useGetVouchers = (
   params?: TQueryParams,
 ): UseQueryResult<TResponseNoPagination<TVoucher>, Error> => {
@@ -19,8 +15,6 @@ export const useGetVouchers = (
     queryFn: () => voucherApi.getVouchers(params),
   });
 };
-
-// 3. Hook create voucher
 export const useAddVoucher = (): UseMutationResult<
   TResponseDetail<TVoucher>,
   Error,
@@ -34,8 +28,6 @@ export const useAddVoucher = (): UseMutationResult<
     },
   });
 };
-
-// 4. Hook update voucher
 export const useUpdateVoucher = (): UseMutationResult<
   TResponseDetail<TVoucher>,
   Error,

@@ -1,13 +1,11 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { ArrowClockwise, Trash, X } from "@phosphor-icons/react";
-
 interface ArchiveOSFloatingBarProps {
   selectedIds: string[];
   onRestoreMultiple: () => void;
   onHardDeleteMultiple: () => void;
   onClearSelection: () => void;
 }
-
 const ArchiveOSFloatingBar: React.FC<ArchiveOSFloatingBarProps> = ({
   selectedIds,
   onRestoreMultiple,
@@ -33,7 +31,6 @@ const ArchiveOSFloatingBar: React.FC<ArchiveOSFloatingBarProps> = ({
                 Đã chọn
               </span>
             </div>
-
             <div className="flex items-center gap-6">
               <button
                 onClick={onRestoreMultiple}
@@ -48,7 +45,6 @@ const ArchiveOSFloatingBar: React.FC<ArchiveOSFloatingBarProps> = ({
                 <Trash size={14} weight="bold" /> Xóa
               </button>
             </div>
-
             <button
               onClick={onClearSelection}
               className="w-8 h-8 flex items-center justify-center text-[#787774] hover:text-white hover:bg-white/10 rounded-full transition-colors"
@@ -61,5 +57,4 @@ const ArchiveOSFloatingBar: React.FC<ArchiveOSFloatingBarProps> = ({
     </AnimatePresence>
   );
 };
-
 export default ArchiveOSFloatingBar;

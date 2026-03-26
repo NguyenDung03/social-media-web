@@ -1,10 +1,8 @@
 import type { ERole } from "./role.type";
-
 export type TLogin = {
   email: string;
   password: string;
 };
-
 export type TUser = {
   _id: string;
   fullName: string;

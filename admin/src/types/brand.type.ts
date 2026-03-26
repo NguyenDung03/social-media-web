@@ -9,7 +9,6 @@ export type TBrand = {
   updatedAt: string;
   products: string[];
 };
-
 export type TFormBrand = Pick<
   TBrand,
   "nameBrand" | "image" | "desc" | "status"

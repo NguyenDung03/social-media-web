@@ -2,7 +2,6 @@ import { RouterProvider } from "react-router-dom";
 import { Toaster } from "react-hot-toast";
 import routes from "./routes.tsx";
 import ErrorBoundary from "./components/common/ErrorBoundary";
-
 function App() {
   return (
     <ErrorBoundary>
@@ -34,5 +33,4 @@ function App() {
     </ErrorBoundary>
   );
 }
-
 export default App;

@@ -1,13 +1,11 @@
 import { motion } from "framer-motion";
 import { MagnifyingGlass, Funnel, Trash } from "@phosphor-icons/react";
-
 interface ArchiveOSFilterBarProps {
   searchQuery: string;
   onSearchChange: (value: string) => void;
   onDeleteMultiple: () => void;
   selectedCount: number;
 }
-
 const ArchiveOSFilterBar: React.FC<ArchiveOSFilterBarProps> = ({
   searchQuery,
   onSearchChange,
@@ -45,5 +43,4 @@ const ArchiveOSFilterBar: React.FC<ArchiveOSFilterBarProps> = ({
     </motion.div>
   );
 };
-
 export default ArchiveOSFilterBar;

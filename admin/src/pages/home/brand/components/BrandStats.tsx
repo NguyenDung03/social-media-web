@@ -1,13 +1,11 @@
 import React from "react";
 import { Search, Layers, Activity } from "lucide-react";
-
 interface BrandStatsProps {
   total: number;
   active: number;
   searchValue: string;
   onSearchChange: (value: string) => void;
 }
-
 export const BrandStats: React.FC<BrandStatsProps> = ({
   total,
   active,
@@ -32,7 +30,6 @@ export const BrandStats: React.FC<BrandStatsProps> = ({
           </span>
         </div>
       </div>
-
       <div className="relative group">
         <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 size-4 group-focus-within:text-[#5f5e61] transition-colors" />
         <input

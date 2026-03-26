@@ -2,7 +2,6 @@ import React from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, Camera, Tag, Loader2 } from "lucide-react";
 import type { TBrand, TFormBrand } from "../../../../types/brand.type";
-
 interface BrandDrawerProps {
   isOpen: boolean;
   onClose: () => void;
@@ -12,7 +11,6 @@ interface BrandDrawerProps {
   onSubmit: (e: React.FormEvent) => void;
   isPending: boolean;
 }
-
 export const BrandDrawer: React.FC<BrandDrawerProps> = ({
   isOpen,
   onClose,
@@ -33,7 +31,6 @@ export const BrandDrawer: React.FC<BrandDrawerProps> = ({
             onClick={onClose}
             className="fixed inset-0 bg-black/20 backdrop-blur-sm z-[50]"
           />
-
           <motion.aside
             initial={{ x: "100%" }}
             animate={{ x: 0 }}
@@ -59,7 +56,6 @@ export const BrandDrawer: React.FC<BrandDrawerProps> = ({
                 <X size={20} />
               </button>
             </div>
-
             <form onSubmit={onSubmit} className="flex-1 flex flex-col gap-8">
               <div className="flex-1 space-y-8 overflow-y-auto pr-2 custom-scrollbar">
                 <div className="space-y-3">
@@ -89,7 +85,6 @@ export const BrandDrawer: React.FC<BrandDrawerProps> = ({
                     />
                   </div>
                 </div>
-
                 <div className="space-y-5">
                   <div className="space-y-1.5">
                     <label className="font-mono text-[10px] uppercase text-slate-500 tracking-widest flex items-center gap-1">
@@ -109,7 +104,6 @@ export const BrandDrawer: React.FC<BrandDrawerProps> = ({
                       type="text"
                     />
                   </div>
-
                   <div className="space-y-1.5">
                     <label className="font-mono text-[10px] uppercase text-slate-500 tracking-widest block">
                       Mô tả ngắn
@@ -124,7 +118,6 @@ export const BrandDrawer: React.FC<BrandDrawerProps> = ({
                       required
                     />
                   </div>
-
                   <div className="space-y-1.5">
                     <label className="font-mono text-[10px] uppercase text-slate-500 tracking-widest block">
                       Trạng thái
@@ -159,7 +152,6 @@ export const BrandDrawer: React.FC<BrandDrawerProps> = ({
                   </div>
                 </div>
               </div>
-
               <div className="pt-6 border-t border-slate-100">
                 <button
                   type="submit"

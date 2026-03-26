@@ -8,7 +8,6 @@ export type TCategory = {
   createdAt: string;
   updatedAt: string;
 };
-
 export type TFormCategory = Pick<
   TCategory,
   "nameCategory" | "image" | "desc" | "status"

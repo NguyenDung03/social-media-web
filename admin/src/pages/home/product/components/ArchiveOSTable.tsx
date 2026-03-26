@@ -1,7 +1,6 @@
 import { motion } from "framer-motion";
 import { ArrowClockwise, Trash } from "@phosphor-icons/react";
 import type { TProduct } from "../../../types/product.type";
-
 interface ArchiveOSTableProps {
   products: TProduct[];
   selectedIds: string[];
@@ -11,14 +10,12 @@ interface ArchiveOSTableProps {
   onRestore: (id: string) => void;
   onHardDelete: (id: string) => void;
 }
-
 const formatPrice = (price: number) => {
   return new Intl.NumberFormat("vi-VN", {
     style: "currency",
     currency: "VND",
   }).format(price);
 };
-
 const formatDate = (dateString: string) => {
   const date = new Date(dateString);
   return new Intl.DateTimeFormat("vi-VN", {
@@ -27,7 +24,6 @@ const formatDate = (dateString: string) => {
     year: "numeric",
   }).format(date);
 };
-
 const ArchiveOSTable: React.FC<ArchiveOSTableProps> = ({
   products,
   selectedIds,
@@ -118,7 +114,7 @@ const ArchiveOSTable: React.FC<ArchiveOSTableProps> = ({
                       <img
                         src={
                           item.images?.[0]?.url ||
-                          "https://api.dicebear.com/7.x/shapes/svg?seed=product"
+                          "https:
                         }
                         className="w-full h-full object-cover grayscale opacity-60 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-500"
                         alt="product"
@@ -170,5 +166,4 @@ const ArchiveOSTable: React.FC<ArchiveOSTableProps> = ({
     </motion.div>
   );
 };
-
 export default ArchiveOSTable;

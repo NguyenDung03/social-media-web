@@ -5,7 +5,6 @@ import type { TProduct, TProductForm } from "../../../../types/product.type";
 import type { TImage } from "../../../../types/common.type";
 import { useGetCategories } from "../../../../hooks/useCategory";
 import { useGetBrands } from "../../../../hooks/useBrand";
-
 interface ProductPageDrawerProps {
   isOpen: boolean;
   editingProduct: TProduct | null;
@@ -14,7 +13,6 @@ interface ProductPageDrawerProps {
   onFormChange: (data: Partial<TProductForm>) => void;
   onSubmit: () => void;
 }
-
 const ProductPageDrawer: React.FC<ProductPageDrawerProps> = ({
   isOpen,
   editingProduct,
@@ -23,17 +21,13 @@ const ProductPageDrawer: React.FC<ProductPageDrawerProps> = ({
   onFormChange,
   onSubmit,
 }) => {
-  // Fetch categories and brands for dropdowns
   const { data: categoriesData } = useGetCategories();
   const { data: brandsData } = useGetBrands();
   const categories = categoriesData?.data || [];
   const brands = brandsData?.data || [];
-
-  // Get images from formData or editing product
   const images: TImage[] =
     (formData.images as TImage[]) || editingProduct?.images || [];
   const [imageUrl, setImageUrl] = useState("");
-
   const handleAddImage = () => {
     if (imageUrl.trim()) {
       const newImage = {
@@ -47,7 +41,6 @@ const ProductPageDrawer: React.FC<ProductPageDrawerProps> = ({
       setImageUrl("");
     }
   };
-
   const handleRemoveImage = (index: number) => {
     const updatedImages = images.filter((_, i) => i !== index);
     onFormChange({
@@ -55,7 +48,6 @@ const ProductPageDrawer: React.FC<ProductPageDrawerProps> = ({
       images: updatedImages,
     });
   };
-
   return (
     <AnimatePresence>
       {isOpen && (
@@ -86,13 +78,12 @@ const ProductPageDrawer: React.FC<ProductPageDrawerProps> = ({
                 <X size={20} />
               </button>
             </div>
-
             <div className="flex-1 overflow-y-auto p-8 space-y-8 custom-scrollbar">
               <div className="space-y-3">
                 <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-[#787774]">
                   Hình ảnh sản phẩm
                 </p>
-                {/* Input link ảnh */}
+                {}
                 <div className="flex gap-2">
                   <input
                     type="text"
@@ -109,7 +100,7 @@ const ProductPageDrawer: React.FC<ProductPageDrawerProps> = ({
                     <Upload size={18} />
                   </button>
                 </div>
-                {/* Preview ảnh */}
+                {}
                 {images.length > 0 && (
                   <div className="grid grid-cols-4 gap-3 mt-4">
                     {images.map((img, index) => (
@@ -123,7 +114,7 @@ const ProductPageDrawer: React.FC<ProductPageDrawerProps> = ({
                           className="w-full h-full object-cover"
                           onError={(e) => {
                             (e.target as HTMLImageElement).src =
-                              "https://via.placeholder.com/150?text=Error";
+                              "https:
                           }}
                         />
                         <button
@@ -145,7 +136,6 @@ const ProductPageDrawer: React.FC<ProductPageDrawerProps> = ({
                   </div>
                 )}
               </div>
-
               <div className="grid grid-cols-2 gap-6">
                 <div className="col-span-2 space-y-2">
                   <label className="text-[10px] font-bold uppercase tracking-widest text-[#787774]">
@@ -274,7 +264,6 @@ const ProductPageDrawer: React.FC<ProductPageDrawerProps> = ({
                 </div>
               </div>
             </div>
-
             <div className="px-8 py-6 border-t border-[#EAEAEA] flex gap-4 bg-[#F7F6F3]/50">
               <button
                 onClick={onSubmit}
@@ -295,5 +284,4 @@ const ProductPageDrawer: React.FC<ProductPageDrawerProps> = ({
     </AnimatePresence>
   );
 };
-
 export default ProductPageDrawer;

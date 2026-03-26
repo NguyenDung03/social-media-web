@@ -2,16 +2,12 @@ import { motion } from "framer-motion";
 import { Search } from "lucide-react";
 import { FONTS } from "../../dashboard/components/theme";
 import type { TOrderStatus } from "../../../../types/order.type";
-
-// Order status type for filter
 type FilterStatus = "all" | TOrderStatus;
-
 interface FilterButtonProps {
   label: string;
   active: boolean;
   onClick: () => void;
 }
-
 function FilterButton({ label, active, onClick }: FilterButtonProps) {
   return (
     <button
@@ -27,7 +23,6 @@ function FilterButton({ label, active, onClick }: FilterButtonProps) {
     </button>
   );
 }
-
 interface OrderFilterBarProps {
   filters: { label: string; value: FilterStatus }[];
   activeFilter: FilterStatus;
@@ -35,7 +30,6 @@ interface OrderFilterBarProps {
   searchQuery: string;
   onSearch: (value: string) => void;
 }
-
 export default function OrderFilterBar({
   filters,
   activeFilter,
@@ -51,7 +45,7 @@ export default function OrderFilterBar({
         transition={{ delay: 0.2, duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
         className="flex flex-col md:flex-row md:items-center justify-between gap-6 pb-4"
       >
-        {/* Filter Buttons */}
+        {}
         <div className="flex flex-wrap gap-2">
           {filters.map((filter) => (
             <FilterButton
@@ -62,8 +56,7 @@ export default function OrderFilterBar({
             />
           ))}
         </div>
-
-        {/* Search Input */}
+        {}
         <div className="relative group">
           <Search
             size={18}

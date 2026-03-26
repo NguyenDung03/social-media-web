@@ -1,6 +1,5 @@
 import { motion } from "framer-motion";
 import { CaretLeft, CaretRight } from "@phosphor-icons/react";
-
 interface ProductPagePaginationProps {
   page: number;
   totalPages: number;
@@ -8,7 +7,6 @@ interface ProductPagePaginationProps {
   limit: number;
   onPageChange: (page: number) => void;
 }
-
 const ProductPagePagination: React.FC<ProductPagePaginationProps> = ({
   page,
   totalPages,
@@ -18,7 +16,6 @@ const ProductPagePagination: React.FC<ProductPagePaginationProps> = ({
 }) => {
   const startDoc = (page - 1) * limit + 1;
   const endDoc = Math.min(page * limit, totalDocs);
-
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -64,5 +61,4 @@ const ProductPagePagination: React.FC<ProductPagePaginationProps> = ({
     </motion.div>
   );
 };
-
 export default ProductPagePagination;

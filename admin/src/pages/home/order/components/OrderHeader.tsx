@@ -1,11 +1,9 @@
 import { motion } from "framer-motion";
 import { FONTS } from "../../dashboard/components/theme";
-
 interface OrderHeaderProps {
   title: string;
   description: string;
 }
-
 export default function OrderHeader({ title, description }: OrderHeaderProps) {
   return (
     <motion.header

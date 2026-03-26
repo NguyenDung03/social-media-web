@@ -2,13 +2,11 @@ import React from "react";
 import { motion } from "framer-motion";
 import { Edit3, MoreVertical, Tag, Clock } from "lucide-react";
 import type { TBrand } from "../../../../types/brand.type";
-
 interface BrandItemProps {
   brand: TBrand;
   index: number;
   onEdit: (brand: TBrand) => void;
 }
-
 export const BrandItem: React.FC<BrandItemProps> = ({
   brand,
   index,
@@ -36,7 +34,6 @@ export const BrandItem: React.FC<BrandItemProps> = ({
             <Tag size={20} className="text-slate-200" />
           )}
         </div>
-
         <div className="flex-1 grid grid-cols-12 gap-4 items-center">
           <div className="col-span-12 lg:col-span-3">
             <h3 className="font-semibold text-slate-900 text-lg">
@@ -46,13 +43,11 @@ export const BrandItem: React.FC<BrandItemProps> = ({
               {brand._id.slice(-8).toUpperCase()}
             </p>
           </div>
-
           <div className="hidden lg:block col-span-4">
             <p className="text-lg text-slate-500 truncate max-w-sm">
               {brand.desc}
             </p>
           </div>
-
           <div className="hidden lg:block col-span-1 text-center">
             <span
               className={`text-[8px] uppercase px-2 py-1 rounded-full font-bold tracking-wider inline-block whitespace-nowrap ${
@@ -64,14 +59,12 @@ export const BrandItem: React.FC<BrandItemProps> = ({
               {brand.status === "active" ? "Hoạt động" : "Tạm ngưng"}
             </span>
           </div>
-
           <div className="hidden lg:block col-span-2 text-right">
             <span className="font-mono text-[15px] text-slate-400 uppercase tracking-tighter flex items-center justify-end gap-1">
               <Clock size={15} />{" "}
               {new Date(brand.createdAt).toLocaleDateString()}
             </span>
           </div>
-
           <div className="col-span-12 lg:col-span-2 flex justify-end gap-2">
             <button
               onClick={(e) => {

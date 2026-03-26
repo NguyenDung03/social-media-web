@@ -10,8 +10,6 @@ import {
 } from "lucide-react";
 import { FONTS } from "../../dashboard/components/theme";
 import type { TOrder, TOrderStatus } from "../../../../types/order.type";
-
-// Helper to format currency
 const formatCurrency = (amount: number): string => {
   return new Intl.NumberFormat("vi-VN", {
     style: "currency",
@@ -19,12 +17,9 @@ const formatCurrency = (amount: number): string => {
     maximumFractionDigits: 0,
   }).format(amount);
 };
-
-// Status badge component
 interface StatusBadgeProps {
   status: TOrderStatus;
 }
-
 function StatusBadge({ status }: StatusBadgeProps) {
   const statusConfig: Record<
     TOrderStatus,
@@ -61,9 +56,7 @@ function StatusBadge({ status }: StatusBadgeProps) {
       border: "#adb3b2",
     },
   };
-
   const config = statusConfig[status];
-
   return (
     <span
       className="px-2 py-1 text-[10px] font-mono uppercase tracking-wider rounded border"
@@ -77,14 +70,11 @@ function StatusBadge({ status }: StatusBadgeProps) {
     </span>
   );
 }
-
-// Menu item type
 interface MenuItem {
   icon: typeof User;
   label: string;
   active: boolean;
 }
-
 interface DetailDrawerProps {
   isOpen: boolean;
   onClose: () => void;
@@ -94,7 +84,6 @@ interface DetailDrawerProps {
   getStatusLabel: (status: TOrderStatus) => string;
   actionLoading: string | null;
 }
-
 export default function DetailDrawer({
   isOpen,
   onClose,
@@ -110,16 +99,13 @@ export default function DetailDrawer({
     { icon: CreditCard, label: "Phân bổ chi phí", active: false },
     { icon: Settings, label: "Thao tác quản trị", active: false },
   ];
-
   if (!order) return null;
-
   const nextStatuses = getNextStatuses(order.status);
-
   return (
     <AnimatePresence>
       {isOpen && (
         <>
-          {/* Backdrop */}
+          {}
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -128,8 +114,7 @@ export default function DetailDrawer({
             className="fixed inset-0 bg-[#111111]/30 backdrop-blur-sm z-[60]"
             onClick={onClose}
           />
-
-          {/* Drawer */}
+          {}
           <motion.aside
             initial={{ x: "100%" }}
             animate={{ x: 0 }}
@@ -137,7 +122,7 @@ export default function DetailDrawer({
             transition={{ type: "spring", damping: 25, stiffness: 200 }}
             className="fixed right-0 top-0 h-full w-full max-w-md bg-white shadow-2xl z-[60] flex flex-col border-l border-[#EAEAEA]"
           >
-            {/* Header */}
+            {}
             <div className="px-8 py-6 border-b border-[#EAEAEA] flex items-center justify-between">
               <div>
                 <h3 className="text-xl font-light tracking-tight text-[#111111]">
@@ -154,15 +139,13 @@ export default function DetailDrawer({
                 <X size={20} />
               </button>
             </div>
-
-            {/* Content */}
+            {}
             <div className="flex-1 overflow-y-auto p-8 space-y-6 custom-scrollbar">
-              {/* Order Status */}
+              {}
               <div className="py-2">
                 <StatusBadge status={order.status} />
               </div>
-
-              {/* Menu Items */}
+              {}
               <div className="space-y-2">
                 {menuItems.map((item, index) => (
                   <motion.div
@@ -186,8 +169,7 @@ export default function DetailDrawer({
                   </motion.div>
                 ))}
               </div>
-
-              {/* Order Summary */}
+              {}
               <div className="p-4 bg-[#F7F6F3] rounded-lg space-y-3">
                 <div className="flex justify-between">
                   <span className="text-xs text-[#787774]">Tổng tiền:</span>
@@ -208,10 +190,9 @@ export default function DetailDrawer({
                   </span>
                 </div>
               </div>
-
-              {/* Action Buttons */}
+              {}
               <div className="space-y-4">
-                {/* Status Update Buttons */}
+                {}
                 {nextStatuses.length > 0 && (
                   <div className="space-y-3">
                     <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-[#787774]">
@@ -245,8 +226,7 @@ export default function DetailDrawer({
                     </div>
                   </div>
                 )}
-
-                {/* Cancel Reason (if cancelled) */}
+                {}
                 {order.status === "cancelled" && order.reasonCancel && (
                   <div className="p-4 bg-red-50 border border-red-200 rounded-lg space-y-2">
                     <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-red-600">

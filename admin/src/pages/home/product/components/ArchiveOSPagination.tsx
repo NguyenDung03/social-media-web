@@ -1,12 +1,10 @@
 import { motion } from "framer-motion";
 import { CaretLeft, CaretRight } from "@phosphor-icons/react";
-
 interface ArchiveOSPaginationProps {
   page: number;
   totalPages: number;
   onPageChange: (page: number) => void;
 }
-
 const ArchiveOSPagination: React.FC<ArchiveOSPaginationProps> = ({
   page,
   totalPages,
@@ -52,5 +50,4 @@ const ArchiveOSPagination: React.FC<ArchiveOSPaginationProps> = ({
     </motion.div>
   );
 };
-
 export default ArchiveOSPagination;
